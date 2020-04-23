@@ -39,12 +39,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   private static int HEIGHT = 800;
   private static boolean FULLSCREEN = false;
 
-  private static final LXStudio.Flags FLAGS = new LXStudio.Flags();
-  static {
-    FLAGS.resizable = true;
-    FLAGS.useGLPointCloud = false;
-  }
-
   @Override
   public void settings() {
     if (FULLSCREEN) {
@@ -56,7 +50,12 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   @Override
   public void setup() {
-    new LXStudio(this, FLAGS);
+    LXStudio.Flags flags = new LXStudio.Flags(this);
+    flags.resizable = true;
+    flags.useGLPointCloud = false;
+    flags.startMultiThreaded = true;
+
+    new LXStudio(this, flags);
     this.surface.setTitle(WINDOW_TITLE);
   }
 
@@ -129,12 +128,12 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       // We're not actually going to run this as a PApplet, but we need to explicitly
       // construct and set the initialize callback so that any custom components
       // will be run
-      FLAGS.initialize = new LXStudioApp();
-      FLAGS.isP3LX = false;
+      LX.Flags flags = new LX.Flags();
+      flags.initialize = new LXStudioApp();
       if (projectFile == null) {
         LX.log("WARNING: No project filename was specified for headless mode!");
       }
-      LX.headless(FLAGS, projectFile);
+      LX.headless(flags, projectFile);
     } else {
       PApplet.main("heronarts.lx.app.LXStudioApp", args);
     }
