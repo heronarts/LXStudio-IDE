@@ -5,6 +5,7 @@
 hs_err_pid*
 
 .lxpreferences
+update-libs.sh
 
 .DS_Store
 applet
