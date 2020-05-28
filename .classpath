@@ -35,15 +35,15 @@
 	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all.jar"/>
-	<classpathentry kind="lib" path="lib/lxstudio-0.2.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/lx-0.2.0-SNAPSHOT-jar-with-dependencies.jar" sourcepath="lib/lx-0.2.0-SNAPSHOT-sources.jar">
+	<classpathentry kind="lib" path="lib/lxstudio-0.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/lx-0.2.0-jar-with-dependencies.jar" sourcepath="lib/lx-0.2.0-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/lx-0.2.0-SNAPSHOT-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/lx-0.2.0-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/p3lx-0.2.0-SNAPSHOT.jar" sourcepath="lib/p3lx-0.2.0-SNAPSHOT-sources.jar">
+	<classpathentry kind="lib" path="lib/p3lx-0.2.0.jar" sourcepath="lib/p3lx-0.2.0-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/p3lx-0.2.0-SNAPSHOT-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/p3lx-0.2.0-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
