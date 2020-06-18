@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
+// import heronarts.lx.output.OPCOutput;
 // import processing.video.Movie;
 import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
@@ -34,7 +35,6 @@ import heronarts.lx.app.ui.UIWireframe;
 import heronarts.lx.LX;
 import heronarts.lx.LXPlugin;
 import heronarts.lx.model.LXModel;
-// import heronarts.lx.output.OPCOutput;
 import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
 import processing.core.PApplet;
@@ -42,6 +42,7 @@ import processing.core.PImage;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
 import processing.serial.Serial;
+import processing.video.Movie;
 
 /**
  * This is an example top-level class to build and run an LX Studio
@@ -67,7 +68,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   private static final Logger logger = Logger.getLogger(PApplet.class.getName());
   LPSimConfig config;
-//   Movie movie;
+  Movie movie;
   PImage videoFrame;
 
   PMatrix3D flattener;
@@ -111,11 +112,11 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     if (config.activeImage != null) {
       videoFrame = loadImage(config.activeImage);
     } else if (config.activeMovie != null) {
-    //   movie = new Movie((PApplet) this, config.activeMovie);
-    //   movie.loop();
-    //   while (!movie.available());
-    //   movie.read();
-    //   videoFrame = createImage(movie.width, movie.height, RGB);
+      movie = new Movie((PApplet) this, config.activeMovie);
+      movie.loop();
+      while (!movie.available());
+      movie.read();
+      videoFrame = createImage(movie.width, movie.height, RGB);
     } else if (config.screencapBounds != null) {
       // activeScreen =
       // GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
