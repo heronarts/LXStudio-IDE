@@ -23,12 +23,12 @@ public class LPSimConfig {
     //   public String activeModel = "data/models/dome_render_6_5_LEDs_Iso_1220_ALL_PANELS.json";
     public String activeModel = "data/models/dome_render_6_5_Dome_ALL_PANELS.json";
     public String[] activeStructures =  {
-    "data/structures/dome_render_6_5_Dome_EDGES.json",
-    "data/structures/dome_render_6_5_Left_Stack_FACES.json"
+        "data/structures/dome_render_6_5_Dome_EDGES.json",
+        "data/structures/dome_render_6_5_Left_Stack_FACES.json"
     };
     public float[] screencapBounds; // = new float[]{ 0, 0, 1, 1 };
     public String activeMovie; // = "data/media/Steamed Hams.mp4";
-    public String activeImage = "data/media/test_broadcast.jpg";
+    public String activeImage; // = "data/media/test_broadcast.jpg";
 
     public LPSimConfig () {}
     public void updateFromJSONObject(final JSONObject jsonConfig) {

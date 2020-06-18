@@ -129,8 +129,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       // robot.createScreenCapture(screencapRectangle);
       // videoFrame = new PImage(screenBuffer);
     }
-    logger.info(String.format("videoFrame: %d x %d", videoFrame.width,
-      videoFrame.height));
+    if(videoFrame != null)
+      logger.info(String.format("videoFrame: %d x %d", videoFrame.width,
+        videoFrame.height));
   }
 
   @Override
@@ -172,6 +173,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   void onUIReadyMovie(LXStudio lx, LXStudio.UI ui) {
     if (videoFrame == null)
       videoSetup();
+    if (videoFrame == null)
+      return;
 
     List<float[]> vertexUVPairs = new ArrayList<float[]>();
 
