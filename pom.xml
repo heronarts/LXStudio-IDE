@@ -1,6 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>heronarts</groupId>
@@ -25,18 +24,24 @@
 			<groupId>heronarts</groupId>
 			<artifactId>lx</artifactId>
 			<version>${project.version}</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/lx-0.2.0-jar-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>heronarts</groupId>
 			<artifactId>p3lx</artifactId>
 			<version>${project.version}</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/p3lx-0.2.0.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>heronarts</groupId>
 			<artifactId>lxstudio</artifactId>
 			<version>${project.version}</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/lxstudio-0.2.0.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -59,6 +64,15 @@
 			<version>2.3.2</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- <dependency>
+			<groupId>org.processing</groupId>
+			<artifactId>video</artifactId>
+            <version>2.0-beta4</version>
+            <scope>system</scope>
+			<systemPath>${basedir}/lib/video/library/video.jar</systemPath>
+		</dependency> -->
+
 	</dependencies>
 
 	<build>
