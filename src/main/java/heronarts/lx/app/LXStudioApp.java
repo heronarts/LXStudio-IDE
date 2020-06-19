@@ -66,15 +66,14 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public final int APA102_CLOCK_CHANNEL = 7;
   public final int APA102_FREQ = 800000;
 
-  private static final Logger logger = Logger.getLogger(PApplet.class.getName());
+  private static final Logger logger = Logger.getLogger(LXStudioApp.class.getName());
   LPSimConfig config;
   Movie movie;
-  PImage videoFrame;
-
-  PMatrix3D flattener;
-  PMatrix3D unflattener;
-  float[][] flatBounds;
-  float[][] modelBounds;
+  public static PImage videoFrame;
+  public static PMatrix3D flattener;
+  public static PMatrix3D unflattener;
+  public static float[][] flatBounds;
+  public static float[][] modelBounds;
 
   @Override
   public void settings() {
@@ -94,10 +93,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       config.updateFromJSONObject(loadJSONObject(activeStructure));
     }
 
-	flattener = config.getWorldFlattener();
-	unflattener = config.getWorldUnflattener();
-	modelBounds = config.getModelBounds();
-	flatBounds = config.getModelFlatBounds();
+    flattener = config.getWorldFlattener();
+    unflattener = config.getWorldUnflattener();
+    modelBounds = config.getModelBounds();
+    flatBounds = config.getModelFlatBounds();
 
     LXStudio.Flags flags = new LXStudio.Flags(this);
     flags.resizable = true;
@@ -116,7 +115,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       movie.loop();
       while (!movie.available());
       movie.read();
-      videoFrame = createImage(movie.width, movie.height, RGB);
+      if(videoFrame == null) videoFrame = createImage(movie.width, movie.height, RGB);
     } else if (config.screencapBounds != null) {
       // activeScreen =
       // GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -155,8 +154,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     // available.
 
     // Register custom pattern and effect types
-    lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
-    lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
+    // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
+    lx.registry.addPattern(heronarts.lx.app.pattern.VideoFrame.class);
+    // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
   }
 
   public void initializeUI(LXStudio lx, LXStudio.UI ui) {
@@ -170,8 +170,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     Serial serialPort = new Serial(this, SERIAL_PORT, PBExpanderOutput.BAUD_RATE);
 
     try {
-      int pointIndex = 0;
-      // int pointIndex = 214 * 6;
+      // int pointIndex = 0;
+      int pointIndex = 214 * 6;
       int nPoints = 300;
       int nChannels = 1;
       PBExpanderOutput output = new PBExpanderOutput(lx, serialPort);
@@ -251,6 +251,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public void draw() {
     // All handled by core LX engine, do not modify, method exists only so that Processing
     // will run a draw-loop.
+    if (movie.available()) {
+      movie.read();
+      videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0, movie.width, movie.height);
+    }
   }
 
   /**
@@ -301,7 +305,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       }
       LX.headless(flags, projectFile);
     } else {
-      PApplet.main("heronarts.lx.app.LXStudioApp", args);
+      PApplet.main(LXStudioApp.class, args);
     }
   }
 

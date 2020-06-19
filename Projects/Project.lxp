@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "timestamp": 1592394750228,
+  "timestamp": 1592553910774,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -209,12 +209,12 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 1
+              "focusedPattern": 2
             },
             "children": {},
             "effects": [],
             "clips": [],
-            "patternIndex": 1,
+            "patternIndex": 2,
             "patterns": [
               {
                 "id": 31,
@@ -251,7 +251,7 @@
                 "deviceVersion": -1
               },
               {
-                "id": 46,
+                "id": 74,
                 "class": "heronarts.lx.pattern.color.GradientPattern",
                 "internal": {
                   "modulationColor": 0,
@@ -282,6 +282,36 @@
                 "children": {
                   "modulation": {
                     "id": 47,
+                    "class": "heronarts.lx.modulation.LXModulationEngine",
+                    "internal": {
+                      "modulationColor": 0
+                    },
+                    "parameters": {
+                      "label": "Modulation"
+                    },
+                    "children": {},
+                    "modulators": [],
+                    "modulations": [],
+                    "triggers": []
+                  }
+                },
+                "deviceVersion": -1
+              },
+              {
+                "id": 82,
+                "class": "heronarts.lx.app.pattern.VideoFrame",
+                "internal": {
+                  "modulationColor": 0,
+                  "expanded": true,
+                  "modulationExpanded": false,
+                  "autoCycleEligible": true
+                },
+                "parameters": {
+                  "label": "VideoFrame"
+                },
+                "children": {
+                  "modulation": {
+                    "id": 83,
                     "class": "heronarts.lx.modulation.LXModulationEngine",
                     "internal": {
                       "modulationColor": 0
@@ -336,7 +366,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.3877740518835051
+            "basis": 0.2538074431178279
           },
           {
             "id": 51,
@@ -362,7 +392,7 @@
               "exp": 0.19999997317790985
             },
             "children": {},
-            "basis": 0.29526851509907887
+            "basis": 0.516257567703386
           },
           {
             "id": 55,
@@ -388,7 +418,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.6243418415273684
+            "basis": 0.72064304519586
           }
         ],
         "modulations": [
@@ -398,7 +428,7 @@
               "path": "/modulation/modulator/1"
             },
             "target": {
-              "componentId": 46,
+              "componentId": 74,
               "parameterPath": "xAmount",
               "path": "/mixer/channel/1/pattern/2/xAmount"
             },
@@ -421,7 +451,7 @@
               "path": "/modulation/modulator/2"
             },
             "target": {
-              "componentId": 46,
+              "componentId": 74,
               "parameterPath": "yAmount",
               "path": "/mixer/channel/1/pattern/2/yAmount"
             },
@@ -444,7 +474,7 @@
               "path": "/modulation/modulator/3"
             },
             "target": {
-              "componentId": 46,
+              "componentId": 74,
               "parameterPath": "zAmount",
               "path": "/mixer/channel/1/pattern/2/zAmount"
             },
@@ -625,10 +655,10 @@
         "phiLock": true,
         "centerPoint": false,
         "camera": {
-          "active": false,
-          "radius": 5.615688766714631,
-          "theta": 5.585684082005173,
-          "phi": 0.4065925693139434,
+          "active": true,
+          "radius": 7.139285272604298,
+          "theta": 5.869562967214733,
+          "phi": 1.2095642490312457,
           "x": -0.19124061876209453,
           "y": 0.8615308594889939,
           "z": -0.6585570362512954
@@ -645,9 +675,9 @@
           },
           {
             "active": true,
-            "radius": 5.615688766714631,
-            "theta": 5.585684082005173,
-            "phi": 0.4065925693139434,
+            "radius": 7.139285272604298,
+            "theta": 5.869562967214733,
+            "phi": 1.2095642490312457,
             "x": -0.19124061876209453,
             "y": 0.8615308594889939,
             "z": -0.6585570362512954
