@@ -18,13 +18,8 @@
 
 package heronarts.lx.app;
 
-import java.io.File;
-import java.util.logging.Logger;
-import java.util.List;
-import java.util.ArrayList;
 
 // import heronarts.lx.output.OPCOutput;
-// import processing.video.Movie;
 import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.LPStructure;
@@ -37,6 +32,15 @@ import heronarts.lx.LXPlugin;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PMatrix3D;
@@ -67,13 +71,17 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public final int APA102_FREQ = 800000;
 
   private static final Logger logger = Logger.getLogger(LXStudioApp.class.getName());
-  LPSimConfig config;
-  Movie movie;
+  public static LPSimConfig config;
   public static PImage videoFrame;
   public static PMatrix3D flattener;
   public static PMatrix3D unflattener;
   public static float[][] flatBounds;
   public static float[][] modelBounds;
+
+  private Movie movie;
+  private Robot robot;
+  private GraphicsDevice activeScreen;
+  private Rectangle screencapRectangle;
 
   @Override
   public void settings() {
@@ -117,33 +125,30 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       movie.read();
       if(videoFrame == null) videoFrame = createImage(movie.width, movie.height, RGB);
     } else if (config.screencapBounds != null) {
-      // activeScreen =
-      // GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-      // int activeScreenWidth = activeScreen.getDisplayMode().getWidth();
-      // int activeScreenHeight = activeScreen.getDisplayMode().getHeight();
-      // logger.info(String.format(
-      // "active screen dimensions: [%d, %d]", activeScreenWidth,
-      // activeScreenHeight));
-      // screencapRectangle = new Rectangle(
-      // int(screencapBounds[0] * activeScreenWidth),
-      // int(screencapBounds[1] * activeScreenHeight),
-      // int(screencapBounds[2] * activeScreenWidth),
-      // int(screencapBounds[3] * activeScreenHeight)
-      // );
-      // logger.info(String.format(
-      // "screencap rectangle: %s", screencapRectangle));
-      // try {
-      // robot = new Robot(activeScreen);
-      // } catch (Exception e) {
-      // logger.warning(e.getMessage());
-      // }
-      // BufferedImage screenBuffer =
-      // robot.createScreenCapture(screencapRectangle);
-      // videoFrame = new PImage(screenBuffer);
+      activeScreen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+      int activeScreenWidth = activeScreen.getDisplayMode().getWidth();
+      int activeScreenHeight = activeScreen.getDisplayMode().getHeight();
+      logger.info(String.format(
+      "active screen dimensions: [%d, %d]", activeScreenWidth,
+      activeScreenHeight));
+      screencapRectangle = new Rectangle(
+        (int)(config.screencapBounds[0] * activeScreenWidth),
+        (int)(config.screencapBounds[1] * activeScreenHeight),
+        (int)(config.screencapBounds[2] * activeScreenWidth),
+        (int)(config.screencapBounds[3] * activeScreenHeight)
+      );
+      logger.info(String.format(
+        "screencap rectangle: %s", screencapRectangle));
+      try {
+        robot = new Robot(activeScreen);
+      } catch (Exception e) {
+        logger.warning(e.getMessage());
+      }
+      BufferedImage screenBuffer = robot.createScreenCapture(screencapRectangle);
+      videoFrame = new PImage(screenBuffer);
     }
     if(videoFrame != null)
-      logger.info(String.format("videoFrame: %d x %d", videoFrame.width,
-        videoFrame.height));
+      logger.info(String.format("videoFrame: %d x %d", videoFrame.width, videoFrame.height));
   }
 
   @Override
@@ -251,9 +256,16 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public void draw() {
     // All handled by core LX engine, do not modify, method exists only so that Processing
     // will run a draw-loop.
-    if (movie.available()) {
+    if (movie != null && movie.available()) {
       movie.read();
       videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0, movie.width, movie.height);
+    } else 	if (screencapRectangle != null) {
+      PImage screenBuffer = new PImage(robot.createScreenCapture(screencapRectangle));
+      videoFrame.copy(
+        screenBuffer,
+        0, 0, screenBuffer.width, screenBuffer.height,
+        0, 0, screenBuffer.width, screenBuffer.height
+      );
     }
   }
 
