@@ -23,21 +23,24 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXPlugin;
-import heronarts.lx.studio.LXStudio;
-import processing.core.PApplet;
-import processing.core.PImage;
-import processing.core.PVector;
-import processing.core.PMatrix3D;
 // import processing.video.Movie;
+import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.LPStructure;
-import flavius.ledportal.LPMeshable;
-import heronarts.lx.app.ui.UIWireframe;
+import flavius.pixelblaze.output.PBExpanderOutput;
 import heronarts.lx.app.ui.UIAxes;
 import heronarts.lx.app.ui.UIVideoFrame;
+import heronarts.lx.app.ui.UIWireframe;
+import heronarts.lx.LX;
+import heronarts.lx.LXPlugin;
+import heronarts.lx.model.LXModel;
+// import heronarts.lx.output.OPCOutput;
+import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
+import processing.core.PApplet;
+import processing.core.PImage;
+import processing.core.PMatrix3D;
+import processing.core.PVector;
 
 /**
  * This is an example top-level class to build and run an LX Studio
@@ -52,6 +55,14 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   private static int WIDTH = 1280;
   private static int HEIGHT = 800;
   private static boolean FULLSCREEN = false;
+
+  // TODO: get these from config
+  public final String SERIAL_PORT = "/dev/tty.usbserial-AD025M69";
+  public final String OPC_HOST = "192.168.1.20";
+  public final int OPC_PORT = 42069;
+  public final byte OPC_CHANNEL = 0;
+  public final int APA102_CLOCK_CHANNEL = 7;
+  public final int APA102_FREQ = 800000;
 
   private static final Logger logger = Logger.getLogger(PApplet.class.getName());
   LPSimConfig config;
@@ -152,6 +163,37 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     // for headless mode should go in the raw initialize method above.
 
     ui.setCoordinateSystem(CoordinateSystem.valueOf("RIGHT_HANDED"));
+    LXModel model = lx.getModel();
+
+    try {
+      int pointIndex = 0;
+      // int pointIndex = 214 * 6;
+      int nPoints = 300;
+      int nChannels = 1;
+      PBExpanderOutput output = new PBExpanderOutput(lx, this, SERIAL_PORT);
+      for (int channelNumber = 0; channelNumber < nChannels; channelNumber++) {
+        int[] indexBuffer = new int[nPoints];
+        for (int i = 0; i < nPoints; i++) {
+          indexBuffer[i] = pointIndex;
+          if (pointIndex < model.size - 1) pointIndex++;
+        }
+        output.addWS281XChannel(channelNumber, indexBuffer);
+        // output.addAPA102DataChannel(channelNumber, indexBuffer, APA102_FREQ);
+      }
+
+      // output.addAPA102ClockChannel(APA102_CLOCK_CHANNEL, APA102_FREQ);
+
+      // int[] indexBuffer = new int[nPoints];
+      // for (int i = 0; i < nPoints; i++) {
+      //   indexBuffer[i] = pointIndex;
+      //   if (pointIndex < model.size - 1) pointIndex++;
+      // }
+      // OPCOutput output = new OPCOutput(lx, indexBuffer, OPC_HOST, OPC_PORT);
+
+      lx.addOutput(output);
+    } catch (Exception x) {
+      x.printStackTrace();
+    }
   }
 
   public void onUIReady(LXStudio lx, LXStudio.UI ui) {

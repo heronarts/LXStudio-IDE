@@ -1,9 +1,9 @@
-package flavius.ledportal;
+package flavius.pixelblaze.util;
 
 /**
- * LPByteUtils
+ * ByteUtils
  */
-public class LPByteUtils {
+public class ByteUtils {
 	public static long uint32Max = 0xffffffffL;
 	public static long uint16Max = 0xffffL;
 	public static long uint8Max = 0xffL;
