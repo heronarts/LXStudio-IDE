@@ -1,22 +1,22 @@
 package flavius.pixelblaze.output;
 
+import flavius.pixelblaze.PBColorOrder;
 import flavius.pixelblaze.PBMessageFactory;
 import flavius.pixelblaze.PBMessageFactoryAPA102Clock;
 import flavius.pixelblaze.PBMessageFactoryAPA102Data;
 import flavius.pixelblaze.PBMessageFactoryDrawAll;
 import flavius.pixelblaze.PBMessageFactoryWS281X;
-import flavius.pixelblaze.PBColorOrder;
 import flavius.pixelblaze.util.PBConstants;
 import heronarts.lx.LX;
 import java.util.ArrayList;
 import java.util.List;
-import processing.core.PApplet;
+import processing.serial.Serial;
 
 public class PBExpanderOutput extends SerialOutput implements PBConstants {
     public final List<PBMessageFactory> messageFactories;
 
-	public PBExpanderOutput(LX lx, PApplet parent, String serialPort) {
-		super(lx, parent, serialPort, BAUD_RATE);
+	public PBExpanderOutput(LX lx, Serial serialPort) {
+		super(lx, serialPort);
         this.messageFactories = new ArrayList<PBMessageFactory>();
         this.messageFactories.add(new PBMessageFactoryDrawAll());
 	}

@@ -41,6 +41,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
+import processing.serial.Serial;
 
 /**
  * This is an example top-level class to build and run an LX Studio
@@ -165,12 +166,14 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     ui.setCoordinateSystem(CoordinateSystem.valueOf("RIGHT_HANDED"));
     LXModel model = lx.getModel();
 
+    Serial serialPort = new Serial(this, SERIAL_PORT, PBExpanderOutput.BAUD_RATE);
+
     try {
       int pointIndex = 0;
       // int pointIndex = 214 * 6;
       int nPoints = 300;
       int nChannels = 1;
-      PBExpanderOutput output = new PBExpanderOutput(lx, this, SERIAL_PORT);
+      PBExpanderOutput output = new PBExpanderOutput(lx, serialPort);
       for (int channelNumber = 0; channelNumber < nChannels; channelNumber++) {
         int[] indexBuffer = new int[nPoints];
         for (int i = 0; i < nPoints; i++) {
