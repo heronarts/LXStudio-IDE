@@ -75,6 +75,10 @@ abstract class SerialOutput extends LXOutput {
   /**
    * Write {@code message} to the serial port. Attempts to reconnect if connection is interrupted.
    *
+   * On unix, if a port is connected, the isRING flag will be zero, but if it's disconnected, isRING
+   * will return random values. This is most reliable way that i culd find to detect loss of
+   * connection.
+   *
    * @param message the message to write to the serial port
    */
   public void write(final byte[] message) {
