@@ -1,8 +1,11 @@
 package flavius.pixelblaze;
 
 // import java.util.logging.Logger;
+
 /**
- * PBMessageFactoryData
+ * An abstract class for all Data channel message factories (WS2812, APA102_DATA)
+ *
+ * @author <a href="https://dev.laserphile.com/">Derwent McElhinney</a>
  */
 public abstract class PBMessageFactoryData extends PBMessageFactory {
   // private static final Logger logger =

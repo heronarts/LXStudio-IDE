@@ -4,7 +4,9 @@ import flavius.pixelblaze.util.ByteUtils;
 // import java.util.logging.Logger;
 
 /**
- * PBMessageFactoryAPA102Data
+ * A message factory for sending APA102 data channel messages
+ *
+ * @author <a href="https://dev.laserphile.com/">Derwent McElhinney</a>
  */
 public class PBMessageFactoryAPA102Data extends PBMessageFactoryData {
   // private static final Logger logger = Logger.getLogger(
@@ -20,9 +22,8 @@ public class PBMessageFactoryAPA102Data extends PBMessageFactoryData {
   }
 
   @Override
-  protected int writeBody(byte[] message, int offset, int[] indexBuffer,
-    int[] colors, byte[] glut) {
-    this.validate(indexBuffer);
+  protected int writeBody(byte[] message, int offset, int[] colors, byte[] glut) {
+    this.validate(this.indexBuffer);
     int i = offset;
     // logger.fine(String.format("freq: 0x%08x (%dd)\n", this.freq, this.freq));
     for (byte b : ByteUtils.uint32LEBytes(this.freq)) {
@@ -35,11 +36,11 @@ public class PBMessageFactoryAPA102Data extends PBMessageFactoryData {
     message[i++] = 0x00;
     // logger.fine(String.format(
     // "pixels: 0x%04x (%dd)\n", indexBuffer.length, indexBuffer.length));
-    for (byte b : ByteUtils.uint16LEBytes(indexBuffer.length)) {
+    for (byte b : ByteUtils.uint16LEBytes(this.indexBuffer.length)) {
       message[i++] = b;
     }
     // logger.fine(String.format("global brightness: 0x%02x\n", brightness));
-    for (int colorIdx : indexBuffer) {
+    for (int colorIdx : this.indexBuffer) {
       int c = 0;
       for (byte b : this.colorOrder.colorBytes(colors[colorIdx], glut)) {
         message[i++] = b;

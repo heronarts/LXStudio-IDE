@@ -1,14 +1,13 @@
 package flavius.pixelblaze;
 
 import flavius.pixelblaze.util.ByteUtils;
-// import java.util.logging.Logger;
 
 /**
- * PBMessageFactoryAPA102Clock
+ * A message factory for setting the channel to be an APA102 clock at a given frequency
+ *
+ * @author <a href="https://dev.laserphile.com/">Derwent McElhinney</a>
  */
 public class PBMessageFactoryAPA102Clock extends PBMessageFactory {
-  // private static final Logger logger = Logger.getLogger(
-  // PBMessageFactoryAPA102Clock.class.getName());
   public final long freq;
 
   public PBMessageFactoryAPA102Clock(int channel, long freq) {
@@ -17,10 +16,8 @@ public class PBMessageFactoryAPA102Clock extends PBMessageFactory {
   }
 
   @Override
-  protected int writeBody(byte[] message, int offset, int[] indexBuffer,
-    int[] colors, byte[] glut) {
+  protected int writeBody(byte[] message, int offset, int[] colors, byte[] glut) {
     int i = offset;
-    // logger.fine(String.format("freq: 0x%08x (%dd)\n", this.freq, this.freq));
     for (byte b : ByteUtils.uint32LEBytes(this.freq)) {
       message[i++] = b;
     }

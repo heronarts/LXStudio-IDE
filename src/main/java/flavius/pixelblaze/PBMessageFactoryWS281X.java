@@ -4,7 +4,9 @@ import flavius.pixelblaze.util.ByteUtils;
 // import java.util.logging.Logger;
 
 /**
- * PBMessageFactoryWS281X
+ * A factory for generating the WS281X data messages
+ *
+ * @author <a href="https://dev.laserphile.com/">Derwent McElhinney</a>
  */
 public class PBMessageFactoryWS281X extends PBMessageFactoryData {
   // private static final Logger logger =
@@ -15,9 +17,8 @@ public class PBMessageFactoryWS281X extends PBMessageFactoryData {
   }
 
   @Override
-  protected int writeBody(byte[] message, int offset, int[] indexBuffer,
-    int[] colors, byte[] glut) {
-    this.validate(indexBuffer);
+  protected int writeBody(byte[] message, int offset, int[] colors, byte[] glut) {
+    this.validate(this.indexBuffer);
     int i = offset;
     // logger.fine(String.format(
     // "numElements: 0x%02x\ncolorOrders: 0x%02x\n",
@@ -27,7 +28,7 @@ public class PBMessageFactoryWS281X extends PBMessageFactoryData {
     message[i++] = (byte) this.colorOrder.numElements;
     message[i++] = (byte) this.colorOrder.colorOrder;
     // logger.fine(String.format("pixels: 0x%04x\n", indexBuffer.length));
-    for (byte b : ByteUtils.uint16LEBytes(indexBuffer.length)) {
+    for (byte b : ByteUtils.uint16LEBytes(this.indexBuffer.length)) {
       message[i++] = b;
     }
     for (int colorIdx : indexBuffer) {

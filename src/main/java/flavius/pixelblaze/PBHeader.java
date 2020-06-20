@@ -2,6 +2,13 @@ package flavius.pixelblaze;
 
 // import java.util.logging.Logger;
 
+/**
+ * A representation of the header section of a pixelblaze message.
+ *
+ * Headers are static for the same recordType and channel.
+ *
+ * @author <a href="https://dev.laserphile.com/">Derwent McElhinney</a>
+ */
 public class PBHeader {
   // private static final Logger logger =
   // Logger.getLogger(PBHeader.class.getName());

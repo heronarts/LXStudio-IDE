@@ -2,6 +2,10 @@ package flavius.pixelblaze;
 
 import flavius.pixelblaze.util.ByteUtils;
 
+/**
+ * Possible colour orderings for Pixelblaze output expander
+ * @author <a href="https://dev.laserphile.com/">Derwent McElhinney</a>
+ */
 public enum PBColorOrder {
 	RGBW(0, 1, 2, 3),
 	RGBV(0, 1, 2, -1),
@@ -28,6 +32,13 @@ public enum PBColorOrder {
 		this(redi, greeni, bluei, 0, 3);
 	}
 
+  /**
+   * Encode a single colour as an array of bytes in this colour order
+   *
+   * @param color an int colour (RGB)
+   * @param glut  gamma lookup table
+   * @return the byte encoding of the colour
+   */
 	public byte[] colorBytes(int color, byte[] glut) {
 		byte[] result = new byte[this.numElements];
 		for(int colorIdx=0; colorIdx<this.numElements; colorIdx++) {
@@ -36,6 +47,4 @@ public enum PBColorOrder {
 		}
     return result;
 	}
-
-	// TODO: write separate colorBytes for APA102
 }
