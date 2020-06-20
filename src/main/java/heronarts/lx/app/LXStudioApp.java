@@ -121,6 +121,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     } else if (config.activeMovie != null) {
       movie = new Movie((PApplet) this, config.activeMovie);
       movie.loop();
+      movie.volume(config.movieVolume);
       while (!movie.available())
         ;
       movie.read();
