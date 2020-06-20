@@ -2,8 +2,7 @@ package flavius.pixelblaze.output;
 
 import heronarts.lx.LX;
 import heronarts.lx.output.LXOutput;
-import java.nio.file.Files;
-import java.nio.file.FileSystems;
+import java.util.Arrays;
 import java.util.logging.Logger;
 import jssc.SerialPort;
 import jssc.SerialPortException;
@@ -69,6 +68,9 @@ abstract class SerialOutput extends LXOutput {
     this(lx, serialPort, baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
   }
 
+  public static boolean portNameExists(String portName) {
+    return Arrays.asList(Serial.list()).contains(portName);
+  }
 
   /**
    * Write {@code message} to the serial port. Attempts to reconnect if connection is interrupted.
@@ -77,7 +79,7 @@ abstract class SerialOutput extends LXOutput {
    */
   public void write(final byte[] message) {
     if(this.disconnected) {
-      if (Files.exists(FileSystems.getDefault().getPath(this.portName))) {
+      if (portNameExists(this.portName)) {
         try {
           if(this.serialPort.port.isOpened()) this.serialPort.port.closePort();
           this.serialPort.port = new SerialPort(this.portName);
@@ -88,29 +90,21 @@ abstract class SerialOutput extends LXOutput {
         } catch (SerialPortException e) {
           logger.warning(String.format("can't reopen serial port: %s", e.toString()));
         }
+      } else {
+        return;
       }
     }
-    if (! this.serialPort.active()) {
-      if(! this.disconnected) {
-        logger.warning(String.format("port %s is not active!", this.portName));
+    try {
+      // This is pretty much the only way you can detect if a port is disconnected 🙄
+      if(this.serialPort.port.isRING()) {
+        logger.severe(String.format("serial port %s is disconnected", this.portName));
         this.disconnected = true;
+        return;
       }
-      return;
+      this.serialPort.port.writeBytes(message);
+    } catch (SerialPortException e) {
+      logger.severe(String.format("can't write message: %s", e.toString()));
+      this.disconnected = true;
     }
-    if (! this.serialPort.port.isOpened()) {
-      if(! this.disconnected) {
-        logger.warning(String.format("port %s is not opened!", this.portName));
-        this.disconnected = true;
-      }
-      return;
-    }
-    if (! Files.exists(FileSystems.getDefault().getPath(this.portName))) {
-      if(! this.disconnected) {
-        logger.warning(String.format("port %s does not exist!", this.portName));
-        this.disconnected = true;
-      }
-      return;
-    }
-    this.serialPort.write(message);
   }
 }
