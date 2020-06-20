@@ -16,7 +16,7 @@ public class PBExpanderOutput extends SerialOutput implements PBConstants {
   public final List<PBMessageFactory> messageFactories;
 
   public PBExpanderOutput(LX lx, Serial serialPort) {
-    super(lx, serialPort);
+    super(lx, serialPort, BAUD_RATE);
     this.messageFactories = new ArrayList<PBMessageFactory>();
     this.messageFactories.add(new PBMessageFactoryDrawAll());
   }
