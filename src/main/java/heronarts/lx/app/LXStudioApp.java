@@ -18,7 +18,6 @@
 
 package heronarts.lx.app;
 
-
 // import heronarts.lx.output.OPCOutput;
 import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
@@ -49,10 +48,10 @@ import processing.serial.Serial;
 import processing.video.Movie;
 
 /**
- * This is an example top-level class to build and run an LX Studio
- * application via an IDE. The main() method of this class can be
- * invoked with arguments to either run with a full Processing 3 UI
- * or as a headless command-line only engine.
+ * This is an example top-level class to build and run an LX Studio application
+ * via an IDE. The main() method of this class can be invoked with arguments to
+ * either run with a full Processing 3 UI or as a headless command-line only
+ * engine.
  */
 public class LXStudioApp extends PApplet implements LXPlugin {
 
@@ -70,7 +69,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public final int APA102_CLOCK_CHANNEL = 7;
   public final int APA102_FREQ = 800000;
 
-  private static final Logger logger = Logger.getLogger(LXStudioApp.class.getName());
+  private static final Logger logger = Logger
+    .getLogger(LXStudioApp.class.getName());
   public static LPSimConfig config;
   public static PImage videoFrame;
   public static PMatrix3D flattener;
@@ -121,41 +121,46 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     } else if (config.activeMovie != null) {
       movie = new Movie((PApplet) this, config.activeMovie);
       movie.loop();
-      while (!movie.available());
+      while (!movie.available())
+        ;
       movie.read();
-      if(videoFrame == null) videoFrame = createImage(movie.width, movie.height, RGB);
+      if (videoFrame == null)
+        videoFrame = createImage(movie.width, movie.height, RGB);
     } else if (config.screencapBounds != null) {
-      activeScreen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+      activeScreen = GraphicsEnvironment.getLocalGraphicsEnvironment()
+        .getDefaultScreenDevice();
       int activeScreenWidth = activeScreen.getDisplayMode().getWidth();
       int activeScreenHeight = activeScreen.getDisplayMode().getHeight();
-      logger.info(String.format(
-      "active screen dimensions: [%d, %d]", activeScreenWidth,
-      activeScreenHeight));
+      logger.info(String.format("active screen dimensions: [%d, %d]",
+        activeScreenWidth, activeScreenHeight));
       screencapRectangle = new Rectangle(
-        (int)(config.screencapBounds[0] * activeScreenWidth),
-        (int)(config.screencapBounds[1] * activeScreenHeight),
-        (int)(config.screencapBounds[2] * activeScreenWidth),
-        (int)(config.screencapBounds[3] * activeScreenHeight)
-      );
-      logger.info(String.format(
-        "screencap rectangle: %s", screencapRectangle));
+        (int) (config.screencapBounds[0] * activeScreenWidth),
+        (int) (config.screencapBounds[1] * activeScreenHeight),
+        (int) (config.screencapBounds[2] * activeScreenWidth),
+        (int) (config.screencapBounds[3] * activeScreenHeight));
+      logger.info(String.format("screencap rectangle: %s", screencapRectangle));
       try {
         robot = new Robot(activeScreen);
       } catch (Exception e) {
         logger.warning(e.getMessage());
       }
-      BufferedImage screenBuffer = robot.createScreenCapture(screencapRectangle);
+      BufferedImage screenBuffer = robot
+        .createScreenCapture(screencapRectangle);
       videoFrame = new PImage(screenBuffer);
     }
-    if(videoFrame != null)
-      logger.info(String.format("videoFrame: %d x %d", videoFrame.width, videoFrame.height));
+    if (videoFrame != null)
+      logger.info(String.format("videoFrame: %d x %d", videoFrame.width,
+        videoFrame.height));
   }
 
   @Override
   public void initialize(LX lx) {
-    // Here is where you should register any custom components or make modifications
-    // to the LX engine or hierarchy. This is also used in headless mode, so note that
-    // you cannot assume you are working with an LXStudio class or that any UI will be
+    // Here is where you should register any custom components or make
+    // modifications
+    // to the LX engine or hierarchy. This is also used in headless mode, so
+    // note that
+    // you cannot assume you are working with an LXStudio class or that any UI
+    // will be
     // available.
 
     // Register custom pattern and effect types
@@ -165,14 +170,17 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   }
 
   public void initializeUI(LXStudio lx, LXStudio.UI ui) {
-    // Here is where you may modify the initial settings of the UI before it is fully
-    // built. Note that this will not be called in headless mode. Anything required
+    // Here is where you may modify the initial settings of the UI before it is
+    // fully
+    // built. Note that this will not be called in headless mode. Anything
+    // required
     // for headless mode should go in the raw initialize method above.
 
     ui.setCoordinateSystem(CoordinateSystem.valueOf("RIGHT_HANDED"));
     LXModel model = lx.getModel();
 
-    Serial serialPort = new Serial(this, SERIAL_PORT, PBExpanderOutput.BAUD_RATE);
+    Serial serialPort = new Serial(this, SERIAL_PORT,
+      PBExpanderOutput.BAUD_RATE);
 
     try {
       // int pointIndex = 0;
@@ -184,7 +192,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
         int[] indexBuffer = new int[nPoints];
         for (int i = 0; i < nPoints; i++) {
           indexBuffer[i] = pointIndex;
-          if (pointIndex < model.size - 1) pointIndex++;
+          if (pointIndex < model.size - 1)
+            pointIndex++;
         }
         output.addWS281XChannel(channelNumber, indexBuffer);
         // output.addAPA102DataChannel(channelNumber, indexBuffer, APA102_FREQ);
@@ -194,8 +203,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
       // int[] indexBuffer = new int[nPoints];
       // for (int i = 0; i < nPoints; i++) {
-      //   indexBuffer[i] = pointIndex;
-      //   if (pointIndex < model.size - 1) pointIndex++;
+      // indexBuffer[i] = pointIndex;
+      // if (pointIndex < model.size - 1) pointIndex++;
       // }
       // OPCOutput output = new OPCOutput(lx, indexBuffer, OPC_HOST, OPC_PORT);
 
@@ -206,7 +215,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   }
 
   public void onUIReady(LXStudio lx, LXStudio.UI ui) {
-    // At this point, the LX Studio application UI has been built. You may now add
+    // At this point, the LX Studio application UI has been built. You may now
+    // add
     // additional views and components to the Ui heirarchy.
 
     for (LPStructure structure : config.structures) {
@@ -254,25 +264,25 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   @Override
   public void draw() {
-    // All handled by core LX engine, do not modify, method exists only so that Processing
+    // All handled by core LX engine, do not modify, method exists only so that
+    // Processing
     // will run a draw-loop.
     if (movie != null && movie.available()) {
       movie.read();
-      videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0, movie.width, movie.height);
-    } else 	if (screencapRectangle != null) {
-      PImage screenBuffer = new PImage(robot.createScreenCapture(screencapRectangle));
-      videoFrame.copy(
-        screenBuffer,
-        0, 0, screenBuffer.width, screenBuffer.height,
-        0, 0, screenBuffer.width, screenBuffer.height
-      );
+      videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0, movie.width,
+        movie.height);
+    } else if (screencapRectangle != null) {
+      PImage screenBuffer = new PImage(
+        robot.createScreenCapture(screencapRectangle));
+      videoFrame.copy(screenBuffer, 0, 0, screenBuffer.width,
+        screenBuffer.height, 0, 0, screenBuffer.width, screenBuffer.height);
     }
   }
 
   /**
    * Main interface into the program. Two modes are supported, if the --headless
-   * flag is supplied then a raw CLI version of LX is used. If not, then we embed
-   * in a Processing 3 applet and run as such.
+   * flag is supplied then a raw CLI version of LX is used. If not, then we
+   * embed in a Processing 3 applet and run as such.
    *
    * @param args Command-line arguments
    */
@@ -289,13 +299,13 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       } else if ("--width".equals(args[i]) || "-w".equals(args[i])) {
         try {
           WIDTH = Integer.parseInt(args[++i]);
-        } catch (Exception x ) {
+        } catch (Exception x) {
           LX.error("Width command-line argument must be followed by integer");
         }
       } else if ("--height".equals(args[i]) || "-h".equals(args[i])) {
         try {
           HEIGHT = Integer.parseInt(args[++i]);
-        } catch (Exception x ) {
+        } catch (Exception x) {
           LX.error("Height command-line argument must be followed by integer");
         }
       } else if (args[i].endsWith(".lxp")) {
@@ -307,7 +317,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       }
     }
     if (headless) {
-      // We're not actually going to run this as a PApplet, but we need to explicitly
+      // We're not actually going to run this as a PApplet, but we need to
+      // explicitly
       // construct and set the initialize callback so that any custom components
       // will be run
       LX.Flags flags = new LX.Flags();

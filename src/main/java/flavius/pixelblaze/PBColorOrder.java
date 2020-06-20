@@ -41,7 +41,7 @@ public enum PBColorOrder {
 		}
 		// message += "}";
 		// logger.fine(message);
-		return result;
+    return result;
 	}
 
 	// TODO: write separate colorBytes for APA102
