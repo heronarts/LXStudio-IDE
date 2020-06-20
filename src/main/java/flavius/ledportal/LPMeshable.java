@@ -98,12 +98,15 @@ public abstract class LPMeshable {
   }
 
   /**
-   * Assumptions: - points are complanar, so only the first 3 points need to be
-   * looked at. - points are given in counter-clockwise order, from the
-   * direction opposing the normal.
+   * Get the normal of a plane defined by {@code points}
+   * Assumptions:
+   * <ul>
+   * <li>points are complanar, so only the first 3 points need to be looked at.</li>
+   * <li>points are given in counter-clockwise order, from the direction opposing the normal.</li>
+   * </li>
    *
-   * @param points
-   * @return
+   * @param points A List of PVectors which define the plane (must be exactly 3 points)
+   * @return PVector The normal of the plane
    */
   public static PVector getNormal(List<PVector> points) {
     PVector anticlockwise = PVector.sub(points.get(2), points.get(0));
@@ -114,15 +117,14 @@ public abstract class LPMeshable {
   }
 
   /**
-   * Form a matrix which will transform all points on the plane defined by
+   * Form a list of matricies which, when composed will transform all points on the plane defined by
    * `center` and `normal` onto the X-Y plane.
    *
-   * @param center
-   * @param normal
-   * @return
+   * @param center a center point on the plane
+   * @param normal a normal to the plane
+   * @return a list of {@link processing.core.PMatrix3D Matrices} to form a flattener matrix
    */
-  private static List<PMatrix3D> getFlattenerComponents(PVector center,
-    PVector normal) {
+  private static List<PMatrix3D> getFlattenerComponents(PVector center, PVector normal) {
     PVector crossZ = normal.cross(zAxis);
     float zenith = PVector.angleBetween(normal, zAxis);
     float azimuth = PVector.angleBetween(crossZ, xAxis);
@@ -277,9 +279,13 @@ public abstract class LPMeshable {
   }
 
   /**
-   * Determine the bounds (min and max) in each axis
+   * Get the bounds ({@code min}, {@code max}) in each axis of all
+   * {@code points}
    *
-   * @return
+   * @param points a List of {@link processing.core.PVector PVector}s
+   * @return a list of bounds ({@code min}, {@code max}) for each axis ({@code
+   *         x}, {@code y},
+   * {@code z})
    */
   public static float[][] getAxisBounds(List<PVector> points) {
 
