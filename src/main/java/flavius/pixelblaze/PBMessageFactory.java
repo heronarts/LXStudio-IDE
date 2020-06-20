@@ -1,22 +1,24 @@
 package flavius.pixelblaze;
 
-import flavius.pixelblaze.util.ByteUtils;
 import flavius.pixelblaze.util.PBCRC;
-// import java.util.logging.Logger;
+import flavius.pixelblaze.util.PBConstants;
 
-public abstract class PBMessageFactory {
-  // private static final Logger logger =
-  // Logger.getLogger(PBMessageFactory.class.getName());
-  public static final int CRC_SIZE = ByteUtils.uint32Bytes;
-  public final PBRecordType recordType;
-  public final int channel;
-  public final int[] indexBuffer;
-  public PBCRC crc = new PBCRC();
+/**
+ * Abstract class which generates messages for the <a href="github.com/simap/pixelblaze_output_expander">
+ * Pixelblaze Output Expander</a> serial protocol for various types of records.
+ */
+public abstract class PBMessageFactory implements PBConstants {
+  private final PBRecordType recordType;
+  private final int channel;
+  private final int[] indexBuffer;
+  private final PBCRC crc = new PBCRC();
+
   /**
-   * Number of bytes between header and CRC when there are zero colors being
+   * Number of bytes between the header and CRC when there are zero colors being
    * sent.
    */
   public final int baseSize;
+
   /**
    * Number of bytes occupied by each color
    */
@@ -43,7 +45,6 @@ public abstract class PBMessageFactory {
     for (byte b : new PBHeader(this.channel, this.recordType).toBytes()) {
       message[i++] = b;
     }
-    ;
     return (i - offset);
   }
 
@@ -52,7 +53,7 @@ public abstract class PBMessageFactory {
   }
 
   protected int writeBody(byte[] message, int offset, int[] indexBuffer,
-    int[] colors) {
+    int[] colors, byte[] glut) {
     return 0;
   }
 
@@ -71,12 +72,11 @@ public abstract class PBMessageFactory {
    * Get the header and body of the message
    */
   public byte[] getMessage(int[] colors, byte[] glut) {
-    // TODO: implement glut
     this.crc.reset();
     final byte[] message = new byte[this.getMessageSize(this.indexBuffer)];
     int i = 0;
     i += this.writeHeader(message, i);
-    i += this.writeBody(message, i, this.indexBuffer, colors);
+    i += this.writeBody(message, i, this.indexBuffer, colors, glut);
     this.crc.updateBytes(message, 0, i);
     i += this.writeCRC(message, i);
     return message;

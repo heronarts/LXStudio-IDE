@@ -16,7 +16,7 @@ public class PBMessageFactoryWS281X extends PBMessageFactoryData {
 
   @Override
   protected int writeBody(byte[] message, int offset, int[] indexBuffer,
-    int[] colors) {
+    int[] colors, byte[] glut) {
     this.validate(indexBuffer);
     int i = offset;
     // logger.fine(String.format(
@@ -31,7 +31,7 @@ public class PBMessageFactoryWS281X extends PBMessageFactoryData {
       message[i++] = b;
     }
     for (int colorIdx : indexBuffer) {
-      for (byte b : this.colorOrder.colorBytes(colors[colorIdx])) {
+      for (byte b : this.colorOrder.colorBytes(colors[colorIdx], glut)) {
         message[i++] = b;
       }
     }

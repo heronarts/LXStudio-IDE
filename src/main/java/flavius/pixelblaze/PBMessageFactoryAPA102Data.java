@@ -21,7 +21,7 @@ public class PBMessageFactoryAPA102Data extends PBMessageFactoryData {
 
   @Override
   protected int writeBody(byte[] message, int offset, int[] indexBuffer,
-    int[] colors) {
+    int[] colors, byte[] glut) {
     this.validate(indexBuffer);
     int i = offset;
     // logger.fine(String.format("freq: 0x%08x (%dd)\n", this.freq, this.freq));
@@ -41,7 +41,7 @@ public class PBMessageFactoryAPA102Data extends PBMessageFactoryData {
     // logger.fine(String.format("global brightness: 0x%02x\n", brightness));
     for (int colorIdx : indexBuffer) {
       int c = 0;
-      for (byte b : this.colorOrder.colorBytes(colors[colorIdx])) {
+      for (byte b : this.colorOrder.colorBytes(colors[colorIdx], glut)) {
         message[i++] = b;
         // overwrite the 4th byte with the brightness register
         if (c == 3)

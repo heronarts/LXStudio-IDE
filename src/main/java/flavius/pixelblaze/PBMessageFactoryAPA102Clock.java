@@ -18,7 +18,7 @@ public class PBMessageFactoryAPA102Clock extends PBMessageFactory {
 
   @Override
   protected int writeBody(byte[] message, int offset, int[] indexBuffer,
-    int[] colors) {
+    int[] colors, byte[] glut) {
     int i = offset;
     // logger.fine(String.format("freq: 0x%08x (%dd)\n", this.freq, this.freq));
     for (byte b : ByteUtils.uint32LEBytes(this.freq)) {
