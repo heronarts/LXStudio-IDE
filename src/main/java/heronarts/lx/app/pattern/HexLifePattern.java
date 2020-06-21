@@ -100,7 +100,7 @@ public class HexLifePattern extends LXModelPattern<LPPanelModel> {
     Strip row = this.model.getRowStrip(y);
     int index = Integer.MIN_VALUE;
     for(Point point : row.points) {
-      if(point.yi == y) {
+      if(point.xi == x) {
         index = point.index;
         break;
       }
@@ -130,11 +130,11 @@ public class HexLifePattern extends LXModelPattern<LPPanelModel> {
       switch (state[i]) {
       case DEAD:
       case DYING:
-        this.newState[i] = (nA == 3) ? CellState.BIRTHING : CellState.DEAD;
+        this.newState[i] = (nA == 2) ? CellState.BIRTHING : CellState.DEAD;
         break;
       case ALIVE:
       case BIRTHING:
-        this.newState[i] = (nA == 2 || nA == 3) ? CellState.ALIVE
+        this.newState[i] = (nA == 2) ? CellState.ALIVE
             : CellState.DYING;
         break;
       }

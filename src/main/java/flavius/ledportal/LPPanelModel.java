@@ -74,10 +74,10 @@ public class LPPanelModel extends LXModel{
       System.arraycopy(points, 0, this.points, 0, points.length);
       for(LXPoint point: pointList) {
         Point p = (Point)point;
-        if(p.xi < xMin) xMin = p.xi;
-        if(p.xi > xMax) xMax = p.xi;
-        if(p.yi < yMin) yMin = p.yi;
-        if(p.yi > yMax) yMax = p.yi;
+        if(p.xi < xiMin) xiMin = p.xi;
+        if(p.xi > xiMax) xiMax = p.xi;
+        if(p.yi < yiMin) yiMin = p.yi;
+        if(p.yi > yiMax) yiMax = p.yi;
       }
     }
   }
