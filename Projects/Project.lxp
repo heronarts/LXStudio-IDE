@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "timestamp": 1592553910774,
+  "timestamp": 1592704644174,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -24,7 +24,7 @@
       "multithreaded": true,
       "channelMultithreaded": false,
       "networkMultithreaded": false,
-      "framesPerSecond": 60.0,
+      "framesPerSecond": 300.0,
       "speed": 1.0
     },
     "children": {
@@ -105,8 +105,8 @@
         "parameters": {
           "label": "Tempo",
           "clockSource": 0,
-          "period": 500.0,
-          "bpm": 120.0,
+          "period": 250.0,
+          "bpm": 240.0,
           "tap": false,
           "nudgeUp": false,
           "nudgeDown": false,
@@ -209,12 +209,12 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 2
+              "focusedPattern": 3
             },
             "children": {},
             "effects": [],
             "clips": [],
-            "patternIndex": 2,
+            "patternIndex": 3,
             "patterns": [
               {
                 "id": 31,
@@ -326,6 +326,36 @@
                   }
                 },
                 "deviceVersion": -1
+              },
+              {
+                "id": 111,
+                "class": "heronarts.lx.app.pattern.HexLifePattern",
+                "internal": {
+                  "modulationColor": 0,
+                  "expanded": true,
+                  "modulationExpanded": false,
+                  "autoCycleEligible": true
+                },
+                "parameters": {
+                  "label": "HexLifePattern"
+                },
+                "children": {
+                  "modulation": {
+                    "id": 112,
+                    "class": "heronarts.lx.modulation.LXModulationEngine",
+                    "internal": {
+                      "modulationColor": 0
+                    },
+                    "parameters": {
+                      "label": "Modulation"
+                    },
+                    "children": {},
+                    "modulators": [],
+                    "modulations": [],
+                    "triggers": []
+                  }
+                },
+                "deviceVersion": -1
               }
             ]
           }
@@ -366,7 +396,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.2538074431178279
+            "basis": 0.10638761963865855
           },
           {
             "id": 51,
@@ -392,7 +422,7 @@
               "exp": 0.19999997317790985
             },
             "children": {},
-            "basis": 0.516257567703386
+            "basis": 0.5389117983301142
           },
           {
             "id": 55,
@@ -418,7 +448,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.72064304519586
+            "basis": 0.8749057041803514
           }
         ],
         "modulations": [
@@ -505,7 +535,7 @@
           "enabled": true,
           "fps": 0.0,
           "gamma": 1.0,
-          "brightness": 1.0
+          "brightness": 0.5285714250057936
         },
         "children": {}
       },
@@ -656,12 +686,12 @@
         "centerPoint": false,
         "camera": {
           "active": true,
-          "radius": 7.139285272604298,
-          "theta": 5.869562967214733,
-          "phi": 1.2095642490312457,
-          "x": -0.19124061876209453,
-          "y": 0.8615308594889939,
-          "z": -0.6585570362512954
+          "radius": 2.229786877895247,
+          "theta": 3.15243666106835,
+          "phi": -0.005832145921885967,
+          "x": 0.0460299120786658,
+          "y": 0.07257058518007398,
+          "z": -0.4111125530471327
         },
         "cue": [
           {
@@ -675,12 +705,12 @@
           },
           {
             "active": true,
-            "radius": 7.139285272604298,
-            "theta": 5.869562967214733,
-            "phi": 1.2095642490312457,
-            "x": -0.19124061876209453,
-            "y": 0.8615308594889939,
-            "z": -0.6585570362512954
+            "radius": 2.229786877895247,
+            "theta": 3.15243666106835,
+            "phi": -0.005832145921885967,
+            "x": 0.0460299120786658,
+            "y": 0.07257058518007398,
+            "z": -0.4111125530471327
           },
           {
             "active": false,
