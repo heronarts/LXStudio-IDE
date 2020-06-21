@@ -15,30 +15,42 @@ import processing.core.PVector;
  * in the grid can have a different length
  */
 public class LPPanelModel extends LXModel{
-  public static int getIndexBoundSize(int[][] indices, int axis) {
-    int minimum = Integer.MAX_VALUE;
-    int maximum = Integer.MIN_VALUE;
+  public static int[][] getIndexBounds(int[][] indices) {
+    int[][] result = new int[][]{
+      new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE},
+      new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE}
+    };
     for(int[] coordinates: indices) {
-      if(coordinates[axis] < minimum) {
-        minimum = coordinates[axis];
-      }
-      if(coordinates[axis] > maximum) {
-        maximum = coordinates[axis];
+      for(int axis = 0; axis < 2; axis++) {
+        if(coordinates[axis] < result[axis][0]) {
+          result[axis][0] = coordinates[axis];
+        }
+        if(coordinates[axis] > result[axis][1]) {
+          result[axis][1] = coordinates[axis];
+        }
       }
     }
-    return maximum - minimum;
+    return result;
   }
 
   public static class PanelMetrics {
-    public final int width;
-    public final int height;
-
+    public int xiMax;
+    public int xiMin;
+    public int yiMax;
+    public int yiMin;
+    public int width;
+    public int height;
     int[][] indices;
     PMatrix3D transformation;
 
     public PanelMetrics(PMatrix3D transformation, int[][] indices) {
-      this.width = getIndexBoundSize(indices, 0);
-      this.height = getIndexBoundSize(indices, 1);
+      int[][] indexBounds = getIndexBounds(indices);
+      this.xiMin = indexBounds[0][0];
+      this.xiMax = indexBounds[0][1];
+      this.yiMin = indexBounds[1][0];
+      this.yiMax = indexBounds[1][1];
+      this.width = xiMax - xiMin;
+      this.height = yiMax - yiMin;
       this.transformation = transformation;
       this.indices = indices;
     }
@@ -59,10 +71,10 @@ public class LPPanelModel extends LXModel{
   public class Strip extends LXModel {
 
     public int index;
-    public int xiMax = Integer.MIN_VALUE;
     public int xiMin = Integer.MAX_VALUE;
-    public int yiMax = Integer.MIN_VALUE;
+    public int xiMax = Integer.MIN_VALUE;
     public int yiMin = Integer.MAX_VALUE;
+    public int yiMax = Integer.MIN_VALUE;
 
     public final Point[] points;
 
@@ -145,7 +157,7 @@ public class LPPanelModel extends LXModel{
     System.arraycopy(super.points, 0, this.points, 0, super.points.length);
 
     List<Strip> rows = new ArrayList<Strip>();
-    for (int y = 0; y < height; ++y) {
+    for (int y = metrics.yiMin; y <= metrics.yiMax; y++) {
       List<LXPoint> row = new ArrayList<LXPoint>();
       for (int i = 0; i < points.length; i++) {
         if(points[i].yi == y) row.add(points[i]);
@@ -155,7 +167,7 @@ public class LPPanelModel extends LXModel{
     this.rows = Collections.unmodifiableList(rows);
 
     List<Strip> columns = new ArrayList<Strip>();
-    for (int x = 0; x < width; ++x) {
+    for (int x = metrics.xiMin; x <= metrics.xiMax; x++) {
       List<LXPoint> column = new ArrayList<LXPoint>();
       for (int i = 0; i < points.length; i++) {
         if(points[i].xi == x) column.add(points[i]);
