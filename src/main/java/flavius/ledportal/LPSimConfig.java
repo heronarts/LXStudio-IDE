@@ -16,12 +16,12 @@ public class LPSimConfig {
   public List<LPStructure> structures = new ArrayList<LPStructure>();
   public List<LPStructure> debugStructures = new ArrayList<LPStructure>();
 
-  public String activeModel = "data/models/dome_render_6_5_LEDs_Iso_1220_Single_ALL_PANELS.json";
+  // public String activeModel = "data/models/dome_render_6_5_LEDs_Iso_1220_Single_ALL_PANELS.json";
   // public String activeModel = "data/models/dome_render_6_5_LEDs_Iso_1220_ALL_PANELS.json";
-  // public String activeModel = "data/models/dome_render_6_5_Dome_ALL_PANELS.json";
+  public String activeModel = "data/models/dome_render_6_5_Dome_ALL_PANELS.json";
   public String[] activeStructures = {
-    // "data/structures/dome_render_6_5_Dome_EDGES.json",
-    // "data/structures/dome_render_6_5_Left_Stack_FACES.json"
+    "data/structures/dome_render_6_5_Dome_EDGES.json",
+    "data/structures/dome_render_6_5_Left_Stack_FACES.json"
   };
   public float[] screencapBounds; // = new float[]{ 0, 0, 1, 1 };
   public String activeMovie;
