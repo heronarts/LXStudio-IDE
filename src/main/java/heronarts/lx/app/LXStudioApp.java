@@ -28,6 +28,7 @@ import heronarts.lx.app.ui.UIVideoFrame;
 import heronarts.lx.app.ui.UIWireframe;
 import heronarts.lx.LX;
 import heronarts.lx.LXPlugin;
+import heronarts.lx.LX.Media;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
@@ -37,6 +38,9 @@ import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -115,11 +119,37 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     this.surface.setTitle(WINDOW_TITLE);
   }
 
-  void videoSetup() {
+  @Override
+  public void initialize(LX lx) {
+    // Here is where you should register any custom components or make
+    // modifications
+    // to the LX engine or hierarchy. This is also used in headless mode, so
+    // note that
+    // you cannot assume you are working with an LXStudio class or that any UI
+    // will be
+    // available.
+
+    // Register custom pattern and effect types
+    // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
+    lx.registry.addPattern(heronarts.lx.app.pattern.VideoFrame.class);
+    lx.registry.addPattern(heronarts.lx.app.pattern.HexLifePattern.class);
+    // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
+
+    initializeVideo(lx);
+  }
+
+  void initializeVideo(LX lx) {
+    String mediaPrefix = "Content/media/";
+    try {
+      mediaPrefix = lx.getMediaFolder(Media.CONTENT).getCanonicalPath() + "/media/";
+    } catch (IOException e) {
+      logger.severe(String.format("could not get mediaPrefix: %s", e.toString()));
+    }
+    logger.info(String.format("mediaPrefix: %s", mediaPrefix));
     if (config.activeImage != null) {
-      videoFrame = loadImage(config.activeImage);
+      videoFrame = loadImage(mediaPrefix + config.activeImage);
     } else if (config.activeMovie != null) {
-      movie = new Movie((PApplet) this, config.activeMovie);
+      movie = new Movie((PApplet) this, (mediaPrefix + config.activeMovie));
       movie.loop();
       movie.volume(config.movieVolume);
       while (!movie.available())
@@ -152,23 +182,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     if (videoFrame != null)
       logger.info(String.format("videoFrame: %d x %d", videoFrame.width,
         videoFrame.height));
-  }
-
-  @Override
-  public void initialize(LX lx) {
-    // Here is where you should register any custom components or make
-    // modifications
-    // to the LX engine or hierarchy. This is also used in headless mode, so
-    // note that
-    // you cannot assume you are working with an LXStudio class or that any UI
-    // will be
-    // available.
-
-    // Register custom pattern and effect types
-    // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
-    lx.registry.addPattern(heronarts.lx.app.pattern.VideoFrame.class);
-    lx.registry.addPattern(heronarts.lx.app.pattern.HexLifePattern.class);
-    // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
   }
 
   public void initializeUI(LXStudio lx, LXStudio.UI ui) {
@@ -236,7 +249,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   void onUIReadyMovie(LXStudio lx, LXStudio.UI ui) {
     if (videoFrame == null)
-      videoSetup();
+      initializeVideo(lx);
     if (videoFrame == null)
       return;
 

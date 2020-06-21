@@ -28,7 +28,8 @@ public class LPSimConfig {
   // public String activeMovie = "data/media/BOKK (loop).mov";
   // public String activeMovie = "data/media/Steamed Hams.mp4";
   public float movieVolume = 0.f;
-  public String activeImage; // = "data/media/test_broadcast.jpg";
+  public String activeImage;
+  // public String activeImage = "test_broadcast.jpg";
 
   public LPSimConfig() {
   }
