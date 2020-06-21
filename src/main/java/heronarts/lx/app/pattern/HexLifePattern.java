@@ -114,7 +114,7 @@ public class HexLifePattern extends LXModelPattern<LPPanelModel> {
     if (x < row.xiMin || x > row.xiMax) {
       return 0;
     }
-    if (y < column.yiMax || y > column.yiMax) {
+    if (y < column.yiMin || y > column.yiMax) {
       return 0;
     }
     int idx = getIndex(x, y);
