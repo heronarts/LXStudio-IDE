@@ -184,8 +184,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       PBExpanderOutput.BAUD_RATE);
 
     try {
-      // int pointIndex = 0;
-      int pointIndex = 214 * 6;
+      // TODO: Get model geometry from config
+      int pointIndex = 0;
+      // int pointIndex = 214 * 6;
       int nPoints = 300;
       int nChannels = 1;
       PBExpanderOutput output = new PBExpanderOutput(lx, serialPort);

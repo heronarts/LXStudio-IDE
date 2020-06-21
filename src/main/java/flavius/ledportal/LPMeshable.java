@@ -13,9 +13,9 @@ import processing.core.PVector;
 public abstract class LPMeshable {
   private static final Logger logger = Logger
     .getLogger(LPMeshable.class.getName());
-  public List<PVector> vertices;
-  public List<int[]> edges;
-  public List<int[]> faces;
+  public List<PVector> vertices = new ArrayList<PVector>();
+  public List<int[]> edges = new ArrayList<int[]>();
+  public List<int[]> faces = new ArrayList<int[]>();
   public PMatrix3D matrix;
   public String name;
 
@@ -37,9 +37,6 @@ public abstract class LPMeshable {
   public static String floatFmt = "%7.3f";
 
   public LPMeshable() {
-    vertices = new ArrayList<PVector>();
-    edges = new ArrayList<int[]>();
-    faces = new ArrayList<int[]>();
   }
 
   public static String formatPVector(PVector vector) {

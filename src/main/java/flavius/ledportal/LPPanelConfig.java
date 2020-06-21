@@ -3,56 +3,47 @@ package flavius.ledportal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
 import processing.data.JSONObject;
 import processing.data.JSONArray;
+import processing.core.PMatrix3D;
 import processing.core.PVector;
 
-public class LPPanel extends LPMeshable {
+public class LPPanelConfig extends LPMeshable {
   private static final Logger logger = Logger
-    .getLogger(LPPanel.class.getName());
-  public List<PVector> leds;
+    .getLogger(LPPanelConfig.class.getName());
+  public int[][] leds;
 
-  public LPPanel() {
-    leds = new ArrayList<PVector>();
-  }
-
-  public LPPanel(List<PVector> leds) {
-    this();
-    this.leds = leds;
-  }
-
-  public LPPanel updateFromJSONObject(JSONObject jsonConfig) {
+  public LPPanelConfig updateFromJSONObject(JSONObject jsonConfig) {
     super.updateFromJSONObject(jsonConfig);
     if (jsonConfig.hasKey("pixels")) {
       JSONArray ledList = jsonConfig.getJSONArray("pixels");
+      this.leds = new int[ledList.size()][2];
       for (int i = 0; i < ledList.size(); i++) {
         JSONArray led = ledList.getJSONArray(i);
-        this.leds.add(new PVector(led.getInt(0), led.getInt(1), 0));
+        this.leds[i][0] = led.getInt(0);
+        this.leds[i][1] = led.getInt(1);
       }
-      logger.info(String.format("has %d pixels: %s", this.leds.size(),
-        formatPVectorList(this.leds)));
+      logger.info(String.format("has %d pixels", this.leds.length));
     }
     return this;
   }
 
-  public String toString() {
-    String out = "Panel:\n";
-    out += "-> LEDs:\n\t";
-    for (PVector led : this.leds) {
-      out += led.toString() + "\n\t";
-    }
-    return out;
-  }
-
   public List<PVector> getWorldPixels() {
     List<PVector> worldPixels = new ArrayList<PVector>();
-    for (PVector led : this.leds) {
+    for (int i=0; i<this.leds.length; i++) {
+      PVector led = new PVector((float)this.leds[i][0], (float)this.leds[i][1]);
       worldPixels.add(worldPixelTransform(getWorldCoordinate(led)));
     }
     logger
       .fine(String.format("world pixels: %s", formatPVectorList(worldPixels)));
     return worldPixels;
+  }
+
+  public LPPanelModel getModel() {
+    List<PMatrix3D> matrices = new ArrayList<PMatrix3D>();
+    matrices.add(worldToUI);
+    matrices.add(matrix);
+    return new LPPanelModel(composeMatrices(matrices), leds);
   }
 
 }
