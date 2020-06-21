@@ -39,8 +39,6 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -81,6 +79,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public static PMatrix3D unflattener;
   public static float[][] flatBounds;
   public static float[][] modelBounds;
+  public static LXStudio studio;
+  public static LXStudioApp instance;
+  public static LXModel model;
 
   private Movie movie;
   private Robot robot;
@@ -98,7 +99,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   @Override
   public void setup() {
-
+    instance = this;
     config = new LPSimConfig();
     config.updateFromJSONObject(loadJSONObject(config.activeModel));
     for (String activeStructure : config.activeStructures) {
@@ -114,8 +115,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     flags.resizable = true;
     flags.useGLPointCloud = false;
     flags.startMultiThreaded = true;
-
-    new LXStudio(this, flags, config.getModel());
+    model = config.getModel();
+    studio = new LXStudio(this, flags, model);
     this.surface.setTitle(WINDOW_TITLE);
   }
 
@@ -133,9 +134,12 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
     lx.registry.addPattern(heronarts.lx.app.pattern.VideoFrame.class);
     lx.registry.addPattern(heronarts.lx.app.pattern.HexLifePattern.class);
+    lx.registry.addPattern(heronarts.lx.app.pattern.PanelGraphicsPattern.class);
+    lx.registry.addPattern(heronarts.lx.app.pattern.PanelBLM.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 
-    initializeVideo(lx);
+    if (videoFrame == null)
+      initializeVideo(lx);
   }
 
   void initializeVideo(LX lx) {
@@ -145,7 +149,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     } catch (IOException e) {
       logger.severe(String.format("could not get mediaPrefix: %s", e.toString()));
     }
-    logger.info(String.format("mediaPrefix: %s", mediaPrefix));
+    // logger.info(String.format("mediaPrefix: %s", mediaPrefix));
     if (config.activeImage != null) {
       videoFrame = loadImage(mediaPrefix + config.activeImage);
     } else if (config.activeMovie != null) {

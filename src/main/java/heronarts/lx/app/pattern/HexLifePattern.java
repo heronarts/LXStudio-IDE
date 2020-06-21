@@ -27,13 +27,9 @@ import heronarts.lx.model.GridModel.Point;
 import heronarts.lx.pattern.LXModelPattern;
 import heronarts.lx.utils.LXUtils;
 import java.util.HashMap;
-import java.util.logging.Logger;
 
 @LXCategory(LXCategory.FORM)
 public class HexLifePattern extends LXModelPattern<LPPanelModel> {
-
-  private static final Logger logger = Logger
-    .getLogger(HexLifePattern.class.getName());
 
   private enum CellState {
     DEAD, BIRTHING, ALIVE, DYING
