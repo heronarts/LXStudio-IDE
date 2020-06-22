@@ -165,6 +165,7 @@ public class HexLifePattern extends LXModelPattern<LPPanelModel> {
       }
     }
     double ramp = this.lx.engine.tempo.ramp();
+    ramp = ramp * ramp;
     for (int i = 0; i < this.model.size; ++i) {
       double b = 0;
       switch (this.state[i]) {
