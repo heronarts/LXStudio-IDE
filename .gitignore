@@ -16,4 +16,4 @@ application.windows64
 application.macosx
 bin/
 target/
-
+doc/
