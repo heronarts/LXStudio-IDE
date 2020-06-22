@@ -1,6 +1,6 @@
 {
   "version": "0.2.0",
-  "timestamp": 1592806052872,
+  "timestamp": 1592807308148,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -161,8 +161,8 @@
           "scene-4": false,
           "scene-5": false,
           "crossfader": 0.5,
-          "crossfaderBlendMode": 0,
-          "focusedChannel": 0,
+          "crossfaderBlendMode": 2,
+          "focusedChannel": 1,
           "cueA": false,
           "cueB": false,
           "viewCondensed": false
@@ -199,7 +199,7 @@
               "enabled": true,
               "cue": false,
               "fader": 1.0,
-              "crossfadeGroup": 0,
+              "crossfadeGroup": 1,
               "blendMode": 0,
               "midiMonitor": false,
               "midiChannel": 16,
@@ -209,12 +209,12 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 4
+              "focusedPattern": 1
             },
             "children": {},
             "effects": [],
             "clips": [],
-            "patternIndex": 4,
+            "patternIndex": 1,
             "patterns": [
               {
                 "id": 31,
@@ -386,6 +386,99 @@
                   }
                 },
                 "deviceVersion": -1
+              },
+              {
+                "id": 208,
+                "class": "heronarts.lx.app.pattern.Panel3DRotatingCube",
+                "internal": {
+                  "modulationColor": 0,
+                  "expanded": true,
+                  "modulationExpanded": false,
+                  "autoCycleEligible": true
+                },
+                "parameters": {
+                  "label": "Panel3DRotatingCube"
+                },
+                "children": {
+                  "modulation": {
+                    "id": 209,
+                    "class": "heronarts.lx.modulation.LXModulationEngine",
+                    "internal": {
+                      "modulationColor": 0
+                    },
+                    "parameters": {
+                      "label": "Modulation"
+                    },
+                    "children": {},
+                    "modulators": [],
+                    "modulations": [],
+                    "triggers": []
+                  }
+                },
+                "deviceVersion": -1
+              }
+            ]
+          },
+          {
+            "id": 243,
+            "class": "heronarts.lx.mixer.LXChannel",
+            "internal": {
+              "modulationColor": 0,
+              "controlsExpanded": true
+            },
+            "parameters": {
+              "label": "Channel-2",
+              "arm": false,
+              "selected": true,
+              "enabled": true,
+              "cue": false,
+              "fader": 1.0,
+              "crossfadeGroup": 2,
+              "blendMode": 0,
+              "midiMonitor": false,
+              "midiChannel": 16,
+              "autoCycleEnabled": false,
+              "autoCycleMode": 0,
+              "autoCycleTimeSecs": 60.0,
+              "transitionEnabled": false,
+              "transitionTimeSecs": 5.0,
+              "transitionBlendMode": 0,
+              "focusedPattern": 0
+            },
+            "children": {},
+            "effects": [],
+            "clips": [],
+            "patternIndex": 0,
+            "patterns": [
+              {
+                "id": 255,
+                "class": "heronarts.lx.app.pattern.Panel3DRotatingCube",
+                "internal": {
+                  "modulationColor": 0,
+                  "expanded": true,
+                  "modulationExpanded": false,
+                  "autoCycleEligible": true
+                },
+                "parameters": {
+                  "label": "Panel3DRotatingCube"
+                },
+                "children": {
+                  "modulation": {
+                    "id": 256,
+                    "class": "heronarts.lx.modulation.LXModulationEngine",
+                    "internal": {
+                      "modulationColor": 0
+                    },
+                    "parameters": {
+                      "label": "Modulation"
+                    },
+                    "children": {},
+                    "modulators": [],
+                    "modulations": [],
+                    "triggers": []
+                  }
+                },
+                "deviceVersion": -1
               }
             ]
           }
@@ -426,7 +519,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.9863561297970128
+            "basis": 0.524970357981209
           },
           {
             "id": 51,
@@ -452,7 +545,7 @@
               "exp": 0.19999997317790985
             },
             "children": {},
-            "basis": 0.7142097339780562
+            "basis": 0.47612033151821676
           },
           {
             "id": 55,
@@ -478,7 +571,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.5347889900875479
+            "basis": 0.6507116677056168
           }
         ],
         "modulations": [
@@ -565,7 +658,7 @@
           "enabled": true,
           "fps": 0.0,
           "gamma": 1.0,
-          "brightness": 0.5285714250057936
+          "brightness": 1.0
         },
         "children": {}
       },

@@ -23,12 +23,16 @@ import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.LPStructure;
 import flavius.pixelblaze.output.PBExpanderOutput;
+import heronarts.lx.app.pattern.HexLifePattern;
+import heronarts.lx.app.pattern.Panel3DBLM;
+import heronarts.lx.app.pattern.Panel3DRotatingCube;
+import heronarts.lx.app.pattern.VideoFrame;
 import heronarts.lx.app.ui.UIAxes;
 import heronarts.lx.app.ui.UIVideoFrame;
 import heronarts.lx.app.ui.UIWireframe;
 import heronarts.lx.LX;
-import heronarts.lx.LXPlugin;
 import heronarts.lx.LX.Media;
+import heronarts.lx.LXPlugin;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
@@ -114,7 +118,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     LXStudio.Flags flags = new LXStudio.Flags(this);
     flags.resizable = true;
     flags.useGLPointCloud = false;
-    flags.startMultiThreaded = true;
+    flags.startMultiThreaded = false;
     model = config.getModel();
     studio = new LXStudio(this, flags, model);
     this.surface.setTitle(WINDOW_TITLE);
@@ -132,10 +136,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
     // Register custom pattern and effect types
     // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
-    lx.registry.addPattern(heronarts.lx.app.pattern.VideoFrame.class);
-    lx.registry.addPattern(heronarts.lx.app.pattern.HexLifePattern.class);
-    lx.registry.addPattern(heronarts.lx.app.pattern.PanelGraphicsPattern.class);
-    lx.registry.addPattern(heronarts.lx.app.pattern.PanelBLM.class);
+    lx.registry.addPattern(VideoFrame.class);
+    lx.registry.addPattern(Panel3DBLM.class);
+    lx.registry.addPattern(Panel3DRotatingCube.class);
+    lx.registry.addPattern(HexLifePattern.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 
     if (videoFrame == null)
