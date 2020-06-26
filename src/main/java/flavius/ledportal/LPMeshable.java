@@ -98,7 +98,7 @@ public abstract class LPMeshable {
    * Get the normal of a plane defined by {@code points}
    * Assumptions:
    * <ul>
-   * <li>points are complanar, so only the first 3 points need to be looked at.</li>
+   * <li>points are co-planar, so only the first 3 points need to be looked at.</li>
    * <li>points are given in counter-clockwise order, from the direction opposing the normal.</li>
    * </li>
    *
@@ -114,7 +114,7 @@ public abstract class LPMeshable {
   }
 
   /**
-   * Form a list of matricies which, when composed will transform all points on the plane defined by
+   * Form a list of matrices which, when composed will transform all points on the plane defined by
    * `center` and `normal` onto the X-Y plane.
    *
    * @param center a center point on the plane
