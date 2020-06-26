@@ -1,6 +1,6 @@
 {
-  "version": "0.2.0",
-  "timestamp": 1592807308148,
+  "version": "0.2.1-SNAPSHOT",
+  "timestamp": 1593166569324,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -21,7 +21,7 @@
     },
     "parameters": {
       "label": "Engine",
-      "multithreaded": false,
+      "multithreaded": true,
       "channelMultithreaded": false,
       "networkMultithreaded": false,
       "framesPerSecond": 300.0,
@@ -136,7 +136,7 @@
         }
       },
       "clips": {
-        "id": 11,
+        "id": 10,
         "class": "heronarts.lx.clip.LXClipEngine",
         "internal": {
           "modulationColor": 0
@@ -148,7 +148,7 @@
         "children": {}
       },
       "mixer": {
-        "id": 12,
+        "id": 11,
         "class": "heronarts.lx.mixer.LXMixerEngine",
         "internal": {
           "modulationColor": 0
@@ -169,7 +169,7 @@
         },
         "children": {
           "master": {
-            "id": 20,
+            "id": 19,
             "class": "heronarts.lx.mixer.LXMasterBus",
             "internal": {
               "modulationColor": 0
@@ -464,7 +464,7 @@
                 },
                 "children": {
                   "modulation": {
-                    "id": 256,
+                    "id": 317,
                     "class": "heronarts.lx.modulation.LXModulationEngine",
                     "internal": {
                       "modulationColor": 0
@@ -485,7 +485,7 @@
         ]
       },
       "modulation": {
-        "id": 21,
+        "id": 20,
         "class": "heronarts.lx.modulation.LXModulationEngine",
         "internal": {
           "modulationColor": 0
@@ -515,11 +515,12 @@
               "wave": 0,
               "skew": 0.0,
               "shape": 0.0,
+              "bias": 0.0,
               "phase": 0.0,
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.524970357981209
+            "basis": 0.03832087545148788
           },
           {
             "id": 51,
@@ -541,11 +542,12 @@
               "wave": 0,
               "skew": 0.0,
               "shape": 0.0,
+              "bias": 0.0,
               "phase": 0.0,
               "exp": 0.19999997317790985
             },
             "children": {},
-            "basis": 0.47612033151821676
+            "basis": 0.3084284416711146
           },
           {
             "id": 55,
@@ -567,11 +569,12 @@
               "wave": 0,
               "skew": 0.0,
               "shape": 0.0,
+              "bias": 0.0,
               "phase": 0.0,
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.6507116677056168
+            "basis": 0.5891348051083135
           }
         ],
         "modulations": [
@@ -648,7 +651,7 @@
         "triggers": []
       },
       "output": {
-        "id": 22,
+        "id": 21,
         "class": "heronarts.lx.LXEngine$Output",
         "internal": {
           "modulationColor": 0
@@ -663,7 +666,7 @@
         "children": {}
       },
       "midi": {
-        "id": 24,
+        "id": 23,
         "class": "heronarts.lx.midi.LXMidiEngine",
         "internal": {
           "modulationColor": 0
@@ -678,7 +681,7 @@
         "mapping": []
       },
       "audio": {
-        "id": 25,
+        "id": 24,
         "class": "heronarts.lx.audio.LXAudioEngine",
         "internal": {
           "modulationColor": 0
@@ -690,7 +693,7 @@
         },
         "children": {
           "input": {
-            "id": 26,
+            "id": 25,
             "class": "heronarts.lx.audio.LXAudioInput",
             "internal": {
               "modulationColor": 0
@@ -702,7 +705,7 @@
             "children": {}
           },
           "output": {
-            "id": 27,
+            "id": 26,
             "class": "heronarts.lx.audio.LXAudioOutput",
             "internal": {
               "modulationColor": 0
@@ -717,7 +720,7 @@
             "children": {}
           },
           "meter": {
-            "id": 28,
+            "id": 27,
             "class": "heronarts.lx.audio.GraphicMeter",
             "internal": {
               "modulationColor": 0
@@ -753,7 +756,7 @@
         }
       },
       "osc": {
-        "id": 29,
+        "id": 28,
         "class": "heronarts.lx.osc.LXOscEngine",
         "internal": {
           "modulationColor": 0
@@ -770,7 +773,7 @@
         "children": {}
       },
       "snapshots": {
-        "id": 30,
+        "id": 29,
         "class": "heronarts.lx.snapshot.LXSnapshotEngine",
         "internal": {
           "modulationColor": 0

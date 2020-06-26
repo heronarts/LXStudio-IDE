@@ -1,35 +1,29 @@
 package heronarts.lx.app.pattern;
 
 import heronarts.lx.color.LXColor;
-import heronarts.lx.parameter.CompoundParameter;
-
-import java.util.logging.Logger;
 
 import heronarts.lx.LX;
 
 import processing.core.PGraphics;
 import processing.core.PMatrix2D;
-import processing.core.PMatrix3D;
 
 /**
  * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed
  * grid pattern
  */
 public class Panel3DBLM extends Panel3DGraphicsPattern {
-  private static final Logger logger = Logger
-    .getLogger(Panel3DBLM.class.getName());
 
   public Panel3DBLM(LX lx) {
     super(lx);
   }
 
-  @Override
-  public void beforeLoopGraphics() {
+  public void beforeDraw(PGraphics pg) {
+    super.beforeDraw(pg);
     pg.noSmooth();
   }
 
   @Override
-  public void loopGraphics() {
+  public void onDraw(PGraphics pg) {
     pg.pushMatrix();
     pg.textFont(font);
     pg.textSize(8);

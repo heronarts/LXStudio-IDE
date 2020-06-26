@@ -7,6 +7,7 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 
+import processing.core.PGraphics;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
 
@@ -45,7 +46,7 @@ public class Panel3DRotatingCube extends Panel3DGraphicsPattern {
   }
 
   @Override
-  public void loopGraphics() {
+  public void onDraw(PGraphics pg) {
     pg.pushMatrix();
     pg.background(LXColor.BLACK);
     pg.stroke(LXColor.WHITE);

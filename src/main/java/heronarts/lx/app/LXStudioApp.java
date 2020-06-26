@@ -118,7 +118,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     LXStudio.Flags flags = new LXStudio.Flags(this);
     flags.resizable = true;
     flags.useGLPointCloud = false;
-    flags.startMultiThreaded = false;
+    flags.startMultiThreaded = true;
     model = config.getModel();
     studio = new LXStudio(this, flags, model);
     this.surface.setTitle(WINDOW_TITLE);
