@@ -1,6 +1,6 @@
 {
   "version": "0.2.1-SNAPSHOT",
-  "timestamp": 1593237694095,
+  "timestamp": 1593237808271,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -408,7 +408,7 @@
                   "yRotate": -1.0,
                   "zRotate": -1.0,
                   "size": 9.900000002235174,
-                  "thicc": 2.300000172108412
+                  "thicc": 2.10000017657876
                 },
                 "children": {
                   "modulation": {
@@ -468,7 +468,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.4029043297888311
+            "basis": 0.15096982617413077
           },
           {
             "id": 51,
@@ -495,7 +495,7 @@
               "exp": 0.19999997317790985
             },
             "children": {},
-            "basis": 0.7799235777783242
+            "basis": 0.2281051086545773
           },
           {
             "id": 55,
@@ -522,7 +522,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.173893054557428
+            "basis": 0.21959746716135795
           },
           {
             "id": 361,
@@ -549,7 +549,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.7996281250000408
+            "basis": 0.0731281250000535
           },
           {
             "id": 363,
@@ -563,7 +563,7 @@
               "trigger": false,
               "loop": true,
               "tempoSync": true,
-              "tempoMultiplier": 11,
+              "tempoMultiplier": 12,
               "tempoLock": true,
               "clockMode": 2,
               "periodFast": 1000.0,
@@ -576,7 +576,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.7990083333334326
+            "basis": 0.146256250000107
           }
         ],
         "modulations": [
