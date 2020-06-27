@@ -7,8 +7,6 @@ import heronarts.lx.LXLoopTask;
 import heronarts.lx.model.GridModel.Point;
 import heronarts.lx.pattern.LXModelPattern;
 import heronarts.p3lx.P3LX;
-import heronarts.p3lx.ui.UIObject;
-import heronarts.p3lx.ui.UITimerTask;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -31,7 +29,7 @@ public class Panel3DGraphicsPattern extends LXModelPattern<LPPanelModel> {
   PGraphics pg;
   LXLoopTask renderTask;
 
-  private static final Logger logger = Logger
+  protected static final Logger logger = Logger
     .getLogger(Panel3DGraphicsPattern.class.getName());
 
   public void beforeDraw(PGraphics pg) {}

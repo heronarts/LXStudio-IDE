@@ -1,6 +1,6 @@
 {
   "version": "0.2.1-SNAPSHOT",
-  "timestamp": 1593166569324,
+  "timestamp": 1593237404991,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -105,8 +105,8 @@
         "parameters": {
           "label": "Tempo",
           "clockSource": 0,
-          "period": 250.0,
-          "bpm": 240.0,
+          "period": 500.0,
+          "bpm": 120.0,
           "tap": false,
           "nudgeUp": false,
           "nudgeDown": false,
@@ -209,7 +209,7 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 1
+              "focusedPattern": 3
             },
             "children": {},
             "effects": [],
@@ -356,66 +356,6 @@
                   }
                 },
                 "deviceVersion": -1
-              },
-              {
-                "id": 175,
-                "class": "heronarts.lx.app.pattern.Panel3DBLM",
-                "internal": {
-                  "modulationColor": 0,
-                  "expanded": true,
-                  "modulationExpanded": false,
-                  "autoCycleEligible": true
-                },
-                "parameters": {
-                  "label": "Panel3DBLM"
-                },
-                "children": {
-                  "modulation": {
-                    "id": 176,
-                    "class": "heronarts.lx.modulation.LXModulationEngine",
-                    "internal": {
-                      "modulationColor": 0
-                    },
-                    "parameters": {
-                      "label": "Modulation"
-                    },
-                    "children": {},
-                    "modulators": [],
-                    "modulations": [],
-                    "triggers": []
-                  }
-                },
-                "deviceVersion": -1
-              },
-              {
-                "id": 208,
-                "class": "heronarts.lx.app.pattern.Panel3DRotatingCube",
-                "internal": {
-                  "modulationColor": 0,
-                  "expanded": true,
-                  "modulationExpanded": false,
-                  "autoCycleEligible": true
-                },
-                "parameters": {
-                  "label": "Panel3DRotatingCube"
-                },
-                "children": {
-                  "modulation": {
-                    "id": 209,
-                    "class": "heronarts.lx.modulation.LXModulationEngine",
-                    "internal": {
-                      "modulationColor": 0
-                    },
-                    "parameters": {
-                      "label": "Modulation"
-                    },
-                    "children": {},
-                    "modulators": [],
-                    "modulations": [],
-                    "triggers": []
-                  }
-                },
-                "deviceVersion": -1
               }
             ]
           },
@@ -460,7 +400,15 @@
                   "autoCycleEligible": true
                 },
                 "parameters": {
-                  "label": "Panel3DRotatingCube"
+                  "label": "Panel3DRotatingCube",
+                  "xOffset": 0.7200000062584877,
+                  "yOffset": 0.7799999825656414,
+                  "zOffset": -0.30000001564621925,
+                  "xRotate": -1.0,
+                  "yRotate": 0.0,
+                  "zRotate": -1.0,
+                  "size": 9.900000002235174,
+                  "thicc": 2.300000172108412
                 },
                 "children": {
                   "modulation": {
@@ -510,7 +458,7 @@
               "tempoMultiplier": 5,
               "tempoLock": true,
               "clockMode": 0,
-              "periodFast": 3847.031143003681,
+              "periodFast": 8957.280618959563,
               "periodSlow": 10000.0,
               "wave": 0,
               "skew": 0.0,
@@ -520,7 +468,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.03832087545148788
+            "basis": 0.1270370997210868
           },
           {
             "id": 51,
@@ -537,7 +485,7 @@
               "tempoMultiplier": 5,
               "tempoLock": true,
               "clockMode": 0,
-              "periodFast": 1965.8508040543747,
+              "periodFast": 15330.990460777282,
               "periodSlow": 10000.0,
               "wave": 0,
               "skew": 0.0,
@@ -547,7 +495,7 @@
               "exp": 0.19999997317790985
             },
             "children": {},
-            "basis": 0.3084284416711146
+            "basis": 0.9224335323931383
           },
           {
             "id": 55,
@@ -564,7 +512,7 @@
               "tempoMultiplier": 5,
               "tempoLock": true,
               "clockMode": 0,
-              "periodFast": 8957.280618959563,
+              "periodFast": 5995.472654948623,
               "periodSlow": 10000.0,
               "wave": 0,
               "skew": 0.0,
@@ -574,7 +522,61 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.5891348051083135
+            "basis": 0.9535080009489887
+          },
+          {
+            "id": 361,
+            "class": "heronarts.lx.modulator.VariableLFO",
+            "internal": {
+              "modulationColor": 0
+            },
+            "parameters": {
+              "label": "LFO 4",
+              "running": true,
+              "trigger": false,
+              "loop": true,
+              "tempoSync": true,
+              "tempoMultiplier": 13,
+              "tempoLock": true,
+              "clockMode": 2,
+              "periodFast": 1000.0,
+              "periodSlow": 10000.0,
+              "wave": 3,
+              "skew": 0.0,
+              "shape": 0.0,
+              "bias": 0.0,
+              "phase": 0.0,
+              "exp": 0.0
+            },
+            "children": {},
+            "basis": 0.6616281250000142
+          },
+          {
+            "id": 363,
+            "class": "heronarts.lx.modulator.VariableLFO",
+            "internal": {
+              "modulationColor": 0
+            },
+            "parameters": {
+              "label": "LFO 5",
+              "running": true,
+              "trigger": false,
+              "loop": true,
+              "tempoSync": true,
+              "tempoMultiplier": 11,
+              "tempoLock": true,
+              "clockMode": 2,
+              "periodFast": 1000.0,
+              "periodSlow": 10000.0,
+              "wave": 3,
+              "skew": 0.0,
+              "shape": 0.0,
+              "bias": 0.0,
+              "phase": 0.0,
+              "exp": 0.0
+            },
+            "children": {},
+            "basis": 0.4310083333333665
           }
         ],
         "modulations": [
@@ -597,7 +599,7 @@
               "label": "LX",
               "enabled": true,
               "Polarity": 1,
-              "Range": 0.6624999949708581
+              "Range": 0.3124999897554517
             },
             "children": {}
           },
@@ -620,7 +622,7 @@
               "label": "LX",
               "enabled": true,
               "Polarity": 1,
-              "Range": -0.537499993108213
+              "Range": -0.22499998845160007
             },
             "children": {}
           },
@@ -643,7 +645,53 @@
               "label": "LX",
               "enabled": true,
               "Polarity": 1,
-              "Range": -0.6000000098720193
+              "Range": -0.2750000050291419
+            },
+            "children": {}
+          },
+          {
+            "source": {
+              "id": 361,
+              "path": "/modulation/modulator/4"
+            },
+            "target": {
+              "componentId": 255,
+              "parameterPath": "xRotate",
+              "path": "/mixer/channel/2/pattern/1/xRotate"
+            },
+            "id": 362,
+            "class": "heronarts.lx.modulation.LXCompoundModulation",
+            "internal": {
+              "modulationColor": 0
+            },
+            "parameters": {
+              "label": "LX",
+              "enabled": true,
+              "Polarity": 0,
+              "Range": 1.0
+            },
+            "children": {}
+          },
+          {
+            "source": {
+              "id": 363,
+              "path": "/modulation/modulator/5"
+            },
+            "target": {
+              "componentId": 255,
+              "parameterPath": "zRotate",
+              "path": "/mixer/channel/2/pattern/1/zRotate"
+            },
+            "id": 364,
+            "class": "heronarts.lx.modulation.LXCompoundModulation",
+            "internal": {
+              "modulationColor": 0
+            },
+            "parameters": {
+              "label": "LX",
+              "enabled": true,
+              "Polarity": 0,
+              "Range": 1.0
             },
             "children": {}
           }
@@ -799,7 +847,9 @@
       "modulatorExpanded": {
         "48": true,
         "51": true,
-        "55": true
+        "55": true,
+        "361": true,
+        "363": true
       },
       "preview": {
         "mode": 0,
@@ -813,11 +863,11 @@
         "camera": {
           "active": true,
           "radius": 1.0,
-          "theta": 6.418039719108492,
-          "phi": 0.5108771780505776,
-          "x": 0.0460299120786658,
-          "y": 0.07257058518007398,
-          "z": -0.4111125530471327
+          "theta": 6.240359477233142,
+          "phi": 0.0705391876399517,
+          "x": -0.035416294065043985,
+          "y": -0.10089073283597827,
+          "z": 0.09943298049711302
         },
         "cue": [
           {
@@ -832,11 +882,11 @@
           {
             "active": true,
             "radius": 1.0,
-            "theta": 6.418039719108492,
-            "phi": 0.5108771780505776,
-            "x": 0.0460299120786658,
-            "y": 0.07257058518007398,
-            "z": -0.4111125530471327
+            "theta": 6.240359477233142,
+            "phi": 0.0705391876399517,
+            "x": -0.035416294065043985,
+            "y": -0.10089073283597827,
+            "z": 0.09943298049711302
           },
           {
             "active": false,
