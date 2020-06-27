@@ -18,15 +18,15 @@ public class LPSimConfig {
 
   // public String activeModel = "data/models/dome_render_6_5_LEDs_Iso_1220_Single_ALL_PANELS.json";
   // public String activeModel = "data/models/dome_render_6_5_LEDs_Iso_1220_ALL_PANELS.json";
-  public String activeModel = "data/models/dome_render_6_5_Dome_ALL_PANELS.json";
+  // public String activeModel = "data/models/dome_render_6_5_Dome_ALL_PANELS.json";
+  public String activeModel = "data/models/TeleCortex_Dome_6_0_PANEL_SMALL.json";
   public String[] activeStructures = {
-    "data/structures/dome_render_6_5_Dome_EDGES.json",
-    "data/structures/dome_render_6_5_Left_Stack_FACES.json"
+    // "data/structures/dome_render_6_5_Dome_EDGES.json",
+    // "data/structures/dome_render_6_5_Left_Stack_FACES.json"
   };
   public float[] screencapBounds; // = new float[]{ 0, 0, 1, 1 };
   public String activeMovie;
-  // public String activeMovie = "data/media/BOKK (loop).mov";
-  // public String activeMovie = "data/media/Steamed Hams.mp4";
+  // public String activeMovie = "Steamed Hams.mp4";
   public float movieVolume = 0.f;
   public String activeImage;
   // public String activeImage = "test_broadcast.jpg";

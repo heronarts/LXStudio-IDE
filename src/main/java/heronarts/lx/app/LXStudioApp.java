@@ -34,6 +34,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.output.OPCOutput;
 import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
 import java.awt.GraphicsDevice;
@@ -209,28 +210,28 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       // TODO: Get model geometry from config
       int pointIndex = 0;
       // int pointIndex = 214 * 6;
-      int nPoints = 300;
-      int nChannels = 1;
-      PBExpanderOutput output = new PBExpanderOutput(lx, serialPort);
-      for (int channelNumber = 0; channelNumber < nChannels; channelNumber++) {
-        int[] indexBuffer = new int[nPoints];
-        for (int i = 0; i < nPoints; i++) {
-          indexBuffer[i] = pointIndex;
-          if (pointIndex < model.size - 1)
-            pointIndex++;
-        }
-        output.addWS281XChannel(channelNumber, indexBuffer);
-        // output.addAPA102DataChannel(channelNumber, indexBuffer, APA102_FREQ);
-      }
+      int nPoints = model.size;
+      // int nChannels = 1;
+      // PBExpanderOutput output = new PBExpanderOutput(lx, serialPort);
+      // for (int channelNumber = 0; channelNumber < nChannels; channelNumber++) {
+      //   int[] indexBuffer = new int[nPoints];
+      //   for (int i = 0; i < nPoints; i++) {
+      //     indexBuffer[i] = pointIndex;
+      //     if (pointIndex < model.size - 1)
+      //       pointIndex++;
+      //   }
+      //   output.addWS281XChannel(channelNumber, indexBuffer);
+      //   // output.addAPA102DataChannel(channelNumber, indexBuffer, APA102_FREQ);
+      // }
 
       // output.addAPA102ClockChannel(APA102_CLOCK_CHANNEL, APA102_FREQ);
 
-      // int[] indexBuffer = new int[nPoints];
-      // for (int i = 0; i < nPoints; i++) {
-      // indexBuffer[i] = pointIndex;
-      // if (pointIndex < model.size - 1) pointIndex++;
-      // }
-      // OPCOutput output = new OPCOutput(lx, indexBuffer, OPC_HOST, OPC_PORT);
+      int[] indexBuffer = new int[nPoints];
+      for (int i = 0; i < nPoints; i++) {
+      indexBuffer[i] = pointIndex;
+      if (pointIndex < model.size - 1) pointIndex++;
+      }
+      OPCOutput output = new OPCOutput(lx, indexBuffer, OPC_HOST, OPC_PORT);
 
       lx.addOutput(output);
     } catch (Exception x) {
