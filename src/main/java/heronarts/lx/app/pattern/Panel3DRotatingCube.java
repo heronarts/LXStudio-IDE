@@ -45,6 +45,11 @@ public class Panel3DRotatingCube extends Panel3DGraphicsPattern {
     edges.add(new int[]{6, 4});
   }
 
+  public void beforeDraw(PGraphics pg) {
+    super.beforeDraw(pg);
+    pg.smooth(8);
+  }
+
   @Override
   public void onDraw(PGraphics pg) {
     pg.pushMatrix();
@@ -61,7 +66,7 @@ public class Panel3DRotatingCube extends Panel3DGraphicsPattern {
     pg.rotateZ((float) totalMs / 10000);
     pg.noFill();
     pg.scale(8);
-    pg.strokeWeight(0.08f);
+    pg.strokeWeight(0.04f);
     for(int i=0; i<edges.size(); i++) {
       PVector from = vertices.get(edges.get(i)[0]);
       PVector to = vertices.get(edges.get(i)[1]);
