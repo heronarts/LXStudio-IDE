@@ -18,14 +18,13 @@
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>heronarts</groupId>
 			<artifactId>lx</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/lx-0.2.0-jar-with-dependencies.jar</systemPath>
+			<systemPath>${basedir}/lib/lx-${project.version}-jar-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -33,7 +32,7 @@
 			<artifactId>p3lx</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/p3lx-0.2.0.jar</systemPath>
+			<systemPath>${basedir}/lib/p3lx-${project.version}.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -41,7 +40,7 @@
 			<artifactId>lxstudio</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/lxstudio-0.2.0.jar</systemPath>
+			<systemPath>${basedir}/lib/lxstudio-${project.version}.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -85,9 +84,7 @@
 			<artifactId>jssc</artifactId>
 			<version>2.8.0</version>
 		</dependency>
-
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
