@@ -35,6 +35,7 @@ import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.output.OPCOutput;
+import heronarts.lx.pattern.GraphicEqualizerPattern;
 import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
 import java.awt.GraphicsDevice;
@@ -142,6 +143,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(Panel3DBLM.class);
     lx.registry.addPattern(Panel3DRotatingCube.class);
     lx.registry.addPattern(HexLifePattern.class);
+    lx.registry.addPattern(GraphicEqualizerPattern.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 
     if (videoFrame == null)
