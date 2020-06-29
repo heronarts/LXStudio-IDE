@@ -120,6 +120,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     flags.resizable = true;
     flags.useGLPointCloud = false;
     flags.startMultiThreaded = true;
+    flags.mediaPath = System.getProperty("user.dir");
     model = config.getModel();
     studio = new LXStudio(this, flags, model);
     this.surface.setTitle(WINDOW_TITLE);
