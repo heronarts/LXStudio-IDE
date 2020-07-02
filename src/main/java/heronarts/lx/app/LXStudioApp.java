@@ -214,27 +214,41 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       int pointIndex = 0;
       // int pointIndex = 214 * 6;
       int nPoints = model.size;
-      // int nChannels = 1;
-      // PBExpanderOutput output = new PBExpanderOutput(lx, serialPort);
-      // for (int channelNumber = 0; channelNumber < nChannels; channelNumber++) {
-      //   int[] indexBuffer = new int[nPoints];
-      //   for (int i = 0; i < nPoints; i++) {
-      //     indexBuffer[i] = pointIndex;
-      //     if (pointIndex < model.size - 1)
-      //       pointIndex++;
-      //   }
-      //   output.addWS281XChannel(channelNumber, indexBuffer);
-      //   // output.addAPA102DataChannel(channelNumber, indexBuffer, APA102_FREQ);
-      // }
+      PBExpanderOutput output = new PBExpanderOutput(lx, serialPort);
+      if(model.children != null) {
+        for(int child=0; child < model.children.length; child++){
+          int childSize = model.children[child].size;
+          int[] indexBuffer = new int[childSize];
+          for(int i=0; i<childSize; i++){
+            indexBuffer[i] = pointIndex;
+            if (pointIndex < model.size - 1)
+              pointIndex++;
+          }
+          output.addWS281XChannel(child, indexBuffer);
+        }
+      } else {
+        // just repeat the same model on N channels
+        int nChannels = 1;
+        for (int channelNumber = 0; channelNumber < nChannels; channelNumber++) {
+          int[] indexBuffer = new int[nPoints];
+          for (int i = 0; i < nPoints; i++) {
+            indexBuffer[i] = pointIndex;
+            if (pointIndex < model.size - 1)
+              pointIndex++;
+          }
+          output.addWS281XChannel(channelNumber, indexBuffer);
+          // output.addAPA102DataChannel(channelNumber, indexBuffer, APA102_FREQ);
+        }
+      }
 
       // output.addAPA102ClockChannel(APA102_CLOCK_CHANNEL, APA102_FREQ);
 
-      int[] indexBuffer = new int[nPoints];
-      for (int i = 0; i < nPoints; i++) {
-      indexBuffer[i] = pointIndex;
-      if (pointIndex < model.size - 1) pointIndex++;
-      }
-      OPCOutput output = new OPCOutput(lx, indexBuffer, OPC_HOST, OPC_PORT);
+      // int[] indexBuffer = new int[nPoints];
+      // for (int i = 0; i < nPoints; i++) {
+      // indexBuffer[i] = pointIndex;
+      // if (pointIndex < model.size - 1) pointIndex++;
+      // }
+      // OPCOutput output = new OPCOutput(lx, indexBuffer, OPC_HOST, OPC_PORT);
 
       lx.addOutput(output);
     } catch (Exception x) {
@@ -351,6 +365,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       // will be run
       LX.Flags flags = new LX.Flags();
       flags.initialize = new LXStudioApp();
+      flags.mediaPath = System.getProperty("user.dir");
       if (projectFile == null) {
         LX.log("WARNING: No project filename was specified for headless mode!");
       }
