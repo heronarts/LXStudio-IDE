@@ -1,14 +1,12 @@
 package heronarts.lx.app.pattern;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
-
-import java.lang.Math;
-import java.util.ArrayList;
-import java.util.List;
-
 import processing.core.PGraphics;
 import processing.core.PMatrix3D;
 import processing.core.PVector;

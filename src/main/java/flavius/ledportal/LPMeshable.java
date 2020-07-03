@@ -1,14 +1,14 @@
 package flavius.ledportal;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
-import processing.data.JSONObject;
-import processing.data.JSONArray;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 
 public abstract class LPMeshable {
   private static final Logger logger = Logger

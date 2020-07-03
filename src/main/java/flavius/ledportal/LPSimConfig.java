@@ -1,9 +1,10 @@
 package flavius.ledportal;
 
-import heronarts.lx.model.LXModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import heronarts.lx.model.LXModel;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
 import processing.data.JSONArray;

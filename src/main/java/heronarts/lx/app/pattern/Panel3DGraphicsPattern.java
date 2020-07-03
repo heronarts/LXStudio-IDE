@@ -1,16 +1,15 @@
 package heronarts.lx.app.pattern;
 
-import flavius.ledportal.LPPanelModel;
-import heronarts.lx.app.LXStudioApp;
-import heronarts.lx.LX;
-import heronarts.lx.LXLoopTask;
-import heronarts.lx.model.GridModel.Point;
-import heronarts.lx.pattern.LXModelPattern;
-import heronarts.p3lx.P3LX;
-
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import flavius.ledportal.LPPanelModel;
+import heronarts.lx.LX;
+import heronarts.lx.LXLoopTask;
+import heronarts.lx.app.LXStudioApp;
+import heronarts.lx.model.GridModel.Point;
+import heronarts.lx.pattern.LXModelPattern;
+import heronarts.p3lx.P3LX;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;

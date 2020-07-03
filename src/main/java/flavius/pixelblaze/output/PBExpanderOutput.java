@@ -1,5 +1,8 @@
 package flavius.pixelblaze.output;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import flavius.pixelblaze.PBColorOrder;
 import flavius.pixelblaze.PBMessageFactory;
 import flavius.pixelblaze.PBMessageFactoryAPA102Clock;
@@ -8,8 +11,6 @@ import flavius.pixelblaze.PBMessageFactoryDrawAll;
 import flavius.pixelblaze.PBMessageFactoryWS281X;
 import flavius.pixelblaze.util.PBConstants;
 import heronarts.lx.LX;
-import java.util.ArrayList;
-import java.util.List;
 import processing.serial.Serial;
 
 /**

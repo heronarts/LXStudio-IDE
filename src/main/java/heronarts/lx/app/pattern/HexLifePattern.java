@@ -18,15 +18,16 @@
 
 package heronarts.lx.app.pattern;
 
+import java.util.HashMap;
+
 import flavius.ledportal.LPPanelModel;
 import flavius.ledportal.LPPanelModel.Strip;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.model.GridModel.Point;
 import heronarts.lx.pattern.LXModelPattern;
 import heronarts.lx.utils.LXUtils;
-import java.util.HashMap;
 
 @LXCategory(LXCategory.FORM)
 public class HexLifePattern extends LXModelPattern<LPPanelModel> {

@@ -1,5 +1,7 @@
 package heronarts.lx.app.pattern;
 
+import java.util.logging.Logger;
+
 import flavius.ledportal.LPMeshable;
 import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
@@ -9,8 +11,6 @@ import heronarts.lx.pattern.LXPattern;
 import processing.core.PImage;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
-
-import java.util.logging.Logger;
 
 @LXCategory(LXCategory.TEXTURE)
 public class VideoFrame extends LXPattern {

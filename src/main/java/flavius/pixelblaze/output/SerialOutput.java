@@ -1,9 +1,10 @@
 package flavius.pixelblaze.output;
 
-import heronarts.lx.LX;
-import heronarts.lx.output.LXOutput;
 import java.util.Arrays;
 import java.util.logging.Logger;
+
+import heronarts.lx.LX;
+import heronarts.lx.output.LXOutput;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 import processing.serial.Serial;

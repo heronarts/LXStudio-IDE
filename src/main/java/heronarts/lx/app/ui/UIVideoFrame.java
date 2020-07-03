@@ -1,9 +1,10 @@
 package heronarts.lx.app.ui;
 
+import java.util.List;
+
 import flavius.ledportal.LPMeshable;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
-import java.util.List;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;

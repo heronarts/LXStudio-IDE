@@ -1,8 +1,9 @@
 package flavius.ledportal;
 
 import java.util.List;
-import processing.data.JSONObject;
+
 import processing.core.PVector;
+import processing.data.JSONObject;
 
 public class LPStructure extends LPMeshable {
   public String type;

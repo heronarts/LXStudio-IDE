@@ -1,9 +1,7 @@
 package heronarts.lx.app.pattern;
 
-import heronarts.lx.color.LXColor;
-
 import heronarts.lx.LX;
-
+import heronarts.lx.color.LXColor;
 import processing.core.PGraphics;
 import processing.core.PMatrix2D;
 
