@@ -91,7 +91,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   private Movie movie;
   private Robot robot;
   private GraphicsDevice activeScreen;
-  private Rectangle screencapRectangle;
+  private Rectangle screenCapRectangle;
 
   @Override
   public void settings() {
@@ -168,26 +168,26 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       movie.read();
       if (videoFrame == null)
         videoFrame = createImage(movie.width, movie.height, RGB);
-    } else if (config.screencapBounds != null) {
+    } else if (config.screenCapBounds != null) {
       activeScreen = GraphicsEnvironment.getLocalGraphicsEnvironment()
         .getDefaultScreenDevice();
       int activeScreenWidth = activeScreen.getDisplayMode().getWidth();
       int activeScreenHeight = activeScreen.getDisplayMode().getHeight();
       logger.info(String.format("active screen dimensions: [%d, %d]",
         activeScreenWidth, activeScreenHeight));
-      screencapRectangle = new Rectangle(
-        (int) (config.screencapBounds[0] * activeScreenWidth),
-        (int) (config.screencapBounds[1] * activeScreenHeight),
-        (int) (config.screencapBounds[2] * activeScreenWidth),
-        (int) (config.screencapBounds[3] * activeScreenHeight));
-      logger.info(String.format("screencap rectangle: %s", screencapRectangle));
+      screenCapRectangle = new Rectangle(
+        (int) (config.screenCapBounds[0] * activeScreenWidth),
+        (int) (config.screenCapBounds[1] * activeScreenHeight),
+        (int) (config.screenCapBounds[2] * activeScreenWidth),
+        (int) (config.screenCapBounds[3] * activeScreenHeight));
+      logger.info(String.format("screenCap rectangle: %s", screenCapRectangle));
       try {
         robot = new Robot(activeScreen);
       } catch (Exception e) {
         logger.warning(e.getMessage());
       }
       BufferedImage screenBuffer = robot
-        .createScreenCapture(screencapRectangle);
+        .createScreenCapture(screenCapRectangle);
       videoFrame = new PImage(screenBuffer);
     }
     if (videoFrame != null)
@@ -312,9 +312,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       movie.read();
       videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0, movie.width,
         movie.height);
-    } else if (screencapRectangle != null) {
+    } else if (screenCapRectangle != null) {
       PImage screenBuffer = new PImage(
-        robot.createScreenCapture(screencapRectangle));
+        robot.createScreenCapture(screenCapRectangle));
       videoFrame.copy(screenBuffer, 0, 0, screenBuffer.width,
         screenBuffer.height, 0, 0, screenBuffer.width, screenBuffer.height);
     }
