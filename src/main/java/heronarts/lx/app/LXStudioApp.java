@@ -42,7 +42,7 @@ import heronarts.lx.app.pattern.Panel3DRotatingCube;
 import heronarts.lx.app.pattern.VideoFrame;
 import heronarts.lx.app.ui.UIAxes;
 import heronarts.lx.app.ui.UIVideoFrame;
-import heronarts.lx.app.ui.UIWireframe;
+import heronarts.lx.app.ui.UIWireFrame;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.pattern.GraphicEqualizerPattern;
 import heronarts.lx.studio.LXStudio;
@@ -261,10 +261,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     // additional views and components to the Ui heirarchy.
 
     for (LPStructure structure : config.structures) {
-      ui.preview.addComponent(new UIWireframe(structure));
+      ui.preview.addComponent(new UIWireFrame(structure));
     }
     for (LPStructure debugStructure : config.debugStructures) {
-      ui.preview.addComponent(new UIWireframe(debugStructure, 0xff0000));
+      ui.preview.addComponent(new UIWireFrame(debugStructure, 0xff0000));
     }
 
     ui.preview.addComponent(new UIAxes());
