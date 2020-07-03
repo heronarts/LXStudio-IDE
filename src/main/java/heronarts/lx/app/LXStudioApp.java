@@ -258,7 +258,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public void onUIReady(LXStudio lx, LXStudio.UI ui) {
     // At this point, the LX Studio application UI has been built. You may now
     // add
-    // additional views and components to the Ui heirarchy.
+    // additional views and components to the Ui hierarchy.
 
     for (LPStructure structure : config.structures) {
       ui.preview.addComponent(new UIWireFrame(structure));
