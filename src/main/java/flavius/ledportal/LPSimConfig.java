@@ -25,8 +25,10 @@ public class LPSimConfig {
   // public String activeModel = "data/models/TeleCortex_Dome_6_0_Panels_ALL_PANELS.json";
   // public String activeModel = "data/models/TeleCortex_Dome_6_0_Panels_Big_M_ALL_PANELS.json";
   public String[] activeStructures = {
-    // "data/structures/dome_render_6_5_Dome_EDGES.json",
-    // "data/structures/dome_render_6_5_Left_Stack_FACES.json"
+    "data/structures/dome_render_6_5_Dome_EDGES.json",
+    "data/structures/dome_render_6_5_Left_Stack_FACES.json",
+    "data/structures/dome_render_6_5_Right_Stack_FACES.json",
+    "data/structures/dome_render_6_5_Table_FACES.json"
   };
   public float[] screenCapBounds; // = new float[]{ 0, 0, 1, 1 };
   public String activeMovie;
