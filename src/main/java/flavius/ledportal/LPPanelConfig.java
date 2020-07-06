@@ -40,10 +40,6 @@ public class LPPanelConfig extends LPMeshable {
   }
 
   public LPPanelModel getModel() {
-    List<PMatrix3D> matrices = new ArrayList<PMatrix3D>();
-    matrices.add(worldToUI);
-    matrices.add(matrix);
-    return new LPPanelModel(composeMatrices(matrices), leds);
+    return new LPPanelModel(getUIMatrix(), leds);
   }
-
 }

@@ -219,6 +219,13 @@ public abstract class LPMeshable {
     return coordinateTransform(matrix, local);
   }
 
+  public PMatrix3D getUIMatrix() {
+    List<PMatrix3D> matrices = new ArrayList<PMatrix3D>();
+    matrices.add(worldToUI);
+    matrices.add(matrix);
+    return composeMatrices(matrices);
+  }
+
   public LPMeshable updateFromJSONObject(JSONObject jsonConfig) {
     if (jsonConfig.hasKey("name")) {
       String name = jsonConfig.getString("name");
