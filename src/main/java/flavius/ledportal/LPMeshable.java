@@ -20,15 +20,74 @@ public abstract class LPMeshable {
   public String name;
 
   /**
-   * For some inexplicable reason, the coordinate system for processing UI
-   * components as the camera is oriented so that "up" is the Y-Axis, where
-   * every other animation software in the fucking world uses the Z-axis for up.
+   * Whether to use right or left handed coordinate systems.
+   *
+   * The default LXStudio coordinate system is left handed, but a right handed coordinate system
+   * is possible by setting `ui.setCoordinateSystem(CoordinateSystem.valueOf("RIGHT_HANDED"));` in
+   * LXStudioApp.initializeUI.
    */
-  public static final PMatrix3D worldToUI = new PMatrix3D(0, 1, 0, 0, 0, 0, 1,
-    0, 1, 0, 0, 0, 0, 0, 0, 1);
+  public static final boolean useRightHandedCoordinates = false;
 
-  public static PMatrix3D pixelToWorld = new PMatrix3D(0, 0, 1, 0, 1, 0, 0, 0,
-    0, 1, 0, 0, 0, 0, 0, 1);
+  /**
+   * A matrix to convert from Cartesian to default P3D coordinate systems
+   *
+   * In typical Cartesian coordinate system conventions, The positive Z axis is pointing up, and
+   * right-handed coordinates are used.
+   *
+   * In default Processing 3D, the negative Y axis is up, and a left-handed coordinate system is
+   * used.
+   */
+  public static final PMatrix3D matCartToP3D = new PMatrix3D(
+    1, 0, 0, 0,
+    0, 0, -1, 0,
+    0, -1, 0, 0,
+    0, 0, 0, 1
+  );
+
+  /**
+   * A matrix to convert from P3D to LX (left handed) coordinate systems.
+   *
+   * In the LXStudio UI, the camera is oriented with negative Y axis facing upwards.
+   * This is equivalent to a 180 degree rotation about the X axis.
+   */
+  public static final PMatrix3D matP3DToLX = new PMatrix3D(
+    1, 0, 0, 0,
+    0, -1, 0, 0,
+    0, 0, -1, 0,
+    0, 0, 0, 1
+  );
+
+  /**
+   * A matrix to convert from left to right handed coordinate systems
+   */
+  public static final PMatrix3D matLeftToRightHand = new PMatrix3D(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, -1, 0,
+    0, 0, 0, 1
+  );
+
+  /**
+   * A matrix to convert from cartesian to LX coordinate system that takes handedness into account
+   */
+  public static final PMatrix3D matCartToLX = new PMatrix3D();
+  {
+    matCartToLX.preApply(matCartToP3D);
+    matCartToLX.preApply(matP3DToLX);
+    if (useRightHandedCoordinates) {
+      matCartToLX.preApply(matLeftToRightHand);
+    }
+  }
+
+
+  /**
+   * A matrix to convert from cartesian to LX coordinate system that takes handedness into account
+   */
+  public static final PMatrix3D matLXToCart = new PMatrix3D();
+  {
+    matLXToCart.preApply(matCartToLX);
+    matLXToCart.invert();
+  }
 
   public static final PVector xAxis = new PVector(1, 0, 0);
   public static final PVector yAxis = new PVector(0, 1, 0);
@@ -95,14 +154,15 @@ public abstract class LPMeshable {
   }
 
   /**
-   * Get the normal of a plane defined by {@code points}
-   * Assumptions:
+   * Get the normal of a plane defined by {@code points} Assumptions:
    * <ul>
-   * <li>points are co-planar, so only the first 3 points need to be looked at.</li>
-   * <li>points are given in counter-clockwise order, from the direction opposing the normal.</li>
-   * </li>
+   * <li>points are co-planar, so only the first 3 points need to be looked
+   * at.</li>
+   * <li>points are given in counter-clockwise order, from the direction
+   * opposing the normal.</li></li>
    *
-   * @param points A List of PVectors which define the plane (must be exactly 3 points)
+   * @param points A List of PVectors which define the plane (must be exactly 3
+   *                 points)
    * @return PVector The normal of the plane
    */
   public static PVector getNormal(List<PVector> points) {
@@ -114,14 +174,16 @@ public abstract class LPMeshable {
   }
 
   /**
-   * Form a list of matrices which, when composed will transform all points on the plane defined by
-   * `center` and `normal` onto the X-Y plane.
+   * Form a list of matrices which, when composed will transform all points on
+   * the plane defined by `center` and `normal` onto the X-Y plane.
    *
    * @param center a center point on the plane
    * @param normal a normal to the plane
-   * @return a list of {@link processing.core.PMatrix3D Matrices} to form a flattener matrix
+   * @return a list of {@link processing.core.PMatrix3D Matrices} to form a
+   *         flattener matrix
    */
-  private static List<PMatrix3D> getFlattenerComponents(PVector center, PVector normal) {
+  private static List<PMatrix3D> getFlattenerComponents(PVector center,
+    PVector normal) {
     PVector crossZ = normal.cross(zAxis);
     float zenith = PVector.angleBetween(normal, zAxis);
     float azimuth = PVector.angleBetween(crossZ, xAxis);
@@ -204,15 +266,15 @@ public abstract class LPMeshable {
   }
 
   public static PVector worldUITransform(PVector world) {
-    return coordinateTransform(worldToUI, world);
+    return coordinateTransform(matCartToLX, world);
   }
 
   public static PVector pixelWorldTransform(PVector pixel) {
-    return coordinateTransform(pixelToWorld, pixel);
+    return coordinateTransform(matLXToCart, pixel);
   }
 
   public static PVector worldPixelTransform(PVector world) {
-    return coordinateTransform(worldToUI, world);
+    return coordinateTransform(matCartToLX, world);
   }
 
   public PVector getWorldCoordinate(PVector local) {
@@ -221,7 +283,7 @@ public abstract class LPMeshable {
 
   public PMatrix3D getUIMatrix() {
     List<PMatrix3D> matrices = new ArrayList<PMatrix3D>();
-    matrices.add(worldToUI);
+    matrices.add(matCartToLX);
     matrices.add(matrix);
     return composeMatrices(matrices);
   }
@@ -288,8 +350,7 @@ public abstract class LPMeshable {
    *
    * @param points a List of {@link processing.core.PVector PVector}s
    * @return a list of bounds ({@code min}, {@code max}) for each axis ({@code
-   *         x}, {@code y},
-   * {@code z})
+   *         x}, {@code y}, {@code z})
    */
   public static float[][] getAxisBounds(List<PVector> points) {
 

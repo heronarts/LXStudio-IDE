@@ -202,7 +202,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     // required
     // for headless mode should go in the raw initialize method above.
 
-    ui.setCoordinateSystem(CoordinateSystem.valueOf("RIGHT_HANDED"));
+    if (LPMeshable.useRightHandedCoordinates) {
+      ui.setCoordinateSystem(CoordinateSystem.valueOf("RIGHT_HANDED"));
+    }
     LXModel model = lx.getModel();
 
     Serial serialPort = new Serial(this, SERIAL_PORT,
