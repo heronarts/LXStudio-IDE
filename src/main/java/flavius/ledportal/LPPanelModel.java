@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import heronarts.lx.model.GridModel.Point;
+import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import processing.core.PMatrix3D;
@@ -42,6 +43,10 @@ public class LPPanelModel extends LXModel{
     public int height;
     int[][] indices;
     PMatrix3D transformation;
+
+    public PanelMetrics(LXMatrix transformation, int[][] indices) {
+      this(LPMeshable.lxMatrixToP3D(transformation), indices);
+    }
 
     public PanelMetrics(PMatrix3D transformation, int[][] indices) {
       int[][] indexBounds = getIndexBounds(indices);

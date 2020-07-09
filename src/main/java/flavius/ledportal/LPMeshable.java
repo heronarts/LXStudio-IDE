@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+import heronarts.lx.transform.LXMatrix;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
 import processing.data.JSONArray;
@@ -279,6 +280,24 @@ public abstract class LPMeshable {
 
   public PVector getWorldCoordinate(PVector local) {
     return coordinateTransform(matrix, local);
+  }
+
+  public static LXMatrix p3DToLXMatrix(PMatrix3D m) {
+    return new LXMatrix(
+      m.m00, m.m01, m.m02, m.m03,
+      m.m10, m.m11, m.m12, m.m13,
+      m.m20, m.m21, m.m22, m.m23,
+      m.m30, m.m31, m.m32, m.m33
+    );
+  }
+
+  public static PMatrix3D lxMatrixToP3D(LXMatrix m) {
+    return new PMatrix3D(
+      m.m11, m.m12, m.m13, m.m14,
+      m.m21, m.m22, m.m23, m.m24,
+      m.m31, m.m32, m.m33, m.m34,
+      m.m41, m.m42, m.m43, m.m44
+    );
   }
 
   public PMatrix3D getUIMatrix() {

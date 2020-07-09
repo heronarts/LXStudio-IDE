@@ -30,12 +30,14 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import flavius.ledportal.LPMeshable;
+import flavius.ledportal.LPPanelFixture;
 import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.LPStructure;
 import flavius.pixelblaze.output.PBExpanderOutput;
 import heronarts.lx.LX;
 import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
+import heronarts.lx.LXRegistry;
 import heronarts.lx.app.pattern.HexLifePattern;
 import heronarts.lx.app.pattern.Panel3DBLM;
 import heronarts.lx.app.pattern.Panel3DRotatingCube;
@@ -46,6 +48,7 @@ import heronarts.lx.app.ui.UIWireFrame;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.pattern.GraphicEqualizerPattern;
 import heronarts.lx.studio.LXStudio;
+import heronarts.lx.app.ui.UIPanelFixture;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -53,6 +56,8 @@ import processing.core.PMatrix3D;
 import processing.core.PVector;
 import processing.serial.Serial;
 import processing.video.Movie;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 
 /**
  * This is an example top-level class to build and run an LX Studio application
@@ -121,8 +126,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     flags.useGLPointCloud = false;
     flags.startMultiThreaded = true;
     flags.mediaPath = System.getProperty("user.dir");
-    model = config.getModel();
-    studio = new LXStudio(this, flags, model);
+    // model = config.getModel();
+    studio = new LXStudio(this, flags);
+    // studio = new LXStudio(this, flags, model);
     this.surface.setTitle(WINDOW_TITLE);
   }
 
@@ -144,6 +150,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(HexLifePattern.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
+
+    lx.registry.addFixture(LPPanelFixture.class);
 
     if (videoFrame == null)
       initializeVideo(lx);
@@ -206,6 +214,18 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       ui.setCoordinateSystem(CoordinateSystem.valueOf("RIGHT_HANDED"));
     }
     LXModel model = lx.getModel();
+
+    try {
+      MethodUtils.invokeMethod(
+        FieldUtils.readField(ui, "registry", true),
+        true,
+        "addUIFixtureControls",
+        new Object[] { UIPanelFixture.class }
+      );
+      logger.info(String.format("ui.registry.fixtureControls: %s", FieldUtils.readField(ui, "registry", true)));
+    } catch (Exception e) {
+      logger.warning(e.toString());
+    }
 
     Serial serialPort = new Serial(this, SERIAL_PORT,
       PBExpanderOutput.BAUD_RATE);
