@@ -1,17 +1,30 @@
 package flavius.ledportal;
 
+import java.net.InetAddress;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import flavius.ledportal.LPPanelModel.PanelMetrics;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.output.ArtNetDatagram;
+import heronarts.lx.output.DDPDatagram;
+import heronarts.lx.output.KinetDatagram;
+import heronarts.lx.output.LXBufferDatagram;
+import heronarts.lx.output.OPCDatagram;
+import heronarts.lx.output.StreamingACNDatagram;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.structure.LXFixture;
+import heronarts.lx.structure.LXFixtureContainer;
 import heronarts.lx.structure.LXProtocolFixture;
 import heronarts.lx.structure.GridFixture.PositionMode;
 import heronarts.lx.structure.GridFixture.Wiring;
@@ -25,38 +38,13 @@ public class LPPanelFixture extends LXProtocolFixture {
     .getLogger(LPPanelFixture.class.getName());
 
   /**
-   * Output protocols
+   * Serial protocols
    */
-  public static enum LPProtocol {
+  public static enum SerialProtocol {
     /**
      * No network output
      */
     NONE("None"),
-
-    /**
-     * Art-Net - <a href="https://art-net.org.uk/">https://art-net.org.uk/</a>
-     */
-    ARTNET("Art-Net"),
-
-    /**
-     * E1.31 Streaming ACN - <a href="https://opendmx.net/index.php/E1.31">https://opendmx.net/index.php/E1.31/</a>
-     */
-    SACN("E1.31 Streaming ACN"),
-
-    /**
-     * Open Pixel Control - <a href="http://openpixelcontrol.org/">http://openpixelcontrol.org/</a>
-     */
-    OPC("OPC"),
-
-    /**
-     * Distributed Display Protocol - <a href="http://www.3waylabs.com/ddp/">http://www.3waylabs.com/ddp/</a>
-     */
-    DDP("DDP"),
-
-    /**
-     * Color Kinetics KiNET - <a href="https://www.colorkinetics.com/">https://www.colorkinetics.com/</a>
-     */
-    KINET("KiNET"),
 
     /**
      * <a href="github.com/simap/pixelblaze_output_expander">Pixelblaze Output Expander Serial Protocol</a>
@@ -65,7 +53,7 @@ public class LPPanelFixture extends LXProtocolFixture {
 
     private final String label;
 
-    LPProtocol(String label) {
+    SerialProtocol(String label) {
       this.label = label;
     }
 
@@ -75,9 +63,9 @@ public class LPPanelFixture extends LXProtocolFixture {
     }
   };
 
-  public final EnumParameter<LPProtocol> protocol =
-    new EnumParameter<LPProtocol>("Protocol", LPProtocol.NONE)
-    .setDescription("Which lighting data protocol this fixture uses");
+  public final EnumParameter<SerialProtocol> serialProtocol =
+    new EnumParameter<SerialProtocol>("Protocol", SerialProtocol.NONE)
+    .setDescription("Which Serial lighting data protocol this fixture uses");
 
   public final EnumParameter<PositionMode> positionMode =
     new EnumParameter<PositionMode>("Mode", PositionMode.CORNER)
@@ -111,7 +99,22 @@ public class LPPanelFixture extends LXProtocolFixture {
     new BoundedParameter("Row Shear", 0, 0, 1000000)
     .setDescription("Offset to add to each additional row");
 
+  public final StringParameter serialPort =
+    new StringParameter("Serial Port", "")
+    .setDescription("Serial Port this fixture connects to");
+
+  public final BooleanParameter unknownSerialPort =
+    new BooleanParameter("Unknown Serial Port", false);
+
+  public final DiscreteParameter pixelBlazeChannel = (DiscreteParameter)
+    new DiscreteParameter("PixelBlaze Expander Channel", 0, 0, 8)
+    .setUnits(LXParameter.Units.INTEGER)
+    .setDescription("Which physical PixelBlaze output channel is used");
+
+  private final Set<LXParameter> serialParameters = new HashSet<LXParameter>();
+
   int[][] indices;
+
 
   public LPPanelFixture(LX lx) {
     super(lx, "Panel");
@@ -121,15 +124,21 @@ public class LPPanelFixture extends LXProtocolFixture {
     addDatagramParameter("opcChannel", this.opcChannel);
     addDatagramParameter("ddpDataOffset", this.ddpDataOffset);
     addDatagramParameter("kinetPort", this.kinetPort);
+    // addDatagramParameter("opcPort", this.opcPort);
+    addDatagramParameter("wiring", this.wiring);
+    addDatagramParameter("splitPacket", this.splitPacket);
+    addDatagramParameter("pointsPerPacket", this.pointsPerPacket);
+
+    addSerialParameter("serialPort", this.serialPort);
+    addSerialParameter("unknownSerialPort", this.unknownSerialPort);
+    addSerialParameter("pixelBlazeChannel", this.pixelBlazeChannel);
+    addSerialParameter("serialProtocol", this.serialProtocol);
 
     addMetricsParameter("pointIndicesJSON", this.pointIndicesJSON);
     addGeometryParameter("rowSpacing", this.rowSpacing);
     addGeometryParameter("columnSpacing", this.columnSpacing);
     addGeometryParameter("rowShear", this.rowShear);
     addGeometryParameter("positionMode", this.positionMode);
-    addDatagramParameter("wiring", this.wiring);
-    addDatagramParameter("splitPacket", this.splitPacket);
-    addDatagramParameter("pointsPerPacket", this.pointsPerPacket);
   }
 
   public void updateIndices(){
@@ -145,12 +154,35 @@ public class LPPanelFixture extends LXProtocolFixture {
     }
   }
 
+  private void regenerateSerial() {
+    // TODO: private void regenerateSerial()
+  }
+
   @Override
   public void onParameterChanged(LXParameter p) {
     if( p == this.pointIndicesJSON ){
       updateIndices();
     }
     super.onParameterChanged(p);
+    LXFixtureContainer container = null;
+    try {
+      container = (LXFixtureContainer) (FieldUtils.readField(this, "container", true));
+    } catch (Exception e) {
+      logger.warning(e.toString());
+      return;
+    }
+    boolean isLoading = false;
+    try {
+      isLoading = (boolean) (FieldUtils.readField(this, "isLoading", true));
+    } catch (Exception e) {
+      logger.warning(e.toString());
+      return;
+    }
+    if ((container != null) && !isLoading) {
+      if (this.serialParameters.contains(p)) {
+        regenerateSerial();
+      }
+    }
   }
 
   @Override
@@ -159,9 +191,61 @@ public class LPPanelFixture extends LXProtocolFixture {
     return this.indices.length;
   }
 
+  private void addDatagram(InetAddress address, int[] indexBuffer, int channel) {
+    LXBufferDatagram datagram = null;
+    switch (this.protocol.getEnum()) {
+    case ARTNET:
+      datagram = new ArtNetDatagram(indexBuffer, channel);
+      break;
+    case SACN:
+      datagram = new StreamingACNDatagram(indexBuffer, channel);
+      break;
+    case DDP:
+      datagram = new DDPDatagram(indexBuffer, channel);
+      break;
+    case KINET:
+      datagram = new KinetDatagram(indexBuffer, channel);
+      break;
+    case OPC:
+      datagram = new OPCDatagram(indexBuffer, (byte) channel);
+      datagram = (LXBufferDatagram)datagram.setPort(42069);
+      break;
+    default:
+      LX.error("Undefined datagram protocol in GridFixture: " + this.protocol.getEnum());
+      break;
+    }
+    if (datagram != null) {
+      datagram.enabled.setValue(address != null);
+      if (address != null) {
+        datagram.setAddress(address);
+      }
+      addDatagram(datagram);
+    }
+  }
+
   @Override
   protected void buildDatagrams() {
     // TODO: protected void buildDatagrams()
+    Protocol protocol = this.protocol.getEnum();
+    if (protocol == Protocol.NONE) {
+      return;
+    }
+    InetAddress address = resolveHostAddress();
+    int[] wiringIndexBuffer = getWiringIndexBuffer();
+    int pointsPerPacket = this.pointsPerPacket.getValuei();
+    if (this.splitPacket.isOn() && (wiringIndexBuffer.length > pointsPerPacket)) {
+      int i = 0;
+      int channel = getProtocolChannel();
+      while (i < wiringIndexBuffer.length) {
+        int chunkSize = Math.min(pointsPerPacket, wiringIndexBuffer.length - i);
+        int chunkIndexBuffer[] = new int[chunkSize];
+        System.arraycopy(wiringIndexBuffer, i, chunkIndexBuffer, 0, chunkSize);
+        addDatagram(address, chunkIndexBuffer, channel++);
+        i += chunkSize;
+      }
+    } else {
+      addDatagram(address, wiringIndexBuffer, getProtocolChannel());
+    }
   }
 
   @Override
@@ -176,13 +260,13 @@ public class LPPanelFixture extends LXProtocolFixture {
 
   @Override
   protected void computePointGeometry(LXMatrix matrix, List<LXPoint> points) {
-    if(this.indices == null) updateIndices();
+    int size = this.size();
     // PanelMetrics metrics = new PanelMetrics(matrix, this.indices);
     LXTransform transform = new LXTransform(matrix);
     float rowSpacing = this.rowSpacing.getValuef();
     float columnSpacing = this.columnSpacing.getValuef();
     float rowShear = this.rowShear.getValuef();
-    for(int i = 0; i<this.indices.length; i++ ){
+    for(int i = 0; i<size; i++ ){
       transform.push();
       int[] coordinates = this.indices[i];
       transform.translateX((rowSpacing * coordinates[0]) + (rowShear * coordinates[1]));
@@ -191,4 +275,35 @@ public class LPPanelFixture extends LXProtocolFixture {
       transform.pop();
     }
   }
+
+  /**
+   * Adds a parameter which impacts the serial outputs of the fixture. Whenever
+   * one is changed, the serial parameters will be regenerated.
+   *
+   * @param path Path to parameter
+   * @param parameter Parameter
+   * @return this
+   */
+  protected LXFixture addSerialParameter(String path, LXParameter parameter) {
+    addParameter(path, parameter);
+    this.serialParameters.add(parameter);
+    return this;
+  }
+
+  @Override
+  protected String getModelKey() {
+    return "panel";
+  }
+
+  private int[] getWiringIndexBuffer() {
+    int size = this.size();
+    int[] indexBuffer = new int[size];
+
+    for(int i = 0; i<size; i++ ){
+      indexBuffer[i] = this.points.get(i).index;
+    }
+
+    return indexBuffer;
+  }
+
 }
