@@ -11,7 +11,6 @@ public abstract class PBMessageFactoryData extends PBMessageFactory {
   // private static final Logger logger =
   // Logger.getLogger(PBMessageFactoryData.class.getName());
   public final PBColorOrder colorOrder;
-  public static final int bytesPerChannel = 2048;
 
   public PBMessageFactoryData(PBRecordType recordType, int channel,
     int[] indexBuffer, int baseSize, PBColorOrder colorOrder) {
@@ -33,12 +32,12 @@ public abstract class PBMessageFactoryData extends PBMessageFactory {
   }
 
   public void validate(int[] indexBuffer) throws RuntimeException {
-    if (this.bufferSpace(indexBuffer) > bytesPerChannel) {
+    if (this.bufferSpace(indexBuffer) > MAX_CHANNEL_BYTES) {
       throw new RuntimeException(
         "too many pixels for a single channel! indexBuffer.length="
           + String.valueOf(indexBuffer.length) + "; colorSize="
-          + String.valueOf(this.colorSize) + "; bytesPerChannel="
-          + String.valueOf(bytesPerChannel));
+          + String.valueOf(this.colorSize) + "; MAX_CHANNEL_BYTES="
+          + String.valueOf(MAX_CHANNEL_BYTES));
     }
   }
 }

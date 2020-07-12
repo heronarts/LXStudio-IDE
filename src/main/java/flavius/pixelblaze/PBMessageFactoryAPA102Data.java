@@ -60,13 +60,7 @@ public class PBMessageFactoryAPA102Data extends PBMessageFactoryData {
 
   @Override
   public void validate(int[] indexBuffer) throws RuntimeException {
-    if (this.bufferSpace(indexBuffer) > bytesPerChannel) {
-      throw new RuntimeException(
-        "too many pixels for a single channel! indexBuffer.length="
-          + String.valueOf(indexBuffer.length) + "; colorSize="
-          + String.valueOf(this.colorSize) + "; bytesPerChannel="
-          + String.valueOf(bytesPerChannel));
-    }
+    super.validate(indexBuffer);
     if (this.colorOrder.numElements != 4) {
       throw new RuntimeException(
         "APA102-Type leds must have a colorOrder of length 4, e.g. RGBV. Instead found"

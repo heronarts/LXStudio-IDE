@@ -114,7 +114,7 @@ public abstract class PBMessageFactory implements PBConstants {
    * @return the number of bytes that the entire message will occupy
    */
   public int getMessageSize() {
-    return PBHeader.size + this.getBodySize() + CRC_SIZE;
+    return HEADER_SIZE + this.getBodySize() + CRC_SIZE;
   }
 
   /**

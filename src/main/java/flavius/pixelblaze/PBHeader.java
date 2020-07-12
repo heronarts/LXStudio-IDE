@@ -1,5 +1,7 @@
 package flavius.pixelblaze;
 
+import flavius.pixelblaze.util.PBConstants;
+
 // import java.util.logging.Logger;
 
 /**
@@ -9,11 +11,9 @@ package flavius.pixelblaze;
  *
  * @author <a href="https://dev.laserphile.com/">Derwent McElhinney</a>
  */
-public class PBHeader {
+public class PBHeader implements PBConstants {
   // private static final Logger logger =
   // Logger.getLogger(PBHeader.class.getName());
-  public static final int size = 6;
-  public static final String magic = "UPXL";
   public int channel;
   public PBRecordType recordType;
 
@@ -23,10 +23,10 @@ public class PBHeader {
   }
 
   public byte[] toBytes() {
-    final byte[] message = new byte[size];
+    final byte[] message = new byte[HEADER_SIZE];
     int i = 0;
-    // logger.fine(String.format("magic: %s\n", magic));
-    for (char c : magic.toCharArray()) {
+    // logger.fine(String.format("MAGIC: %s\n", MAGIC));
+    for (char c : MAGIC.toCharArray()) {
       message[i++] = (byte) c;
     }
     // logger.fine(String.format("channel: %d\n", this.channel));
