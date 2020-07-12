@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import flavius.pixelblaze.model.SerialModel;
 import heronarts.lx.model.GridModel.Point;
 import heronarts.lx.transform.LXMatrix;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
@@ -15,7 +15,7 @@ import processing.core.PVector;
  * Basically {@link heronarts.lx.model.GridModel} but each row
  * in the grid can have a different length
  */
-public class LPPanelModel extends LXModel{
+public class LPPanelModel extends SerialModel{
   public static int[][] getIndexBounds(int[][] indices) {
     int[][] result = new int[][]{
       new int[]{Integer.MAX_VALUE, Integer.MIN_VALUE},
@@ -73,7 +73,7 @@ public class LPPanelModel extends LXModel{
     }
   }
 
-  public class Strip extends LXModel {
+  public class Strip extends SerialModel {
 
     public int index;
     public int xiMin = Integer.MAX_VALUE;
@@ -86,7 +86,7 @@ public class LPPanelModel extends LXModel{
     public Strip(int index, List<LXPoint> pointList) {
       super(pointList);
       this.index = index;
-      LXPoint[] points = ((LXModel) this).points;
+      LXPoint[] points = ((SerialModel) this).points;
       this.points = new Point[points.length];
       System.arraycopy(points, 0, this.points, 0, points.length);
       for(LXPoint point: pointList) {
@@ -152,7 +152,7 @@ public class LPPanelModel extends LXModel{
   }
 
   public LPPanelModel(PanelMetrics metrics) {
-    super(metrics.toPoints(), LXModel.Key.GRID);
+    super(metrics.toPoints(), SerialModel.Key.GRID);
     this.metrics = metrics;
     this.width = metrics.width;
     this.height = metrics.height;

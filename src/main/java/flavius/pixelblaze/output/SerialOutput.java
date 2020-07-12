@@ -22,7 +22,7 @@ import processing.serial.Serial;
  *      "http://processing.github.io/processing-javadocs/libraries/processing/serial/Serial.html">
  *      {@code processing.serial.Serial}</a>
  */
-abstract class SerialOutput extends LXOutput {
+public abstract class SerialOutput extends LXOutput {
   protected Serial serialPort;
   protected String portName;
   protected int baudRate;

@@ -1,6 +1,9 @@
 package flavius.ledportal;
 
 import java.net.InetAddress;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,12 +12,24 @@ import java.util.logging.Logger;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import flavius.ledportal.LPPanelModel.PanelMetrics;
+import flavius.pixelblaze.PBColorOrder;
+import flavius.pixelblaze.PBRecordType;
+import flavius.pixelblaze.model.SerialModel;
+import flavius.pixelblaze.output.PBExpanderDataPacket;
+import flavius.pixelblaze.output.PBExpanderPacket;
+import flavius.pixelblaze.output.SerialDefinition;
+import flavius.pixelblaze.output.SerialOutput;
+import flavius.pixelblaze.output.SerialPacket;
+import flavius.pixelblaze.output.SerialPacketOutput;
+import flavius.pixelblaze.structure.SerialProtocolFixture;
 import heronarts.lx.LX;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.ArtNetDatagram;
 import heronarts.lx.output.DDPDatagram;
 import heronarts.lx.output.KinetDatagram;
 import heronarts.lx.output.LXBufferDatagram;
+import heronarts.lx.output.LXDatagramOutput;
 import heronarts.lx.output.OPCDatagram;
 import heronarts.lx.output.StreamingACNDatagram;
 import heronarts.lx.parameter.BooleanParameter;
@@ -31,41 +46,12 @@ import heronarts.lx.structure.GridFixture.Wiring;
 import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
 import processing.data.JSONArray;
+import processing.serial.Serial;
 
-public class LPPanelFixture extends LXProtocolFixture {
+public class LPPanelFixture extends SerialProtocolFixture {
 
   private static final Logger logger = Logger
     .getLogger(LPPanelFixture.class.getName());
-
-  /**
-   * Serial protocols
-   */
-  public static enum SerialProtocol {
-    /**
-     * No network output
-     */
-    NONE("None"),
-
-    /**
-     * <a href="github.com/simap/pixelblaze_output_expander">Pixelblaze Output Expander Serial Protocol</a>
-     */
-    PBX("PixelBlaze Output Expander");
-
-    private final String label;
-
-    SerialProtocol(String label) {
-      this.label = label;
-    }
-
-    @Override
-    public String toString() {
-      return this.label;
-    }
-  };
-
-  public final EnumParameter<SerialProtocol> serialProtocol =
-    new EnumParameter<SerialProtocol>("Protocol", SerialProtocol.NONE)
-    .setDescription("Which Serial lighting data protocol this fixture uses");
 
   public final EnumParameter<PositionMode> positionMode =
     new EnumParameter<PositionMode>("Mode", PositionMode.CORNER)
@@ -77,7 +63,7 @@ public class LPPanelFixture extends LXProtocolFixture {
 
   public final BooleanParameter splitPacket =
     new BooleanParameter("Split Packet", false)
-    .setDescription("Whether to break a large grid into multiple datagrams on separate channels");
+    .setDescription("Whether to break a large grid into multiple packets on separate channels");
 
   public final DiscreteParameter pointsPerPacket =
     new DiscreteParameter("Points Per Packet", 170, 1, 21845)
@@ -99,20 +85,6 @@ public class LPPanelFixture extends LXProtocolFixture {
     new BoundedParameter("Row Shear", 0, 0, 1000000)
     .setDescription("Offset to add to each additional row");
 
-  public final StringParameter serialPort =
-    new StringParameter("Serial Port", "")
-    .setDescription("Serial Port this fixture connects to");
-
-  public final BooleanParameter unknownSerialPort =
-    new BooleanParameter("Unknown Serial Port", false);
-
-  public final DiscreteParameter pixelBlazeChannel = (DiscreteParameter)
-    new DiscreteParameter("PixelBlaze Expander Channel", 0, 0, 8)
-    .setUnits(LXParameter.Units.INTEGER)
-    .setDescription("Which physical PixelBlaze output channel is used");
-
-  private final Set<LXParameter> serialParameters = new HashSet<LXParameter>();
-
   int[][] indices;
 
 
@@ -124,6 +96,7 @@ public class LPPanelFixture extends LXProtocolFixture {
     addDatagramParameter("opcChannel", this.opcChannel);
     addDatagramParameter("ddpDataOffset", this.ddpDataOffset);
     addDatagramParameter("kinetPort", this.kinetPort);
+    // TODO: specify OPC port
     // addDatagramParameter("opcPort", this.opcPort);
     addDatagramParameter("wiring", this.wiring);
     addDatagramParameter("splitPacket", this.splitPacket);
@@ -154,35 +127,12 @@ public class LPPanelFixture extends LXProtocolFixture {
     }
   }
 
-  private void regenerateSerial() {
-    // TODO: private void regenerateSerial()
-  }
-
   @Override
   public void onParameterChanged(LXParameter p) {
     if( p == this.pointIndicesJSON ){
       updateIndices();
     }
     super.onParameterChanged(p);
-    LXFixtureContainer container = null;
-    try {
-      container = (LXFixtureContainer) (FieldUtils.readField(this, "container", true));
-    } catch (Exception e) {
-      logger.warning(e.toString());
-      return;
-    }
-    boolean isLoading = false;
-    try {
-      isLoading = (boolean) (FieldUtils.readField(this, "isLoading", true));
-    } catch (Exception e) {
-      logger.warning(e.toString());
-      return;
-    }
-    if ((container != null) && !isLoading) {
-      if (this.serialParameters.contains(p)) {
-        regenerateSerial();
-      }
-    }
   }
 
   @Override
@@ -225,7 +175,7 @@ public class LPPanelFixture extends LXProtocolFixture {
 
   @Override
   protected void buildDatagrams() {
-    // TODO: protected void buildDatagrams()
+
     Protocol protocol = this.protocol.getEnum();
     if (protocol == Protocol.NONE) {
       return;
@@ -246,6 +196,49 @@ public class LPPanelFixture extends LXProtocolFixture {
     } else {
       addDatagram(address, wiringIndexBuffer, getProtocolChannel());
     }
+  }
+
+  private void addPacket(SerialDefinition definition, int[] indexBuffer, int channel) {
+    SerialPacket packet = null;
+    // TODO: implement PixelBlaze color order
+    PBColorOrder order = PBColorOrder.RGB;
+    switch (this.serialProtocol.getEnum()) {
+    case PBX_WS281X:
+      packet = new PBExpanderDataPacket(PBRecordType.SET_CHANNEL_APA102_DATA, order, indexBuffer, channel);
+      break;
+    case PBX_APA102:
+      packet = new PBExpanderDataPacket(PBRecordType.SET_CHANNEL_WS2812, order, indexBuffer, channel);
+      break;
+    default:
+      LX.error("Undefined serial protocol in LPPanelFixture: " + this.serialProtocol.getEnum());
+      break;
+    }
+    if (packet != null) {
+      packet.enabled.setValue(definition != null);
+      if (definition != null) {
+        packet.setDefinition(definition);
+      }
+      addPacket(packet);
+    }
+  }
+
+  SerialDefinition getSerialDefinition() {
+    String portName = this.serialPort.getString();
+    if(portName == "") {
+      return null;
+    }
+    return new SerialDefinition(portName, (int)baudRate.getValue());
+  }
+
+  @Override
+  protected void buildPackets() {
+    logger.info("");
+    SerialProtocol serialProtocol = this.serialProtocol.getEnum();
+    if (serialProtocol == SerialProtocol.NONE) {
+      return;
+    }
+    int[] wiringIndexBuffer = getWiringIndexBuffer();
+    addPacket(getSerialDefinition(), wiringIndexBuffer, getProtocolChannel());
   }
 
   @Override
@@ -274,20 +267,6 @@ public class LPPanelFixture extends LXProtocolFixture {
       points.get(i).set(transform);
       transform.pop();
     }
-  }
-
-  /**
-   * Adds a parameter which impacts the serial outputs of the fixture. Whenever
-   * one is changed, the serial parameters will be regenerated.
-   *
-   * @param path Path to parameter
-   * @param parameter Parameter
-   * @return this
-   */
-  protected LXFixture addSerialParameter(String path, LXParameter parameter) {
-    addParameter(path, parameter);
-    this.serialParameters.add(parameter);
-    return this;
   }
 
   @Override

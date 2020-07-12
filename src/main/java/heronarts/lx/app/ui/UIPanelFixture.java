@@ -180,7 +180,8 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
       outputSerialPort.setEnabled(
         fixture.serialProtocol.getEnum() != LPPanelFixture.SerialProtocol.NONE);
       switch ((LPPanelFixture.SerialProtocol) fixture.serialProtocol.getEnum()) {
-      case PBX: {
+      case PBX_WS281X:
+      case PBX_APA102: {
         outputChannel.setParameter(fixture.pixelBlazeChannel).setEnabled(true);
         outputChannelLabel.setLabel("Channel");
         break;

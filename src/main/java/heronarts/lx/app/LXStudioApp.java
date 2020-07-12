@@ -33,11 +33,12 @@ import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPPanelFixture;
 import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.LPStructure;
+import flavius.pixelblaze.model.ModelSerialPacketOutput;
+import flavius.pixelblaze.model.SerialModel;
 import flavius.pixelblaze.output.PBExpanderOutput;
 import heronarts.lx.LX;
 import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
-import heronarts.lx.LXRegistry;
 import heronarts.lx.app.pattern.HexLifePattern;
 import heronarts.lx.app.pattern.Panel3DBLM;
 import heronarts.lx.app.pattern.Panel3DRotatingCube;
@@ -74,10 +75,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   private static boolean FULLSCREEN = false;
 
   // TODO: get these from config
-  public final String SERIAL_PORT = "/dev/tty.usbserial-AD025M69";
-  public final String OPC_HOST = "192.168.1.20";
-  public final int OPC_PORT = 42069;
-  public final byte OPC_CHANNEL = 0;
   public final int APA102_CLOCK_CHANNEL = 7;
   public final int APA102_FREQ = 800000;
 
@@ -168,7 +165,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     if (config.activeImage != null) {
       videoFrame = loadImage(mediaPrefix + config.activeImage);
     } else if (config.activeMovie != null) {
-      movie = new Movie((PApplet) this, (mediaPrefix + config.activeMovie));
+      movie = new Movie(this, (mediaPrefix + config.activeMovie));
       movie.loop();
       movie.volume(config.movieVolume);
       while (!movie.available())
@@ -213,7 +210,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     if (LPMeshable.useRightHandedCoordinates) {
       ui.setCoordinateSystem(CoordinateSystem.valueOf("RIGHT_HANDED"));
     }
-    LXModel model = lx.getModel();
 
     try {
       MethodUtils.invokeMethod(
@@ -227,51 +223,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       logger.warning(e.toString());
     }
 
-    Serial serialPort = new Serial(this, SERIAL_PORT,
-      PBExpanderOutput.BAUD_RATE);
-
     try {
-      // TODO: Get model geometry from config
-      int pointIndex = 0;
-      // int pointIndex = 214 * 6;
-      int nPoints = model.size;
-      PBExpanderOutput output = new PBExpanderOutput(lx, serialPort);
-      if(model.children != null) {
-        for(int child=0; child < model.children.length; child++){
-          int childSize = model.children[child].size;
-          int[] indexBuffer = new int[childSize];
-          for(int i=0; i<childSize; i++){
-            indexBuffer[i] = pointIndex;
-            if (pointIndex < model.size - 1)
-              pointIndex++;
-          }
-          output.addWS281XChannel(child, indexBuffer);
-        }
-      } else {
-        // just repeat the same model on N channels
-        int nChannels = 1;
-        for (int channelNumber = 0; channelNumber < nChannels; channelNumber++) {
-          int[] indexBuffer = new int[nPoints];
-          for (int i = 0; i < nPoints; i++) {
-            indexBuffer[i] = pointIndex;
-            if (pointIndex < model.size - 1)
-              pointIndex++;
-          }
-          output.addWS281XChannel(channelNumber, indexBuffer);
-          // output.addAPA102DataChannel(channelNumber, indexBuffer, APA102_FREQ);
-        }
-      }
-
-      // output.addAPA102ClockChannel(APA102_CLOCK_CHANNEL, APA102_FREQ);
-
-      // int[] indexBuffer = new int[nPoints];
-      // for (int i = 0; i < nPoints; i++) {
-      // indexBuffer[i] = pointIndex;
-      // if (pointIndex < model.size - 1) pointIndex++;
-      // }
-      // OPCOutput output = new OPCOutput(lx, indexBuffer, OPC_HOST, OPC_PORT);
-
-      lx.addOutput(output);
+      lx.addOutput(new ModelSerialPacketOutput(lx));
     } catch (Exception x) {
       x.printStackTrace();
     }
