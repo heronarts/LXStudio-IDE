@@ -12,26 +12,38 @@ import heronarts.lx.output.LXOutput;
 
 /**
  * An output stage that functions by sending serial packets, similar to how
- * {@link heronarts.lx.output.LXDatagramOutput} sends {@link heronarts.lx.output.LXDatagram}
+ * {@link heronarts.lx.output.LXDatagramOutput} sends
+ * {@link heronarts.lx.output.LXDatagram}
  */
 public class SerialPacketOutput extends LXOutput {
 
   protected final List<SerialPacket> packets = new ArrayList<SerialPacket>();
 
+  /**
+   * A list of {@link SerialDefinition} that have been used to send PixelBlaze
+   * messages.
+   *
+   * Used to send a SendAll command after all fixtures have been sent.
+   */
+  protected final List<SerialDefinition> pbDefsSent = new ArrayList<SerialDefinition>();
+
+  SerialPacket pbSendAll = new PBExpanderDrawAllPacket();
+
   private final SimpleDateFormat date = new SimpleDateFormat("[HH:mm:ss]");
 
   private static final Logger logger = Logger
-  .getLogger(SerialPacketOutput.class.getName());
+    .getLogger(SerialPacketOutput.class.getName());
 
   public SerialPacketOutput(LX lx) {
     super(lx);
   }
 
   public SerialPacketOutput addPacket(SerialPacket packet) {
-    logger.info("");
-    Objects.requireNonNull(packet, "May not add null packet to SerialPacketOutput");
+    Objects.requireNonNull(packet,
+      "May not add null packet to SerialPacketOutput");
     if (this.packets.contains(packet)) {
-      throw new IllegalStateException("May not add duplicate packet to SerialPacketOutput: " + packet);
+      throw new IllegalStateException(
+        "May not add duplicate packet to SerialPacketOutput: " + packet);
     }
     this.packets.add(packet);
     return this;
@@ -69,14 +81,25 @@ public class SerialPacketOutput extends LXOutput {
    *
    * @param colors Color values
    */
-  protected /* abstract */ void beforeSend(int[] colors) {}
+  protected void beforeSend(int[] colors) {
+    this.pbDefsSent.clear();
+  }
 
   /**
    * Subclasses may override. Invoked after packets are sent.
    *
    * @param colors Color values
    */
-  protected /* abstract */ void afterSend(int[] colors) {}
+  protected void afterSend(int[] colors) {
+    pbSendAll.onSend();
+    for (SerialDefinition def : this.pbDefsSent) {
+      try {
+        def.write(pbSendAll.buffer);
+      } catch (IOException iox) {
+        logger.warning(iox.toString());
+      }
+    }
+  }
 
   /**
    * Core method which sends the packets.
@@ -89,10 +112,10 @@ public class SerialPacketOutput extends LXOutput {
       onSendPacket(packet, now, colors, brightness);
     }
     afterSend(colors);
-    // logger.info("");
   }
 
-  protected void onSendPacket(SerialPacket packet, long nowMillis, int[] colors, double brightness) {
+  protected void onSendPacket(SerialPacket packet, long nowMillis, int[] colors,
+    double brightness) {
     if (!packet.enabled.isOn()) {
       return;
     }
@@ -104,12 +127,18 @@ public class SerialPacketOutput extends LXOutput {
       return;
     }
 
-    byte[] glut = this.gammaLut[(int) Math.round(brightness * packet.brightness.getValue() * 255.f)];
+    byte[] glut = this.gammaLut[(int) Math
+      .round(brightness * packet.brightness.getValue() * 255.f)];
     packet.onSend(colors, glut);
     try {
       packet.definition.write(packet.buffer);
+      if (PBExpanderPacket.class.isInstance(packet)
+        && !this.pbDefsSent.contains(packet.definition)) {
+        this.pbDefsSent.add(packet.definition);
+      }
       if (packetErrorState.failureCount > 0) {
-        LXOutput.log(this.date.format(nowMillis) + " Recovered connectivity to " + packetErrorState.destination);
+        LXOutput.log(this.date.format(nowMillis) + " Recovered connectivity to "
+          + packetErrorState.destination);
       }
       // Sent fine! All good here...
       packetErrorState.failureCount = 0;
@@ -119,16 +148,16 @@ public class SerialPacketOutput extends LXOutput {
       packet.error.setValue(true);
       if (packetErrorState.failureCount == 0) {
         LXOutput.error(this.date.format(nowMillis) + " IOException sending to "
-            + packetErrorState.destination + " (" + iox.getLocalizedMessage()
-            + "), will initiate backoff after 3 consecutive failures");
+          + packetErrorState.destination + " (" + iox.getLocalizedMessage()
+          + "), will initiate backoff after 3 consecutive failures");
       }
       ++packetErrorState.failureCount;
       if (packetErrorState.failureCount >= 3) {
         int pow = Math.min(5, packetErrorState.failureCount - 3);
         long waitFor = (long) (50 * Math.pow(2, pow));
-        LXOutput.error(this.date.format(nowMillis) + " Retrying " + packetErrorState.destination
-            + " in " + waitFor + "ms" + " (" + packetErrorState.failureCount
-            + " consecutive failures)");
+        LXOutput.error(this.date.format(nowMillis) + " Retrying "
+          + packetErrorState.destination + " in " + waitFor + "ms" + " ("
+          + packetErrorState.failureCount + " consecutive failures)");
         packetErrorState.sendAfter = nowMillis + waitFor;
 
       }
@@ -137,6 +166,7 @@ public class SerialPacketOutput extends LXOutput {
 
   @Override
   protected void onSend(int[] colors, byte[] glut) {
-    throw new UnsupportedOperationException("SerialPacketOutput does not implement onSend by glut");
+    throw new UnsupportedOperationException(
+      "SerialPacketOutput does not implement onSend by glut");
   }
 }

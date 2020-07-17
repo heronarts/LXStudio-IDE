@@ -2,11 +2,10 @@ package flavius.pixelblaze.model;
 
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-
 import flavius.pixelblaze.output.SerialPacketOutput;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
  * This helper is used for sending dynamic serial packets / datagrams that are

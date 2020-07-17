@@ -3,7 +3,6 @@ package flavius.pixelblaze.output;
 import java.util.logging.Logger;
 
 import flavius.pixelblaze.PBColorOrder;
-import flavius.pixelblaze.PBHeader;
 import flavius.pixelblaze.PBRecordType;
 import flavius.pixelblaze.util.ByteUtils;
 
@@ -41,10 +40,8 @@ public class PBExpanderDataPacket extends PBExpanderPacket {
     }
   }
 
-  public PBExpanderDataPacket(PBRecordType type, PBColorOrder order,
-    int[] indexBuffer, int channel) {
-    super(HEADER_SIZE + bodySize(type, order, indexBuffer) + CRC_SIZE, type,
-      channel);
+  public PBExpanderDataPacket(PBRecordType type, PBColorOrder order, int[] indexBuffer, int channel) {
+    super(HEADER_SIZE + bodySize(type, order, indexBuffer) + CRC_SIZE, type, channel);
     this.order = order;
     this.indexBuffer = indexBuffer;
   }
@@ -52,15 +49,9 @@ public class PBExpanderDataPacket extends PBExpanderPacket {
   @Override
   protected void writeBody(int[] colors, byte[] glut) {
     this.validate(this.indexBuffer);
-    int i = CRC_SIZE;
-    logger.fine(String.format(
-      "numElements: 0x%02x\norders: 0x%02x\n",
-      this.order.numElements,
-      this.order.colorOrder
-    ));
+    int i = HEADER_SIZE;
     buffer[i++] = (byte) this.order.numElements;
     buffer[i++] = (byte) this.order.colorOrder;
-    logger.fine(String.format("pixels: 0x%04x\n", indexBuffer.length));
     for (byte b : ByteUtils.uint16LEBytes(this.indexBuffer.length)) {
       buffer[i++] = b;
     }

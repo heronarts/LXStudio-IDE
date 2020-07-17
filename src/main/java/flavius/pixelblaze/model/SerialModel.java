@@ -2,13 +2,8 @@ package flavius.pixelblaze.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 import flavius.pixelblaze.output.SerialPacket;
-import flavius.pixelblaze.output.SerialPacketOutput;
-import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 
@@ -16,6 +11,7 @@ import heronarts.lx.model.LXPoint;
  * Extends {@link SerialModel} to allow for sending serial packets in addition to datagrams
  */
 public class SerialModel extends LXModel {
+  // TODO(dev): is SerialModel necessary?
 
   /**
    * An ordered list of packets that should be sent for this model.
@@ -26,7 +22,7 @@ public class SerialModel extends LXModel {
    * Constructs a null model with no points
    */
   public SerialModel() {
-    super();
+    this(new ArrayList<LXPoint>());
   }
 
   /**
@@ -35,7 +31,7 @@ public class SerialModel extends LXModel {
    * @param points Points in the model
    */
   public SerialModel(List<LXPoint> points) {
-    super(points);
+    this(points, new SerialModel[0]);
   }
 
   /**
@@ -45,30 +41,33 @@ public class SerialModel extends LXModel {
    * @param keys Key identifiers for the model type
    */
   public SerialModel(List<LXPoint> points, String ... keys) {
-    super(points, keys);
+    this(points, new SerialModel[0], keys);
   }
 
-  // /**
-  //  * Constructs a model with a given set of points and pre-constructed children. In this case, points
-  //  * from the children are not added to the points array, they are assumed to already be contained by
-  //  * the points list.
-  //  *
-  //  * @param points Points in this model
-  //  * @param children Pre-built direct child model array
-  //  */
-  // public SerialModel(List<LXPoint> points, SerialModel[] children) {
-  //   this(points, children, SerialModel.Key.MODEL);
-  // }
+  /**
+   * Constructs a model with a given set of points and pre-constructed children. In this case, points
+   * from the children are not added to the points array, they are assumed to already be contained by
+   * the points list.
+   *
+   * @param points Points in this model
+   * @param children Pre-built direct child model array
+   */
+  public SerialModel(List<LXPoint> points, LXModel[] children) {
+    this(points, children, SerialModel.Key.MODEL);
+  }
 
-  // /**
-  //  * Constructs a model with a given set of points and pre-constructed submodels. In this case, points
-  //  * from the submodels are not added to the points array, they are assumed to already be contained by
-  //  * the points list.
-  //  *
-  //  * @param points Points in this model
-  //  * @param children Pre-built direct submodel child array
-  //  * @param keys Key identifier for this model
-  //  */
+  /**
+   * Constructs a model with a given set of points and pre-constructed submodels. In this case, points
+   * from the submodels are not added to the points array, they are assumed to already be contained by
+   * the points list.
+   *
+   * @param points Points in this model
+   * @param children Pre-built direct submodel child array
+   * @param keys Key identifier for this model
+   */
+  public SerialModel(List<LXPoint> points, LXModel[] children, String ... keys) {
+    super(points, children, keys);
+  }
   // public SerialModel(List<LXPoint> points, SerialModel[] children, String ... keys) {
   //   this.keys = validateKeys(keys);
   //   this.pointList = Collections.unmodifiableList(new ArrayList<LXPoint>(points));

@@ -33,9 +33,7 @@ import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPPanelFixture;
 import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.LPStructure;
-import flavius.pixelblaze.model.ModelSerialPacketOutput;
-import flavius.pixelblaze.model.SerialModel;
-import flavius.pixelblaze.output.PBExpanderOutput;
+import flavius.pixelblaze.structure.SerialPacketStructure;
 import heronarts.lx.LX;
 import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
@@ -44,21 +42,21 @@ import heronarts.lx.app.pattern.Panel3DBLM;
 import heronarts.lx.app.pattern.Panel3DRotatingCube;
 import heronarts.lx.app.pattern.VideoFrame;
 import heronarts.lx.app.ui.UIAxes;
+import heronarts.lx.app.ui.UIPanelFixture;
 import heronarts.lx.app.ui.UIVideoFrame;
 import heronarts.lx.app.ui.UIWireFrame;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.output.LXOutput;
 import heronarts.lx.pattern.GraphicEqualizerPattern;
 import heronarts.lx.studio.LXStudio;
-import heronarts.lx.app.ui.UIPanelFixture;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
-import processing.serial.Serial;
 import processing.video.Movie;
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 
 /**
  * This is an example top-level class to build and run an LX Studio application
@@ -108,7 +106,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public void setup() {
     instance = this;
     config = new LPSimConfig();
-    config.updateFromJSONObject(loadJSONObject(config.activeModel));
     for (String activeStructure : config.activeStructures) {
       config.updateFromJSONObject(loadJSONObject(activeStructure));
     }
@@ -161,7 +158,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     } catch (IOException e) {
       logger.severe(String.format("could not get mediaPrefix: %s", e.toString()));
     }
-    // logger.info(String.format("mediaPrefix: %s", mediaPrefix));
     if (config.activeImage != null) {
       videoFrame = loadImage(mediaPrefix + config.activeImage);
     } else if (config.activeMovie != null) {
@@ -224,7 +220,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     }
 
     try {
-      lx.addOutput(new ModelSerialPacketOutput(lx));
+      SerialPacketStructure structure = new SerialPacketStructure(lx);
+      LXOutput output = structure.serialOutput;
+      lx.addOutput(output);
+      logger.info(String.format("added output %s", output));
     } catch (Exception x) {
       x.printStackTrace();
     }

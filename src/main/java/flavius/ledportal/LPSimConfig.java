@@ -17,18 +17,11 @@ public class LPSimConfig {
   public List<LPStructure> structures = new ArrayList<LPStructure>();
   public List<LPStructure> debugStructures = new ArrayList<LPStructure>();
 
-  // public String activeModel = "data/models/dome_render_6_5_LEDs_Iso_1220_Single_ALL_PANELS.json";
-  public String activeModel = "data/models/dome_render_6_5_LEDs_Iso_1220_Double_ALL_PANELS.json";
-  // public String activeModel = "data/models/dome_render_6_5_LEDs_Iso_1220_ALL_PANELS.json";
-  // public String activeModel = "data/models/dome_render_6_5_Dome_ALL_PANELS.json";
-  // public String activeModel = "data/models/TeleCortex_Dome_6_0_PANEL_SMALL.json";
-  // public String activeModel = "data/models/TeleCortex_Dome_6_0_Panels_ALL_PANELS.json";
-  // public String activeModel = "data/models/TeleCortex_Dome_6_0_Panels_Big_M_ALL_PANELS.json";
   public String[] activeStructures = {
-    "data/structures/dome_render_6_5_Dome_EDGES.json",
-    "data/structures/dome_render_6_5_Left_Stack_FACES.json",
-    "data/structures/dome_render_6_5_Right_Stack_FACES.json",
-    "data/structures/dome_render_6_5_Table_FACES.json"
+    // "data/structures/dome_render_6_5_Dome_EDGES.json",
+    // "data/structures/dome_render_6_5_Left_Stack_FACES.json",
+    // "data/structures/dome_render_6_5_Right_Stack_FACES.json",
+    // "data/structures/dome_render_6_5_Table_FACES.json"
   };
   public float[] screenCapBounds; // = new float[]{ 0, 0, 1, 1 };
   public String activeMovie;
@@ -92,18 +85,14 @@ public class LPSimConfig {
     LXModel result;
     if (this.panels.size() == 1) {
       result = this.panels.get(0).getModel();
-      logger.info(String.format("single model: %s", result));
     } else {
       LXModel[] children = new LXModel[this.panels.size()];
       int childNumber = 0;
-      String message = "multiple models: ";
       for (LPPanelConfig panel : this.panels) {
         children[childNumber] = panel.getModel();
-        message += String.format("\n\t%s", children[childNumber]);
         childNumber += 1;
       }
       result = new LXModel(children);
-      logger.info(message);
     }
     return result;
   }

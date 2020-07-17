@@ -2,26 +2,24 @@ package heronarts.lx.app.ui;
 
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-
 import flavius.ledportal.LPPanelFixture;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.structure.LXFixture;
-import heronarts.lx.structure.LXProtocolFixture;
 import heronarts.lx.studio.LXStudio;
 import heronarts.lx.studio.LXStudio.UI;
 import heronarts.lx.studio.ui.fixture.UIFixture;
 import heronarts.lx.studio.ui.fixture.UIFixtureControls;
+import heronarts.p3lx.ui.UI2dComponent;
+import heronarts.p3lx.ui.UITheme;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDropMenu;
 import heronarts.p3lx.ui.component.UIIntegerBox;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UITextBox;
-import heronarts.p3lx.ui.UI2dComponent;
-import heronarts.p3lx.ui.UITheme;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
 
@@ -158,10 +156,13 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
       (float)GRID_HEIGHT);
     final UILabel outputChannelLabel = uiFixture.newControlLabel("Channel",
       (float) GRID_LABEL_WIDTH);
+    final UIIntegerBox outputBaudRate = new UIIntegerBox(0.0f, 0.0f, (float) GRID_LABEL_WIDTH,
+      (float)GRID_HEIGHT);
     final UIButton reverseButton = includeReverseOption
       ? new UIButton(0.0f, 0.0f, 24.0f, (float)GRID_HEIGHT).setParameter(fixture.reverse)
         .setActiveLabel("\u2190").setInactiveLabel("\u2192")
       : null;
+    outputBaudRate.setParameter(fixture.baudRate).setEnabled(true);
     UI ui = null;
     try {
       ui = (UI) (FieldUtils.readField(uiFixture, "ui", true));
@@ -183,7 +184,7 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
       case PBX_WS281X:
       case PBX_APA102: {
         outputChannel.setParameter(fixture.pixelBlazeChannel).setEnabled(true);
-        outputChannelLabel.setLabel("Channel");
+        // outputChannelLabel.setLabel("Channel");
         break;
       }
       case NONE: {
@@ -202,7 +203,10 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
         (UI2dComponent) reverseButton },
       { (UI2dComponent) outputSerialPort, (UI2dComponent) outputChannel },
       { (UI2dComponent) uiFixture.newControlLabel("Serial Port", 106.0f),
-        (UI2dComponent) outputChannelLabel } };
+        (UI2dComponent) outputChannelLabel },
+      { (UI2dComponent) uiFixture.newControlLabel("Baud Rate", 106.0f),
+        (UI2dComponent) outputBaudRate }
+    };
   }
 
   @Override

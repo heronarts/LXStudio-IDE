@@ -108,6 +108,10 @@ public abstract class SerialPacket {
    */
   public abstract void onSend(int[] colors, byte[] glut);
 
+  public void onSend() {
+    this.onSend(new int[]{}, new byte[]{});
+  }
+
   /**
    * Invoked when the packet is no longer needed. Typically a no-op, but subclasses
    * may override if cleanup work is necessary.

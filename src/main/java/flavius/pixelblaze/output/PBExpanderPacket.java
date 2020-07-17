@@ -1,12 +1,11 @@
 package flavius.pixelblaze.output;
 
-import flavius.pixelblaze.PBColorOrder;
 import flavius.pixelblaze.PBHeader;
 import flavius.pixelblaze.PBRecordType;
 import flavius.pixelblaze.util.PBCRC;
 import flavius.pixelblaze.util.PBConstants;
 
-public abstract class PBExpanderPacket extends SerialPacket implements PBConstants {
+public class PBExpanderPacket extends SerialPacket implements PBConstants {
   public final PBRecordType type;
   private final PBCRC crc = new PBCRC();
   public final int channel;
@@ -69,7 +68,8 @@ public abstract class PBExpanderPacket extends SerialPacket implements PBConstan
    * @param glut    the gamma lookup table
    * @return the number of bytes written to the buffer
    */
-  protected abstract void writeBody(int[] colors, byte[] glut);
+  protected void writeBody(int[] colors, byte[] glut) {
+  }
 
   protected int getCRCIndex() {
     return buffer.length - CRC_SIZE;
@@ -84,6 +84,7 @@ public abstract class PBExpanderPacket extends SerialPacket implements PBConstan
   @Override
   public void onSend(int[] colors, byte[] glut) {
     writeBody(colors, glut);
+    this.crc.reset();
     this.crc.updateBytes(buffer, 0, getCRCIndex());
     writeCRC();
   }
