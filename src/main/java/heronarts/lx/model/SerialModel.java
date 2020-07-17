@@ -1,11 +1,9 @@
-package flavius.pixelblaze.model;
+package heronarts.lx.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import flavius.pixelblaze.output.SerialPacket;
-import heronarts.lx.model.LXModel;
-import heronarts.lx.model.LXPoint;
+import heronarts.lx.output.SerialPacket;
 
 /**
  * Extends {@link SerialModel} to allow for sending serial packets in addition to datagrams

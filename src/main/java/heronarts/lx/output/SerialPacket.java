@@ -1,4 +1,4 @@
-package flavius.pixelblaze.output;
+package heronarts.lx.output;
 
 import java.util.HashMap;
 import java.util.Map;

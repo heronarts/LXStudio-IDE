@@ -4,6 +4,7 @@ import flavius.pixelblaze.PBHeader;
 import flavius.pixelblaze.PBRecordType;
 import flavius.pixelblaze.util.PBCRC;
 import flavius.pixelblaze.util.PBConstants;
+import heronarts.lx.output.SerialPacket;
 
 public class PBExpanderPacket extends SerialPacket implements PBConstants {
   public final PBRecordType type;

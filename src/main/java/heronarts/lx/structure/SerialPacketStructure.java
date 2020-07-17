@@ -1,15 +1,12 @@
-package flavius.pixelblaze.structure;
+package heronarts.lx.structure;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import flavius.pixelblaze.output.SerialPacket;
-import flavius.pixelblaze.output.SerialPacketOutput;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.structure.LXFixture;
-import heronarts.lx.structure.LXStructure;
+import heronarts.lx.output.SerialPacket;
+import heronarts.lx.output.SerialPacketOutput;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
@@ -44,30 +41,16 @@ public class SerialPacketStructure extends LXStructure implements LXStructure.Li
         // Adjust by fixture brightness
         brightness *= fixture.brightness.getValue();
 
-        List<LXFixture> children = new ArrayList<LXFixture>();
-        try {
-          children = (List<LXFixture>)(FieldUtils.readField(fixture, "children", true));
-        } catch (Exception e) {
-          logger.warning(e.toString());
-          return;
-        }
-
         // Recursively send all the fixture's children
-        for (LXFixture child : children) {
+        for (LXFixture child : fixture.children) {
           onSendFixture(colors, now, brightness, child);
         }
 
-        List<SerialPacket> packets = new ArrayList<SerialPacket>();
-        try {
-          packets = (List<SerialPacket>) (FieldUtils.readField((SerialProtocolFixture)fixture,
-            "packets", true));
-        } catch (Exception e) {
-          logger.warning(e.toString());
+        // Then send the fixture's own direct packets
+        if(!SerialProtocolFixture.class.isInstance(fixture)){
           return;
         }
-
-        // Then send the fixture's own direct packets
-        for (SerialPacket packet : packets) {
+        for (SerialPacket packet : ((SerialProtocolFixture)fixture).packets) {
           onSendPacket(packet, now, colors, brightness);
         }
       }
@@ -92,8 +75,6 @@ public class SerialPacketStructure extends LXStructure implements LXStructure.Li
 
   @Override
   public void fixtureAdded(LXFixture fixture) {
-    // TODO Auto-generated method stub
-    logger.info(String.format("this: %s, fixture: %s", this, fixture));
     List<LXFixture> mutableFixtures = null;
     try {
       mutableFixtures = (List<LXFixture>) (FieldUtils.readField(this,
@@ -109,15 +90,11 @@ public class SerialPacketStructure extends LXStructure implements LXStructure.Li
 
   @Override
   public void fixtureRemoved(LXFixture fixture) {
-    // TODO Auto-generated method stub
-    logger.info(String.format("this: %s, fixture: %s", this, fixture));
     removeFixture(fixture);
   }
 
   @Override
   public void fixtureMoved(LXFixture fixture, int index) {
-    // TODO Auto-generated method stub
-    logger.info(String.format("this: %s, fixture: %s", this, fixture));
     List<LXFixture> mutableFixtures = null;
     try {
       mutableFixtures = (List<LXFixture>) (FieldUtils.readField(this,

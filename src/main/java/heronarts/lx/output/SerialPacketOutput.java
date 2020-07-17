@@ -1,4 +1,4 @@
-package flavius.pixelblaze.output;
+package heronarts.lx.output;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import flavius.pixelblaze.output.PBExpanderDrawAllPacket;
+import flavius.pixelblaze.output.PBExpanderPacket;
 import heronarts.lx.LX;
-import heronarts.lx.output.LXOutput;
 
 /**
  * An output stage that functions by sending serial packets, similar to how

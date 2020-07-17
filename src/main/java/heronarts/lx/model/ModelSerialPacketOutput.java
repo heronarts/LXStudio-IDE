@@ -1,10 +1,9 @@
-package flavius.pixelblaze.model;
+package heronarts.lx.model;
 
 import java.util.logging.Logger;
 
-import flavius.pixelblaze.output.SerialPacketOutput;
 import heronarts.lx.LX;
-import heronarts.lx.model.LXModel;
+import heronarts.lx.output.SerialPacketOutput;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
@@ -13,6 +12,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
  * updated.
  */
 public class ModelSerialPacketOutput extends SerialPacketOutput implements LX.Listener {
+  // TODO(dev): Is this necessary?
   private static final Logger logger = Logger
     .getLogger(ModelSerialPacketOutput.class.getName());
 

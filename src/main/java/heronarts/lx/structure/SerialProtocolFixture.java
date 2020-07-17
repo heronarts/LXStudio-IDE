@@ -1,4 +1,4 @@
-package flavius.pixelblaze.structure;
+package heronarts.lx.structure;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,15 +8,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import flavius.pixelblaze.output.SerialPacket;
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
+import heronarts.lx.output.SerialPacket;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
-import heronarts.lx.structure.LXProtocolFixture;
 import jssc.SerialPort;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -130,52 +128,10 @@ public abstract class SerialProtocolFixture extends LXProtocolFixture {
     }
   }
 
-  /**
-   * Invoked when this fixture has been loaded or added to some container. Will
-   * rebuild the points and the metrics, and notify container of the change to
-   * this fixture's generation
-   */
   @Override
-  protected void regenerate() {
-    super.regenerate();
-    // We may have a totally new size, blow out the points array and rebuild
-    int numPoints = size();
-    List<LXPoint> mutablePoints = null;
-    try {
-      mutablePoints = (List<LXPoint>) (FieldUtils.readField(this,
-        "mutablePoints", true));
-    } catch (Exception e) {
-      logger.warning(e.toString());
-      return;
-    }
-    mutablePoints.clear();
-    for (int i = 0; i < numPoints; ++i) {
-      LXPoint p = new LXPoint();
-      p.index = this.firstPointIndex + i;
-      mutablePoints.add(p);
-    }
-
-    // A new model will have to be created, forget these points
-    this.model = null;
-    this.modelPoints.clear();
-
-    // Regenerate our geometry, note that we bypass regenerateGeometry()
-    // here because we don't need to notify our container about the change.
-    // We're
-    // going to notify them after this of even more substantive generation
-    // change.
-    _regenerateGeometry();
-
-    // Rebuild datagram objects
-    regenerateDatagrams();
-
+  public void onRegenerate() {
     // Rebuild serial packet objects
     regenerateSerialPackets();
-
-    // Let our container know that our structural generation has changed
-    if (this.container != null) {
-      this.container.fixtureGenerationChanged(this);
-    }
   }
 
   private void regenerateSerialPackets() {

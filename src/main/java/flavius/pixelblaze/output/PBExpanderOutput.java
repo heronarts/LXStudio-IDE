@@ -11,6 +11,7 @@ import flavius.pixelblaze.PBMessageFactoryDrawAll;
 import flavius.pixelblaze.PBMessageFactoryWS281X;
 import flavius.pixelblaze.util.PBConstants;
 import heronarts.lx.LX;
+import heronarts.lx.output.SerialOutput;
 import processing.serial.Serial;
 
 /**

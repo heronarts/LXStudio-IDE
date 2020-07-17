@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import flavius.pixelblaze.model.SerialModel;
 import heronarts.lx.model.GridModel.Point;
-import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.model.SerialModel;
+import heronarts.lx.transform.LXMatrix;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
 

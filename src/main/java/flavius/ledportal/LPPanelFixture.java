@@ -2,14 +2,10 @@ package flavius.ledportal;
 
 import java.net.InetAddress;
 import java.util.List;
-import java.util.logging.Logger;
 
 import flavius.pixelblaze.PBColorOrder;
 import flavius.pixelblaze.PBRecordType;
 import flavius.pixelblaze.output.PBExpanderDataPacket;
-import flavius.pixelblaze.output.SerialDefinition;
-import flavius.pixelblaze.output.SerialPacket;
-import flavius.pixelblaze.structure.SerialProtocolFixture;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.ArtNetDatagram;
@@ -17,6 +13,8 @@ import heronarts.lx.output.DDPDatagram;
 import heronarts.lx.output.KinetDatagram;
 import heronarts.lx.output.LXBufferDatagram;
 import heronarts.lx.output.OPCDatagram;
+import heronarts.lx.output.SerialDefinition;
+import heronarts.lx.output.SerialPacket;
 import heronarts.lx.output.StreamingACNDatagram;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
@@ -26,14 +24,12 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.structure.GridFixture.PositionMode;
 import heronarts.lx.structure.GridFixture.Wiring;
+import heronarts.lx.structure.SerialProtocolFixture;
 import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
 import processing.data.JSONArray;
 
 public class LPPanelFixture extends SerialProtocolFixture {
-
-  private static final Logger logger = Logger
-    .getLogger(LPPanelFixture.class.getName());
 
   public final EnumParameter<PositionMode> positionMode =
     new EnumParameter<PositionMode>("Mode", PositionMode.CORNER)
