@@ -14,14 +14,14 @@ public class LPSimConfig {
   private static final Logger logger = Logger
     .getLogger(LPSimConfig.class.getName());
   public List<LPPanelConfig> panels = new ArrayList<LPPanelConfig>();
-  public List<LPStructure> structures = new ArrayList<LPStructure>();
-  public List<LPStructure> debugStructures = new ArrayList<LPStructure>();
+  public List<LPDecoration> decorations = new ArrayList<LPDecoration>();
+  public List<LPDecoration> debugDecorations = new ArrayList<LPDecoration>();
 
-  public String[] activeStructures = {
-    // "data/structures/dome_render_6_5_Dome_EDGES.json",
-    // "data/structures/dome_render_6_5_Left_Stack_FACES.json",
-    // "data/structures/dome_render_6_5_Right_Stack_FACES.json",
-    // "data/structures/dome_render_6_5_Table_FACES.json"
+  public String[] activeDecorations = {
+    "data/decorations/dome_render_6_5_Dome_EDGES.json",
+    "data/decorations/dome_render_6_5_Left_Stack_FACES.json",
+    "data/decorations/dome_render_6_5_Right_Stack_FACES.json",
+    "data/decorations/dome_render_6_5_Table_FACES.json"
   };
   public float[] screenCapBounds; // = new float[]{ 0, 0, 1, 1 };
   public String activeMovie;
@@ -41,11 +41,11 @@ public class LPSimConfig {
         this.panels.add(panel.updateFromJSONObject(panelList.getJSONObject(i)));
       }
     }
-    if (jsonConfig.hasKey("structures")) {
-      final JSONArray structureList = jsonConfig.getJSONArray("structures");
+    if (jsonConfig.hasKey("decorations")) {
+      final JSONArray structureList = jsonConfig.getJSONArray("decorations");
       for (int i = 0; i < structureList.size(); i++) {
-        final LPStructure structure = new LPStructure();
-        this.structures
+        final LPDecoration structure = new LPDecoration();
+        this.decorations
           .add(structure.updateFromJSONObject(structureList.getJSONObject(i)));
       }
     }

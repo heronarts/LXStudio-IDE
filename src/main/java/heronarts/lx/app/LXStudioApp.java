@@ -29,10 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import flavius.ledportal.LPDecoration;
 import flavius.ledportal.LPMeshable;
-import flavius.ledportal.LPPanelFixture;
 import flavius.ledportal.LPSimConfig;
-import flavius.ledportal.LPStructure;
+import flavius.ledportal.structure.LPPanelFixture;
+// import flavius.ledportal.structure.LPPanelStructure;
 import heronarts.lx.LX;
 import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
@@ -44,8 +45,6 @@ import heronarts.lx.app.ui.UIAxes;
 import heronarts.lx.app.ui.UIPanelFixture;
 import heronarts.lx.app.ui.UIVideoFrame;
 import heronarts.lx.app.ui.UIWireFrame;
-import heronarts.lx.model.LXModel;
-import heronarts.lx.output.LXOutput;
 import heronarts.lx.pattern.GraphicEqualizerPattern;
 import heronarts.lx.structure.SerialPacketStructure;
 import heronarts.lx.studio.LXStudio;
@@ -86,7 +85,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public static float[][] modelBounds;
   public static LXStudio studio;
   public static LXStudioApp instance;
-  public static LXModel model;
+  // public static LPPanelStructure panelStructure;
 
   private Movie movie;
   private Robot robot;
@@ -106,8 +105,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public void setup() {
     instance = this;
     config = new LPSimConfig();
-    for (String activeStructure : config.activeStructures) {
-      config.updateFromJSONObject(loadJSONObject(activeStructure));
+    for (String activeDecoration : config.activeDecorations) {
+      config.updateFromJSONObject(loadJSONObject(activeDecoration));
     }
 
     flattener = config.getWorldFlattener();
@@ -135,6 +134,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     // you cannot assume you are working with an LXStudio class or that any UI
     // will be
     // available.
+    // panelStructure = new LPPanelStructure(lx);
 
     // Register custom pattern and effect types
     // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
@@ -221,9 +221,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
     try {
       SerialPacketStructure structure = new SerialPacketStructure(lx);
-      LXOutput output = structure.serialOutput;
-      lx.addOutput(output);
-      logger.info(String.format("added output %s", output));
+      lx.addOutput(structure.serialOutput);
     } catch (Exception x) {
       x.printStackTrace();
     }
@@ -234,11 +232,11 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     // add
     // additional views and components to the Ui hierarchy.
 
-    for (LPStructure structure : config.structures) {
-      ui.preview.addComponent(new UIWireFrame(structure));
+    for (LPDecoration decoration : config.decorations) {
+      ui.preview.addComponent(new UIWireFrame(decoration));
     }
-    for (LPStructure debugStructure : config.debugStructures) {
-      ui.preview.addComponent(new UIWireFrame(debugStructure, 0xff0000));
+    for (LPDecoration debugDecoration : config.debugDecorations) {
+      ui.preview.addComponent(new UIWireFrame(debugDecoration, 0xff0000));
     }
 
     ui.preview.addComponent(new UIAxes());

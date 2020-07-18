@@ -1,8 +1,9 @@
-package flavius.ledportal;
+package flavius.ledportal.structure;
 
 import java.net.InetAddress;
 import java.util.List;
 
+import flavius.ledportal.LPMeshable;
 import flavius.pixelblaze.PBColorOrder;
 import flavius.pixelblaze.PBRecordType;
 import flavius.pixelblaze.output.PBExpanderDataPacket;
@@ -51,6 +52,10 @@ public class LPPanelFixture extends SerialProtocolFixture {
     new StringParameter("Point Indices", "[[0,0]]")
     .setDescription("A JSON array of integer points that make up this panel");
 
+  public final DiscreteParameter opcPort =
+    new DiscreteParameter("OPC Port", 1, 1, 65535)
+    .setDescription("UDP Port to use for OPC");
+
   public final BoundedParameter rowSpacing =
     new BoundedParameter("Row Spacing", 10, 0, 1000000)
     .setDescription("Spacing between rows in the grid");
@@ -63,6 +68,18 @@ public class LPPanelFixture extends SerialProtocolFixture {
     new BoundedParameter("Row Shear", 0, 0, 1000000)
     .setDescription("Offset to add to each additional row");
 
+  public final DiscreteParameter globalGridOriginX =
+    new DiscreteParameter("Global Grid Origin X", 0, Integer.MIN_VALUE/2, Integer.MAX_VALUE/2)
+    .setDescription("The X coordinate in the global grid of the origin index, [0, 0]");
+
+  public final DiscreteParameter globalGridOriginY =
+    new DiscreteParameter("Global Grid Origin Y", 0, Integer.MIN_VALUE/2, Integer.MAX_VALUE/2)
+    .setDescription("The Y coordinate in the global grid of the origin index, [0, 0]");
+
+  public final StringParameter globalGridMatrix =
+    new StringParameter("Global Grid Matrix", "[[1, 0],[0, 1]]")
+    .setDescription("A JSON integer matrix which transforms local indices to global grid indices");
+
   int[][] indices;
 
 
@@ -74,8 +91,8 @@ public class LPPanelFixture extends SerialProtocolFixture {
     addDatagramParameter("opcChannel", this.opcChannel);
     addDatagramParameter("ddpDataOffset", this.ddpDataOffset);
     addDatagramParameter("kinetPort", this.kinetPort);
-    // TODO: specify OPC port
-    // addDatagramParameter("opcPort", this.opcPort);
+
+    addDatagramParameter("opcPort", this.opcPort);
     addDatagramParameter("splitPacket", this.splitPacket);
     addDatagramParameter("pointsPerPacket", this.pointsPerPacket);
 
@@ -88,6 +105,9 @@ public class LPPanelFixture extends SerialProtocolFixture {
     addMetricsParameter("pointIndicesJSON", this.pointIndicesJSON);
     addMetricsParameter("wiring", this.wiring);
     addMetricsParameter("reverse", this.reverse);
+    addMetricsParameter("globalGridOriginX", this.globalGridOriginX);
+    addMetricsParameter("globalGridOriginY", this.globalGridOriginY);
+    addMetricsParameter("StringParameter", this.globalGridMatrix);
 
     addGeometryParameter("rowSpacing", this.rowSpacing);
     addGeometryParameter("columnSpacing", this.columnSpacing);
@@ -137,7 +157,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
       break;
     case OPC:
       datagram = new OPCDatagram(indexBuffer, (byte) channel);
-      datagram = (LXBufferDatagram)datagram.setPort(42069);
+      datagram = (LXBufferDatagram)datagram.setPort(this.opcPort.getValuei());
       break;
     default:
       LX.error("Undefined datagram protocol in GridFixture: " + this.protocol.getEnum());

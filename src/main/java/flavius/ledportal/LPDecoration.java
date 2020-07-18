@@ -5,10 +5,10 @@ import java.util.List;
 import processing.core.PVector;
 import processing.data.JSONObject;
 
-public class LPStructure extends LPMeshable {
+public class LPDecoration extends LPMeshable {
   public String type;
 
-  public LPStructure updateFromJSONObject(JSONObject jsonConfig) {
+  public LPDecoration updateFromJSONObject(JSONObject jsonConfig) {
     super.updateFromJSONObject(jsonConfig);
     if (jsonConfig.hasKey("type")) {
       this.type = jsonConfig.getString("type");
@@ -16,7 +16,7 @@ public class LPStructure extends LPMeshable {
     return this;
   }
 
-  public LPStructure updateFromPlaneDebugPoints(List<PVector> points) {
+  public LPDecoration updateFromPlaneDebugPoints(List<PVector> points) {
     for (PVector point : points) {
       this.vertices.add(point);
       this.edges.add(new int[] { 0, this.vertices.size() - 1 });
@@ -24,7 +24,7 @@ public class LPStructure extends LPMeshable {
     return this;
   }
 
-  public LPStructure updateFromPolygon(List<PVector> vertices) {
+  public LPDecoration updateFromPolygon(List<PVector> vertices) {
     for (PVector vertex : vertices) {
       this.vertices.add(vertex);
       int size = this.vertices.size();

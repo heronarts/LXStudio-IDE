@@ -2,7 +2,7 @@
   "fixtures": [
     {
       "id": 329,
-      "class": "flavius.ledportal.LPPanelFixture",
+      "class": "flavius.ledportal.structure.LPPanelFixture",
       "internal": {
         "modulationColor": 0
       },
@@ -45,7 +45,7 @@
     },
     {
       "id": 495,
-      "class": "flavius.ledportal.LPPanelFixture",
+      "class": "flavius.ledportal.structure.LPPanelFixture",
       "internal": {
         "modulationColor": 0
       },

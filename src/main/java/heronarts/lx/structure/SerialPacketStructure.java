@@ -1,22 +1,15 @@
 package heronarts.lx.structure;
 
-import java.util.List;
-import java.util.logging.Logger;
-
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.output.SerialPacket;
 import heronarts.lx.output.SerialPacketOutput;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
- * Serial equivalent of {@link heronarts.lx.structure.LXStructure} which does
- * serial packets as well as datagrams
+ * Serial equivalent of {@link heronarts.lx.structure.LXStructure} which is used to create a
+ * {@link SerialPacketOutput}
  */
-public class SerialPacketStructure extends LXStructure implements LXStructure.Listener {
-
-  private static final Logger logger = Logger
-    .getLogger(SerialPacketStructure.class.getName());
+public class SerialPacketStructure extends ShadowStructure {
 
   public class SerialOutput extends SerialPacketOutput {
 
@@ -66,35 +59,5 @@ public class SerialPacketStructure extends LXStructure implements LXStructure.Li
   public SerialPacketStructure(LX lx, LXModel immutable) {
     super(lx, immutable);
     this.serialOutput = new SerialOutput(lx);
-    this.lx.structure.addListener(this);
-    for(LXFixture fixture: this.lx.structure.fixtures) {
-      logger.info(String.format("adding fixture %s", fixture));
-      addFixture(fixture);
-    }
-  }
-
-  @Override
-  public void fixtureAdded(LXFixture fixture) {
-    List<LXFixture> mutableFixtures = null;
-    try {
-      mutableFixtures = (List<LXFixture>) (FieldUtils.readField(this,
-      "mutableFixtures",
-      true));
-    } catch (Exception e) {
-      logger.warning(e.toString());
-      return;
-    }
-    int index = this.fixtures.size();
-    mutableFixtures.add(index, fixture);
-  }
-
-  @Override
-  public void fixtureRemoved(LXFixture fixture) {
-    removeFixture(fixture);
-  }
-
-  @Override
-  public void fixtureMoved(LXFixture fixture, int index) {
-    moveFixture(fixture, index);
   }
 }

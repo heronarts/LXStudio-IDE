@@ -1,7 +1,5 @@
 package heronarts.lx.model;
 
-import java.util.logging.Logger;
-
 import heronarts.lx.LX;
 import heronarts.lx.output.SerialPacketOutput;
 
@@ -12,8 +10,6 @@ import heronarts.lx.output.SerialPacketOutput;
  */
 public class ModelSerialPacketOutput extends SerialPacketOutput implements LX.Listener {
   // TODO(dev): Is this necessary?
-  private static final Logger logger = Logger
-    .getLogger(ModelSerialPacketOutput.class.getName());
 
   public ModelSerialPacketOutput(LX lx) {
     super(lx);

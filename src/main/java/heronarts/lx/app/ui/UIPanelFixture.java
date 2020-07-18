@@ -2,7 +2,7 @@ package heronarts.lx.app.ui;
 
 import java.util.logging.Logger;
 
-import flavius.ledportal.LPPanelFixture;
+import flavius.ledportal.structure.LPPanelFixture;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -40,12 +40,10 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
         (UI2dComponent) uiFixture.newControlButton(
           (EnumParameter<?>) fixture.positionMode,
           (float) GRID_CONTROL_WIDTH_MEDIUM) },
-      { (UI2dComponent) uiFixture.newParameterLabel("Row Spacing",
+      { (UI2dComponent) uiFixture.newParameterLabel("Row,Col Spacing",
         (float) GRID_LABEL_WIDTH),
         (UI2dComponent) uiFixture.newControlBox(fixture.rowSpacing,
-          (float) GRID_CONTROL_WIDTH_SMALL) },
-      { (UI2dComponent) uiFixture.newParameterLabel("Column Spacing",
-        (float) GRID_LABEL_WIDTH),
+          (float) GRID_CONTROL_WIDTH_SMALL),
         (UI2dComponent) uiFixture.newControlBox(fixture.columnSpacing,
           (float) GRID_CONTROL_WIDTH_SMALL) },
       { (UI2dComponent) uiFixture.newParameterLabel("Row Shear",
@@ -55,18 +53,29 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
       { (UI2dComponent) uiFixture.newParameterLabel("Point Indices (JSON)",
         (float) GRID_CONTROL_WIDTH_FULL) },
       { (UI2dComponent) uiFixture.newControlTextBox(fixture.pointIndicesJSON,
-        (float) (GRID_CONTROL_WIDTH_FULL)) } };
+        (float) (GRID_CONTROL_WIDTH_FULL)) },
+      { (UI2dComponent) uiFixture.newParameterLabel("X,Y: Glb. Orig.",
+        (float) GRID_LABEL_WIDTH),
+        (UI2dComponent) uiFixture.newControlIntBox(fixture.globalGridOriginX,
+          (float) (GRID_CONTROL_WIDTH_SMALL)),
+        (UI2dComponent) uiFixture.newControlIntBox(fixture.globalGridOriginY,
+          (float) (GRID_CONTROL_WIDTH_SMALL)) },
+      { (UI2dComponent) uiFixture.newParameterLabel("Grid Matrix (JSON)",
+        (float) GRID_CONTROL_WIDTH_FULL) },
+      { (UI2dComponent) uiFixture.newControlTextBox(fixture.globalGridMatrix,
+        (float) (GRID_CONTROL_WIDTH_FULL)) },
+    };
   }
 
   public UI2dComponent[][] buildWiringSection(UIFixture uiFixture,
     LPPanelFixture fixture) {
     return new UI2dComponent[][] {
       { (UI2dComponent) new UIDropMenu(0.0f, 0.0f, uiFixture.getContentWidth(),
-        (float)GRID_HEIGHT, (DiscreteParameter) fixture.wiring) },
-      { (UI2dComponent) new UIButton(0.0f, 0.0f, 96.0f, (float)GRID_HEIGHT)
+        (float) GRID_HEIGHT, (DiscreteParameter) fixture.wiring) },
+      { (UI2dComponent) new UIButton(0.0f, 0.0f, 96.0f, (float) GRID_HEIGHT)
         .setParameter(fixture.splitPacket).setLabel("Multi-Packet"),
         (UI2dComponent) uiFixture.newControlIntBox(fixture.pointsPerPacket,
-          (float) (int) (uiFixture.getContentWidth() - 98.0f)) } };
+          (float) (uiFixture.getContentWidth() - 98.0f)) } };
   }
 
   public UI2dComponent[][] buildDatagramProtocolSection(UIFixture uiFixture,
@@ -76,16 +85,20 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
 
   public UI2dComponent[][] buildDatagramProtocolSection(UIFixture uiFixture,
     LPPanelFixture fixture, final boolean includeReverseOption) {
-    final UITextBox outputHost = new UITextBox(0.0f, 0.0f, 106.0f, (float)GRID_HEIGHT)
-      .setParameter(fixture.host);
-    final UIIntegerBox outputUniverse = new UIIntegerBox(0.0f, 0.0f, (float) GRID_LABEL_WIDTH,
-      (float)GRID_HEIGHT);
+    final UITextBox outputHost = new UITextBox(0.0f, 0.0f,
+      GRID_CONTROL_WIDTH_MEDIUM,
+      (float) GRID_HEIGHT).setParameter(fixture.host);
+    final UIIntegerBox outputUniverse = new UIIntegerBox(0.0f, 0.0f,
+      (float) GRID_CONTROL_WIDTH_MEDIUM, (float) GRID_HEIGHT);
     final UILabel outputUniverseLabel = uiFixture.newControlLabel("Universe",
       (float) GRID_LABEL_WIDTH);
     final UIButton reverseButton = includeReverseOption
-      ? new UIButton(0.0f, 0.0f, 24.0f, (float)GRID_HEIGHT).setParameter(fixture.reverse)
-        .setActiveLabel("\u2190").setInactiveLabel("\u2192")
+      ? new UIButton(0.0f, 0.0f, 24.0f, (float) GRID_HEIGHT)
+        .setParameter(fixture.reverse).setActiveLabel("\u2190")
+        .setInactiveLabel("\u2192")
       : null;
+    final UIIntegerBox outputPort = uiFixture.newControlIntBox(fixture.opcPort,
+          (float) (GRID_CONTROL_WIDTH_MEDIUM));
     UI ui = null;
     try {
       ui = (UI) (FieldUtils.readField(uiFixture, "ui", true));
@@ -101,32 +114,37 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
       .setFontColor(fixture.unknownHost.isOn() ? theme.getAttentionColor()
         : theme.getControlTextColor()));
     final LXParameterListener protocolListener = p -> {
-      outputHost.setEnabled(
-        fixture.protocol.getEnum() != LXFixture.Protocol.NONE);
+      outputHost
+        .setEnabled(fixture.protocol.getEnum() != LXFixture.Protocol.NONE);
       switch ((LXFixture.Protocol) fixture.protocol.getEnum()) {
       case ARTNET:
       case SACN: {
         outputUniverse.setParameter(fixture.artNetUniverse).setEnabled(true);
+        outputPort.setEnabled(true);
         outputUniverseLabel.setLabel("Universe");
         break;
       }
       case DDP: {
         outputUniverse.setParameter(fixture.ddpDataOffset).setEnabled(true);
+        outputPort.setEnabled(true);
         outputUniverseLabel.setLabel("Offset");
         break;
       }
       case OPC: {
         outputUniverse.setParameter(fixture.opcChannel).setEnabled(true);
+        outputPort.setEnabled(true);
         outputUniverseLabel.setLabel("Channel");
         break;
       }
       case KINET: {
         outputUniverse.setParameter(fixture.kinetPort).setEnabled(true);
+        outputPort.setEnabled(true);
         outputUniverseLabel.setLabel("Port");
         break;
       }
       case NONE: {
         outputUniverse.setParameter((DiscreteParameter) null).setEnabled(false);
+        outputPort.setEnabled(false);
         break;
       }
       }
@@ -137,12 +155,16 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
       { (UI2dComponent) new UIDropMenu(0.0f, 0.0f,
         (reverseButton == null) ? uiFixture.getContentWidth()
           : (uiFixture.getContentWidth() - 2.0f - reverseButton.getWidth()),
-        (float)GRID_HEIGHT, (DiscreteParameter) fixture.protocol),
+        (float) GRID_HEIGHT, (DiscreteParameter) fixture.protocol),
         (UI2dComponent) reverseButton },
-      { (UI2dComponent) outputHost, (UI2dComponent) outputUniverse },
-      { (UI2dComponent) uiFixture.newControlLabel("Host", 106.0f),
-        (UI2dComponent) outputUniverseLabel } };
+      { (UI2dComponent) uiFixture.newControlLabel("Host", GRID_LABEL_WIDTH),
+        (UI2dComponent) outputHost },
+      { (UI2dComponent) uiFixture.newControlLabel("Port", GRID_LABEL_WIDTH),
+        (UI2dComponent) outputPort },
+      { (UI2dComponent) outputUniverseLabel,
+        (UI2dComponent) outputUniverse }, };
   }
+
   public UI2dComponent[][] buildSerialProtocolSection(UIFixture uiFixture,
     LPPanelFixture fixture) {
     return buildSerialProtocolSection(uiFixture, fixture, false);
@@ -150,17 +172,18 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
 
   public UI2dComponent[][] buildSerialProtocolSection(UIFixture uiFixture,
     LPPanelFixture fixture, final boolean includeReverseOption) {
-    final UITextBox outputSerialPort = new UITextBox(0.0f, 0.0f, 106.0f, (float)GRID_HEIGHT)
-      .setParameter(fixture.serialPort);
-    final UIIntegerBox outputChannel = new UIIntegerBox(0.0f, 0.0f, (float) GRID_LABEL_WIDTH,
-      (float)GRID_HEIGHT);
+    final UITextBox outputSerialPort = new UITextBox(0.0f, 0.0f, 106.0f,
+      (float) GRID_HEIGHT).setParameter(fixture.serialPort);
+    final UIIntegerBox outputChannel = new UIIntegerBox(0.0f, 0.0f,
+      (float) GRID_LABEL_WIDTH, (float) GRID_HEIGHT);
     final UILabel outputChannelLabel = uiFixture.newControlLabel("Channel",
       (float) GRID_LABEL_WIDTH);
-    final UIIntegerBox outputBaudRate = new UIIntegerBox(0.0f, 0.0f, (float) GRID_LABEL_WIDTH,
-      (float)GRID_HEIGHT);
+    final UIIntegerBox outputBaudRate = new UIIntegerBox(0.0f, 0.0f,
+      (float) GRID_LABEL_WIDTH, (float) GRID_HEIGHT);
     final UIButton reverseButton = includeReverseOption
-      ? new UIButton(0.0f, 0.0f, 24.0f, (float)GRID_HEIGHT).setParameter(fixture.reverse)
-        .setActiveLabel("\u2190").setInactiveLabel("\u2192")
+      ? new UIButton(0.0f, 0.0f, 24.0f, (float) GRID_HEIGHT)
+        .setParameter(fixture.reverse).setActiveLabel("\u2190")
+        .setInactiveLabel("\u2192")
       : null;
     outputBaudRate.setParameter(fixture.baudRate).setEnabled(true);
     UI ui = null;
@@ -180,7 +203,8 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
     final LXParameterListener protocolListener = p -> {
       outputSerialPort.setEnabled(
         fixture.serialProtocol.getEnum() != LPPanelFixture.SerialProtocol.NONE);
-      switch ((LPPanelFixture.SerialProtocol) fixture.serialProtocol.getEnum()) {
+      switch ((LPPanelFixture.SerialProtocol) fixture.serialProtocol
+        .getEnum()) {
       case PBX_WS281X:
       case PBX_APA102: {
         outputChannel.setParameter(fixture.pixelBlazeChannel).setEnabled(true);
@@ -199,14 +223,13 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
       { (UI2dComponent) new UIDropMenu(0.0f, 0.0f,
         (reverseButton == null) ? uiFixture.getContentWidth()
           : (uiFixture.getContentWidth() - 2.0f - reverseButton.getWidth()),
-        (float)GRID_HEIGHT, (DiscreteParameter) fixture.serialProtocol),
+        (float) GRID_HEIGHT, (DiscreteParameter) fixture.serialProtocol),
         (UI2dComponent) reverseButton },
-      { (UI2dComponent) outputSerialPort, (UI2dComponent) outputChannel },
-      { (UI2dComponent) uiFixture.newControlLabel("Serial Port", 106.0f),
-        (UI2dComponent) outputChannelLabel },
-      { (UI2dComponent) uiFixture.newControlLabel("Baud Rate", 106.0f),
-        (UI2dComponent) outputBaudRate }
-    };
+      { (UI2dComponent) uiFixture.newControlLabel("Serial Port",
+        GRID_LABEL_WIDTH), (UI2dComponent) outputSerialPort, },
+      { (UI2dComponent) outputChannelLabel, (UI2dComponent) outputChannel, },
+      { (UI2dComponent) uiFixture.newControlLabel("Baud Rate",
+        GRID_LABEL_WIDTH), (UI2dComponent) outputBaudRate } };
   }
 
   @Override

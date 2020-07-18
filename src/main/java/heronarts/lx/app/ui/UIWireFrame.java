@@ -2,8 +2,8 @@ package heronarts.lx.app.ui;
 
 import java.util.List;
 
+import flavius.ledportal.LPDecoration;
 import flavius.ledportal.LPMeshable;
-import flavius.ledportal.LPStructure;
 import heronarts.lx.color.LXColor;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
@@ -14,16 +14,16 @@ import processing.core.PVector;
 public class UIWireFrame extends UI3dComponent {
   public int colour;
   public float alpha = 100;
-  LPStructure data;
+  LPDecoration data;
   List<PVector[]> edges;
 
-  public UIWireFrame(LPStructure data, int colour) {
+  public UIWireFrame(LPDecoration data, int colour) {
     this.data = data;
     this.edges = data.getWorldEdges();
     this.colour = colour;
   }
 
-  public UIWireFrame(LPStructure data) {
+  public UIWireFrame(LPDecoration data) {
     this(data, LXColor.WHITE);
   }
 

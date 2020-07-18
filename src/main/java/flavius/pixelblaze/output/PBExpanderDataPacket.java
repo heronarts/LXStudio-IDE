@@ -1,7 +1,5 @@
 package flavius.pixelblaze.output;
 
-import java.util.logging.Logger;
-
 import flavius.pixelblaze.PBColorOrder;
 import flavius.pixelblaze.PBRecordType;
 import flavius.pixelblaze.util.ByteUtils;
@@ -9,9 +7,6 @@ import flavius.pixelblaze.util.ByteUtils;
 public class PBExpanderDataPacket extends PBExpanderPacket {
   public final PBColorOrder order;
   public final int[] indexBuffer;
-
-  private static final Logger logger = Logger
-  .getLogger(PBExpanderDataPacket.class.getName());
 
   /**
    * Calculate the number of bytes required to store these colors on the

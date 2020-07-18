@@ -2,7 +2,7 @@
   "fixtures": [
       {
           "id": 1,
-          "class": "flavius.ledportal.LPPanelFixture",
+          "class": "flavius.ledportal.structure.LPPanelFixture",
           "parameters": {
               "label": "LEDs_Iso_1220.PANELS[0]",
               "rowSpacing": 0.05418210218548796,
@@ -19,7 +19,7 @@
       },
       {
           "id": 2,
-          "class": "flavius.ledportal.LPPanelFixture",
+          "class": "flavius.ledportal.structure.LPPanelFixture",
           "parameters": {
               "label": "LEDs_Iso_1220.PANELS[1]",
               "rowSpacing": 0.05418210218548796,
@@ -36,7 +36,7 @@
       },
       {
           "id": 3,
-          "class": "flavius.ledportal.LPPanelFixture",
+          "class": "flavius.ledportal.structure.LPPanelFixture",
           "parameters": {
               "label": "LEDs_Iso_1220.PANELS[2]",
               "rowSpacing": 0.05418210218548796,
@@ -53,7 +53,7 @@
       },
       {
           "id": 4,
-          "class": "flavius.ledportal.LPPanelFixture",
+          "class": "flavius.ledportal.structure.LPPanelFixture",
           "parameters": {
               "label": "LEDs_Iso_1220.PANELS[3]",
               "rowSpacing": 0.05418210218548796,
@@ -70,7 +70,7 @@
       },
       {
           "id": 5,
-          "class": "flavius.ledportal.LPPanelFixture",
+          "class": "flavius.ledportal.structure.LPPanelFixture",
           "parameters": {
               "label": "LEDs_Iso_1220.PANELS[4]",
               "rowSpacing": 0.05418210218548796,
@@ -87,7 +87,7 @@
       },
       {
           "id": 6,
-          "class": "flavius.ledportal.LPPanelFixture",
+          "class": "flavius.ledportal.structure.LPPanelFixture",
           "parameters": {
               "label": "LEDs_Iso_1220.PANELS[5]",
               "rowSpacing": 0.05418210218548796,
