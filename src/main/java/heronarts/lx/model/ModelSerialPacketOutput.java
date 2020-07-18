@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import heronarts.lx.LX;
 import heronarts.lx.output.SerialPacketOutput;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
  * This helper is used for sending dynamic serial packets / datagrams that are
@@ -18,13 +17,7 @@ public class ModelSerialPacketOutput extends SerialPacketOutput implements LX.Li
 
   public ModelSerialPacketOutput(LX lx) {
     super(lx);
-    LXModel model = null;
-    try {
-      model = (LXModel) (FieldUtils.readField(lx, "model", true));
-    } catch (Exception e) {
-      logger.warning(e.toString());
-    }
-    setModel(model);
+    setModel(lx.getModel());
     lx.addListener(this);
   }
 

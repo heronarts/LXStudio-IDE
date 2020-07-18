@@ -95,16 +95,6 @@ public class SerialPacketStructure extends LXStructure implements LXStructure.Li
 
   @Override
   public void fixtureMoved(LXFixture fixture, int index) {
-    List<LXFixture> mutableFixtures = null;
-    try {
-      mutableFixtures = (List<LXFixture>) (FieldUtils.readField(this,
-        "mutableFixtures", true));
-    } catch (Exception e) {
-      logger.warning(e.toString());
-      return;
-    }
-    mutableFixtures.remove(fixture);
+    moveFixture(fixture, index);
   }
-
-
 }
