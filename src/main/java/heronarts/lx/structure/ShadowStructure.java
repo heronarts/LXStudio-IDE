@@ -21,8 +21,16 @@ public class ShadowStructure extends LXStructure implements LXStructure.Listener
   }
 
   public ShadowStructure(LX lx, LXModel immutable) {
+    this(lx, immutable, new ModelListener(){
+      @Override
+      public void modelChanged(LXModel model) { /* noop */ }
+    });
+  }
+
+  public ShadowStructure(LX lx, LXModel immutable, ModelListener modelListener) {
     super(lx, immutable);
     this.lx.structure.addListener(this);
+    this.setModelListener(modelListener);
     for(LXFixture fixture: this.lx.structure.fixtures) {
       fixtureAdded(fixture);
     }
@@ -44,11 +52,28 @@ public class ShadowStructure extends LXStructure implements LXStructure.Listener
 
   @Override
   public void fixtureRemoved(LXFixture fixture) {
-    removeFixture(fixture);
+    List<LXFixture> mutableFixtures = null;
+    try {
+      mutableFixtures = (List<LXFixture>) (FieldUtils.readField(this,
+        "mutableFixtures", true));
+    } catch (Exception e) {
+      logger.warning(e.toString());
+      return;
+    }
+    mutableFixtures.remove(fixture);
   }
 
   @Override
   public void fixtureMoved(LXFixture fixture, int index) {
-    moveFixture(fixture, index);
+    List<LXFixture> mutableFixtures = null;
+    try {
+      mutableFixtures = (List<LXFixture>) (FieldUtils.readField(this,
+        "mutableFixtures", true));
+    } catch (Exception e) {
+      logger.warning(e.toString());
+      return;
+    }
+    mutableFixtures.remove(fixture);
+    mutableFixtures.add(index, fixture);
   }
 }

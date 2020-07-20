@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import heronarts.lx.transform.LXMatrix;
+import processing.core.PMatrix2D;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
 import processing.data.JSONArray;
@@ -305,6 +306,10 @@ public abstract class LPMeshable {
     matrices.add(matCartToLX);
     matrices.add(matrix);
     return composeMatrices(matrices);
+  }
+
+  public static PMatrix3D getRowColShearMatrix(float rowSpacing, float colSpacing, float rowShear) {
+    return new PMatrix3D(new PMatrix2D(rowSpacing, rowShear, 0.f, 0.f, colSpacing, 0.f));
   }
 
   public LPMeshable updateFromJSONObject(JSONObject jsonConfig) {

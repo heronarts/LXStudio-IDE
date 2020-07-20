@@ -30,8 +30,9 @@ public class LPPanelConfig extends LPMeshable {
 
   public List<PVector> getWorldPixels() {
     List<PVector> worldPixels = new ArrayList<PVector>();
-    for (int i=0; i<this.leds.length; i++) {
-      PVector led = new PVector((float)this.leds[i][0], (float)this.leds[i][1]);
+    for (int i = 0; i < this.leds.length; i++) {
+      PVector led = new PVector((float) this.leds[i][0],
+        (float) this.leds[i][1]);
       worldPixels.add(worldPixelTransform(getWorldCoordinate(led)));
     }
     logger
@@ -40,6 +41,6 @@ public class LPPanelConfig extends LPMeshable {
   }
 
   public LPPanelModel getModel() {
-    return new LPPanelModel(getUIMatrix(), leds);
+    return new LPPanelModel(leds, p3DToLXMatrix(getUIMatrix()));
   }
 }

@@ -2,12 +2,16 @@ package flavius.ledportal.structure;
 
 import java.net.InetAddress;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import flavius.ledportal.LPMeshable;
+import flavius.ledportal.LPPanelModel;
 import flavius.pixelblaze.PBColorOrder;
 import flavius.pixelblaze.PBRecordType;
 import flavius.pixelblaze.output.PBExpanderDataPacket;
 import heronarts.lx.LX;
+import heronarts.lx.model.GridModel;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.ArtNetDatagram;
 import heronarts.lx.output.DDPDatagram;
@@ -27,7 +31,6 @@ import heronarts.lx.structure.GridFixture.PositionMode;
 import heronarts.lx.structure.GridFixture.Wiring;
 import heronarts.lx.structure.SerialProtocolFixture;
 import heronarts.lx.transform.LXMatrix;
-import heronarts.lx.transform.LXTransform;
 import processing.data.JSONArray;
 
 public class LPPanelFixture extends SerialProtocolFixture {
@@ -80,8 +83,10 @@ public class LPPanelFixture extends SerialProtocolFixture {
     new StringParameter("Global Grid Matrix", "[[1, 0],[0, 1]]")
     .setDescription("A JSON integer matrix which transforms local indices to global grid indices");
 
-  int[][] indices;
-
+  /**
+   * Array of (x,y) grid coordinates from which this fixtures points in 3d are derived.
+   */
+  int[][] gridIndices;
 
   public LPPanelFixture(LX lx) {
     super(lx, "Panel");
@@ -115,14 +120,118 @@ public class LPPanelFixture extends SerialProtocolFixture {
     addGeometryParameter("positionMode", this.positionMode);
   }
 
+  /**
+   * Creates point objects, but does not position them. That is left to
+   * {@link regeneratePointGeometry}
+   */
+  protected void regeneratePoints() {
+    // We may have a totally new size, blow out the points array and rebuild
+    this.mutablePoints.clear();
+
+    int pointIndex = this.firstPointIndex;
+    for (int[] gridCoordinates: this.gridIndices) {
+      LXPoint p = new GridModel.Point(gridCoordinates[0], gridCoordinates[1], 0, 0, 0);
+      p.index = pointIndex ++;
+      this.mutablePoints.add(p);
+    }
+  }
+
+  /**
+   * Invoked when this fixture has been loaded or added to some container. Will
+   * rebuild the points and the metrics, and notify container of the change to
+   * this fixture's generation
+   */
+  @Override
+  protected void regenerate() {
+    regeneratePoints();
+
+    // A new model will have to be created, forget these points
+    this.model = null;
+    this.modelPoints.clear();
+
+    // Regenerate our geometry, note that we bypass regenerateGeometry()
+    // here because we don't need to notify our container about the change.
+    // We're
+    // going to notify them after this of even more substantive generation
+    // change.
+    _regenerateGeometry();
+
+    // Rebuild datagram objects
+    regenerateDatagrams();
+
+    onRegenerate();
+
+    // Let our container know that our structural generation has changed
+    if (this.container != null) {
+      this.container.fixtureGenerationChanged(this);
+    }
+  }
+
+  /**
+   * Constructs an LXModel object for this Fixture
+   *
+   * @return Model representation of this fixture
+   */
+  @Override
+  public LXModel toModel() {
+    // Creating a new model, clear our set of points
+    this.modelPoints.clear();
+
+    // Note: we make a deep copy here because a change to the number of points
+    // in one fixture will alter point indices in all fixtures after it.
+    // When we're in multi-threaded mode, that point might have been passed to
+    // the UI, which holds a reference to the model.
+    // The indices passed to the UI cannot be changed mid-flight, so we make new
+    // copies of all points here to stay safe.
+    for (LXPoint p : this.points) {
+      GridModel.Point gridPoint = (GridModel.Point)p;
+      LXPoint modelPoint = (new GridModel.Point(gridPoint.xi, gridPoint.yi, gridPoint.x, gridPoint.y, gridPoint.z));
+      modelPoint.index = p.index;
+      modelPoints.add(modelPoint);
+    }
+
+    // TODO(dev): deal with children
+    // Now iterate over our children and add their points too
+    // List<LXModel> childModels = new ArrayList<LXModel>();
+    // for (LXFixture child : this.children) {
+    //   LXModel childModel = child.toModel();
+    //   for (LXPoint p : childModel.points) {
+    //     this.modelPoints.add(p);
+    //   }
+    //   childModels.add(childModel);
+    // }
+
+    // TODO(dev): deal with submodels
+    // Generate any submodels references into of this fixture
+    // for (Submodel submodel : toSubmodels()) {
+    //   childModels.add(submodel);
+    // }
+
+    // Okay, good to go, construct the model
+    LPPanelModel model = new LPPanelModel(
+      this.gridIndices,
+      modelPoints.stream().map(point -> (GridModel.Point)point)
+        .collect(Collectors.toList())
+    );
+    model.transform.set(this.geometryMatrix);
+
+    // for (GridModel.Point p : model.points) {
+    //   // this.modelPoints.add((LXPoint) new GridModel.Point(p.xi, p.yi, p.x,
+    //   // p.y, p.z));
+    //   this.mutablePoints.add(p);
+    // }
+
+    return this.model = model;
+  }
+
   public void updateIndices(){
     JSONArray parsed = JSONArray.parse(this.pointIndicesJSON.getString());
     int newSize = parsed.size();
-    if(this.indices == null || this.indices.length != newSize) {
-      this.indices = new int[newSize][];
+    if(this.gridIndices == null || this.gridIndices.length != newSize) {
+      this.gridIndices = new int[newSize][];
     }
     for(int i = 0; i < newSize; i++) {
-      this.indices[i] = parsed.getJSONArray(i).getIntArray();
+      this.gridIndices[i] = parsed.getJSONArray(i).getIntArray();
     }
   }
 
@@ -136,8 +245,8 @@ public class LPPanelFixture extends SerialProtocolFixture {
 
   @Override
   protected int size() {
-    if(this.indices == null) updateIndices();
-    return this.indices.length;
+    if(this.gridIndices == null) updateIndices();
+    return this.gridIndices.length;
   }
 
   private void addDatagram(InetAddress address, int[] indexBuffer, int channel) {
@@ -242,28 +351,27 @@ public class LPPanelFixture extends SerialProtocolFixture {
   @Override
   protected void computeGeometryMatrix(LXMatrix geometryMatrix) {
     float degreesToRadians = (float) Math.PI / 180;
+    float rowSpacing = this.rowSpacing.getValuef();
+    float columnSpacing = this.columnSpacing.getValuef();
+    float rowShear = this.rowShear.getValuef();
     geometryMatrix.multiply(LPMeshable.p3DToLXMatrix(LPMeshable.matCartToLX));
     geometryMatrix.translate(this.x.getValuef(), this.y.getValuef(), this.z.getValuef());
     geometryMatrix.rotateZ(this.yaw.getValuef() * degreesToRadians);
     geometryMatrix.rotateY(this.pitch.getValuef() * degreesToRadians);
     geometryMatrix.rotateX(this.roll.getValuef() * degreesToRadians);
+    geometryMatrix.multiply(LPMeshable.p3DToLXMatrix(
+      LPMeshable.getRowColShearMatrix(rowSpacing, columnSpacing, rowShear)));
   }
 
   @Override
   protected void computePointGeometry(LXMatrix matrix, List<LXPoint> points) {
     int size = this.size();
-    // PanelMetrics metrics = new PanelMetrics(matrix, this.indices);
-    LXTransform transform = new LXTransform(matrix);
-    float rowSpacing = this.rowSpacing.getValuef();
-    float columnSpacing = this.columnSpacing.getValuef();
-    float rowShear = this.rowShear.getValuef();
     for(int i = 0; i<size; i++ ){
-      transform.push();
-      int[] coordinates = this.indices[i];
-      transform.translateX((rowSpacing * coordinates[0]) + (rowShear * coordinates[1]));
-      transform.translateY(columnSpacing * coordinates[1]);
-      points.get(i).set(transform);
-      transform.pop();
+      int[] coordinates = this.gridIndices[i];
+      LXPoint point = new LXPoint(coordinates[0], coordinates[1]);
+      point.multiply(matrix);
+      point.index = this.firstPointIndex + i;
+      points.get(i).set(point);
     }
   }
 
