@@ -32,14 +32,12 @@ import java.util.logging.Logger;
 import flavius.ledportal.LPDecoration;
 import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
+import flavius.ledportal.pattern.LPPanel3DRotatingCube;
 import flavius.ledportal.structure.LPPanelFixture;
-// import flavius.ledportal.structure.LPPanelStructure;
+import flavius.ledportal.structure.LPPanelStructureListener;
 import heronarts.lx.LX;
 import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
-import heronarts.lx.app.pattern.HexLifePattern;
-import heronarts.lx.app.pattern.Panel3DBLM;
-import heronarts.lx.app.pattern.Panel3DRotatingCube;
 import heronarts.lx.app.pattern.VideoFrame;
 import heronarts.lx.app.ui.UIAxes;
 import heronarts.lx.app.ui.UIPanelFixture;
@@ -85,7 +83,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public static float[][] modelBounds;
   public static LXStudio studio;
   public static LXStudioApp instance;
-  // public static LPPanelStructure panelStructure;
+  public static LPPanelStructureListener panelStructure;
 
   private Movie movie;
   private Robot robot;
@@ -134,14 +132,14 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     // you cannot assume you are working with an LXStudio class or that any UI
     // will be
     // available.
-    // panelStructure = new LPPanelStructure(lx);
+    panelStructure = new LPPanelStructureListener(lx);
 
     // Register custom pattern and effect types
     // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
     lx.registry.addPattern(VideoFrame.class);
-    lx.registry.addPattern(Panel3DBLM.class);
-    lx.registry.addPattern(Panel3DRotatingCube.class);
-    lx.registry.addPattern(HexLifePattern.class);
+    // lx.registry.addPattern(Panel3DBLM.class);
+    lx.registry.addPattern(LPPanel3DRotatingCube.class);
+    // lx.registry.addPattern(HexLifePattern.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 

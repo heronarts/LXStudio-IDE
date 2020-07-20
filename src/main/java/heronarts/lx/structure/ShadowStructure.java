@@ -36,6 +36,8 @@ public class ShadowStructure extends LXStructure implements LXStructure.Listener
     }
   }
 
+  public void onFixtureChanged() {}
+
   @Override
   public void fixtureAdded(LXFixture fixture) {
     List<LXFixture> mutableFixtures = null;
@@ -48,6 +50,7 @@ public class ShadowStructure extends LXStructure implements LXStructure.Listener
     }
     int index = this.fixtures.size();
     mutableFixtures.add(index, fixture);
+    onFixtureChanged();
   }
 
   @Override
@@ -61,6 +64,7 @@ public class ShadowStructure extends LXStructure implements LXStructure.Listener
       return;
     }
     mutableFixtures.remove(fixture);
+    onFixtureChanged();
   }
 
   @Override
@@ -75,5 +79,6 @@ public class ShadowStructure extends LXStructure implements LXStructure.Listener
     }
     mutableFixtures.remove(fixture);
     mutableFixtures.add(index, fixture);
+    onFixtureChanged();
   }
 }

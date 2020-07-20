@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import heronarts.lx.model.GridModel.Point;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.SerialModel;
 import heronarts.lx.transform.LXMatrix;
@@ -32,6 +31,74 @@ public class LPPanelModel extends SerialModel {
     return result;
   }
 
+  public static int[][] extractIndices(List<Point> points) {
+    int[][] result = new int[points.size()][2];
+    for(int i = 0; i < points.size(); i++) {
+      result[i][0] = points.get(i).xi;
+      result[i][1] = points.get(i).yi;
+    }
+    return result;
+  }
+
+  public static List<Point> extractPoints(LPPanelModel[] models) {
+    List<Point> result = new ArrayList<Point>();
+    for (LPPanelModel model : models) {
+      for (LXPoint point : model.points) {
+        if (Point.class.isInstance(point)) {
+          result.add((Point) point);
+        }
+      }
+    }
+    return result;
+  }
+
+  public static class Point extends LXPoint {
+    // Global x index, used for structure level grid
+    public int xi;
+    // Global y index, used for structure level grid
+    public int yi;
+    // Local x index, used for local index transformations
+    public int xil;
+    // Local y index, used for local index transformations
+    public int yil;
+
+    public Point() {
+      this(0, 0);
+    }
+    public Point(int xi, int yi) {
+      this(xi, yi, (float)xi, (float)yi, 0.f);
+    }
+    public Point(int xi, int yi, float x, float y, float z) {
+      this(xi, yi, xi, yi, x, y, z);
+    }
+    public Point(int xi, int yi, int xil, int yil, float x, float y, float z) {
+      super(x, y, z);
+      this.xi = xi;
+      this.yi = yi;
+      this.xil = xil;
+      this.yil = yil;
+    }
+
+    public void localIndexTransform(LXMatrix matrix) {
+      this.x = matrix.m11 * this.xil + matrix.m12 * this.yil + matrix.m13 * 1
+        + matrix.m14;
+      this.y = matrix.m21 * this.xil + matrix.m22 * this.yil + matrix.m23 * 1
+        + matrix.m24;
+      this.z = matrix.m31 * this.xil + matrix.m32 * this.yil + matrix.m33 * 1
+        + matrix.m34;
+    }
+
+    public LXPoint set(Point that) {
+      set((LXPoint)that);
+      this.xi = that.xi;
+      this.yi = that.yi;
+      this.xil = that.xi;
+      this.yil = that.yi;
+
+      return (LXPoint)this;
+    }
+  }
+
   public static class PanelMetrics {
     public int xiMax;
     public int xiMin;
@@ -56,7 +123,8 @@ public class LPPanelModel extends SerialModel {
       List<LXPoint> points = new ArrayList<LXPoint>(indices.length);
       int index = 0;
       for (int[] coordinates : indices) {
-        Point point = new Point(coordinates[0], coordinates[1],
+        Point point = new Point(
+          coordinates[0], coordinates[1],
           (float) coordinates[0], (float) coordinates[1], 0.f);
         point.index = index++;
         point.multiply(transform);
@@ -215,7 +283,11 @@ public class LPPanelModel extends SerialModel {
     this(new PanelMetrics(indices), transform);
   }
 
-  public LPPanelModel(int[][] indices, List<Point> points) {
-    this(new PanelMetrics(indices), points);
+  public LPPanelModel(List<Point> points) {
+    this(new PanelMetrics(extractIndices(points)), points);
+  }
+
+  public LPPanelModel(LPPanelModel[] subModels) {
+    this(extractPoints(subModels));
   }
 }
