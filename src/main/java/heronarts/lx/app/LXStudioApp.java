@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import flavius.ledportal.LPDecoration;
 import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
+import flavius.ledportal.pattern.LPPanelHexLife;
 import flavius.ledportal.pattern.LPPanel3DRotatingCube;
 import flavius.ledportal.structure.LPPanelFixture;
 import flavius.ledportal.structure.LPPanelStructureListener;
@@ -139,7 +140,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(VideoFrame.class);
     // lx.registry.addPattern(Panel3DBLM.class);
     lx.registry.addPattern(LPPanel3DRotatingCube.class);
-    // lx.registry.addPattern(HexLifePattern.class);
+    lx.registry.addPattern(LPPanelHexLife.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 

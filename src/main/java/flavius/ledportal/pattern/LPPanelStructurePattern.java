@@ -20,10 +20,11 @@ public abstract class LPPanelStructurePattern extends LXPattern {
   protected LPPanelStructurePattern(LX lx) {
     super(lx);
     this.structure = LXStudioApp.panelStructure;
+    this.getModel();
   }
 
   @Override
   public LXModel getModel() {
-    return (LXModel)(this.model = this.structure.getLPPanelModel());
+    return this.model = this.structure.getLPPanelModel();
   }
 }
