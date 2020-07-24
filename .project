@@ -3,6 +3,8 @@
 	<name>LXStudio-IDE</name>
 	<comment></comment>
 	<projects>
+		<project>lx</project>
+		<project>p3lx</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

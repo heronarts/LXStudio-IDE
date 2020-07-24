@@ -16,7 +16,8 @@
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
 		<maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+    <project-path>${env.HOME}/Documents/GitHub</project-path>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -24,15 +25,15 @@
 			<artifactId>lx</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/lx-${project.version}-jar-with-dependencies.jar</systemPath>
+			<systemPath>${project-path}/LX/target/lx-${project.version}-jar-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>heronarts</groupId>
-			<artifactId>p3lx</artifactId>
+			<artifactId>lx</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/p3lx-${project.version}.jar</systemPath>
+			<systemPath>${project-path}/P3LX/target/p3lx-${project.version}-jar-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<dependency>

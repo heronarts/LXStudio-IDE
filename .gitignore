@@ -17,3 +17,4 @@ application.macosx
 bin/
 target/
 doc/
+.metadata/
