@@ -21,11 +21,11 @@ package heronarts.lx.app.pattern;
 import java.util.HashMap;
 
 import flavius.ledportal.LPPanelModel;
+import flavius.ledportal.LPPanelModel.Point;
 import flavius.ledportal.LPPanelModel.Strip;
 import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.GridModel.Point;
 import heronarts.lx.pattern.LXModelPattern;
 import heronarts.lx.utils.LXUtils;
 
@@ -82,7 +82,7 @@ public class HexLifePattern extends LXModelPattern<LPPanelModel> {
   }
 
   private int neighborsAlive(int i) {
-    Point p = (Point)this.model.points[i];
+    Point p = this.model.points[i];
     int x = p.xi;
     int y = p.yi;
     int total = 0;
