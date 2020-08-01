@@ -27,6 +27,8 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
   PGraphics pg;
   LXLoopTask renderTask;
 
+  String mediaPrefix;
+
   protected static final Logger logger = Logger
     .getLogger(LPPanel3DGraphicsPattern.class.getName());
 
@@ -40,6 +42,9 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
     super(lx);
     applet = LXStudioApp.instance;
     this.getModel();
+    for(Point point : model.points) {
+      logger.info(String.format("%s point x: %d, y: %d", model, point.xi, point.yi));
+    }
     pg = applet.createGraphics(
         model.width + 1, model.height + 1, PGraphics.P3D);
     frame = new PImage(pg.width, pg.height);
@@ -48,6 +53,12 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
       fontPrefix = lx.getMediaFolder(LX.Media.CONTENT).getCanonicalPath() + "/fonts/";
     } catch (IOException e) {
       logger.severe(String.format("could not get fontPrefix: %s", e.toString()));
+    }
+    mediaPrefix = "Content/media/";
+    try {
+      mediaPrefix = lx.getMediaFolder(LX.Media.CONTENT).getCanonicalPath() + "/media/";
+    } catch (IOException e) {
+      logger.severe(String.format("could not get mediaPrefix: %s", e.toString()));
     }
     font = applet.createFont(fontPrefix + "uni0553-webfont.ttf", 8);
 
