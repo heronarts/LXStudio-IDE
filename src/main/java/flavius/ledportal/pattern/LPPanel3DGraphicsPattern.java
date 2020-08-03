@@ -110,7 +110,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
       ((P3LX)this.lx).ui.removeLoopTask(this.renderTask);
     }
     super.dispose();
-    this.pg.dispose();
+    // this.pg.dispose();
   }
 
   @Override
