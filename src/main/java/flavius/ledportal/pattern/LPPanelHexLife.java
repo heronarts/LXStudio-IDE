@@ -64,55 +64,51 @@ public class LPPanelHexLife extends LPPanelStructurePattern {
 
   private void spawn() {
     for (int i = 0; i < this.state.length; ++i) {
-      this.state[i] = (LXUtils.random(0, 100) > 70) ? CellState.BIRTHING : CellState.DEAD;
+      this.state[i] = (LXUtils.random(0, 100) > 70) ? CellState.BIRTHING
+        : CellState.DEAD;
     }
   }
 
   private int[][] getNeighborOffsets() {
-    return new int[][]{
-      new int[]{0, -1},
-      new int[]{1, -1},
-      new int[]{-1, 0},
-      new int[]{1, 0},
-      new int[]{-1, 1},
-      new int[]{0, 1}
+    return new int[][] { //
+      /* */ new int[] { 0, -1 }, //
+      /* */ new int[] { 1, -1 }, //
+      /* */ new int[] { -1, 0 }, //
+      /* */ new int[] { 1, 0 }, //
+      /* */ new int[] { -1, 1 }, //
+      /* */ new int[] { 0, 1 } //
     };
   }
 
   private int neighborsAlive(int i) {
-    Point p = (Point)this.model.points[i];
+    Point p = (Point) this.model.points[i];
     int x = p.xi;
     int y = p.yi;
     int total = 0;
     int[][] neighborOffsets = getNeighborOffsets();
-    for(int j=0; j<neighborOffsets.length; j++) {
+    for (int j = 0; j < neighborOffsets.length; j++) {
       total += isAlive(x + neighborOffsets[j][0], y + neighborOffsets[j][1]);
     }
     return total;
   }
 
   private int getIndex(int x, int y) {
-    Strip row = this.model.getRowStrip(y);
-    int index = Integer.MIN_VALUE;
-    for(Point point : row.points) {
-      if(point.xi == x) {
-        index = point.index;
-        break;
-      }
-    }
-    return index;
+    Point point = this.model.pointAt(x, y);
+    if (point == null)
+      return -1;
+    return point.index;
   }
 
   private int isAlive(int x, int y) {
     Strip row = this.model.getRowStrip(y);
     Strip column = this.model.getColumnStrip(x);
-    if (x < row.xiMin || x > row.xiMax) {
+    if (x < row.xiMin || x > row.xiMax)
       return 0;
-    }
-    if (y < column.yiMin || y > column.yiMax) {
+    if (y < column.yiMin || y > column.yiMax)
       return 0;
-    }
     int idx = getIndex(x, y);
+    if (idx < 0)
+      return 0;
     if (this.isLiveState(this.state[idx])) {
       return 1;
     }
@@ -129,8 +125,7 @@ public class LPPanelHexLife extends LPPanelStructurePattern {
         break;
       case ALIVE:
       case BIRTHING:
-        this.newState[i] = (nA == 2) ? CellState.ALIVE
-            : CellState.DYING;
+        this.newState[i] = (nA == 2) ? CellState.ALIVE : CellState.DYING;
         break;
       }
     }

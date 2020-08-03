@@ -216,6 +216,24 @@ public class LPPanelModel extends SerialModel {
     return result;
   }
 
+  /**
+   * Get the point at indices xi, yi
+   * @param xi
+   * @param yi
+   * @return
+   */
+  public Point pointAt(int xi, int yi) {
+    Strip row = this.getRowStrip(yi);
+    if (row == null)
+      return null;
+    for(Point point : row.points) {
+      if(point.xi == xi) {
+        return point;
+      }
+    }
+    return null;
+  }
+
   protected List<Strip> generateRows() {
     List<Strip> rows = new ArrayList<Strip>();
     for (int y = metrics.yiMin; y <= metrics.yiMax; y++) {
