@@ -23,8 +23,15 @@ public abstract class LPPanelStructurePattern extends LXPattern {
     this.getModel();
   }
 
+  public void beforeUpdateModel(LPPanelModel newModel) {}
+
   @Override
   public LXModel getModel() {
-    return this.model = this.structure.getLPPanelModel();
+    LPPanelModel newModel = this.structure.getLPPanelModel();
+    if (newModel != this.model) {
+      this.beforeUpdateModel(newModel);
+      this.model = newModel;
+    }
+    return this.model;
   }
 }

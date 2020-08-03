@@ -164,7 +164,7 @@ public class LPPanelHexLife extends LPPanelStructurePattern {
         this.transition();
       }
     }
-    double ramp = this.lx.engine.tempo.ramp();
+    double ramp = this.lx.engine.tempo.basis();
     ramp = ramp * ramp;
     for (int i = 0; i < this.model.size; ++i) {
       double b = 0;

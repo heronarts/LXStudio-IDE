@@ -26,8 +26,9 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
   PApplet applet;
   PGraphics pg;
   LXLoopTask renderTask;
-
+  int frameSize;
   String mediaPrefix;
+  String fontPrefix;
 
   protected static final Logger logger = Logger
     .getLogger(LPPanel3DGraphicsPattern.class.getName());
@@ -40,15 +41,8 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
 
   public LPPanel3DGraphicsPattern(LX lx) {
     super(lx);
-    applet = LXStudioApp.instance;
-    this.getModel();
-    for(Point point : model.points) {
-      logger.info(String.format("%s point x: %d, y: %d", model, point.xi, point.yi));
-    }
-    pg = applet.createGraphics(
-        model.width + 1, model.height + 1, PGraphics.P3D);
-    frame = new PImage(pg.width, pg.height);
-    String fontPrefix = "Content/fonts/";
+
+    fontPrefix = "Content/fonts/";
     try {
       fontPrefix = lx.getMediaFolder(LX.Media.CONTENT).getCanonicalPath() + "/fonts/";
     } catch (IOException e) {
@@ -60,7 +54,8 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
     } catch (IOException e) {
       logger.severe(String.format("could not get mediaPrefix: %s", e.toString()));
     }
-    font = applet.createFont(fontPrefix + "uni0553-webfont.ttf", 8);
+
+    refreshFont();
 
     renderTask = new LXLoopTask() {
       @Override
@@ -82,12 +77,40 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
     }
   }
 
+  public void refreshFont() {
+    font = this.applet.createFont(fontPrefix + "uni0553-webfont.ttf", 8);
+  }
+
+  @Override
+  public void beforeUpdateModel(LPPanelModel newModel) {
+    if(this.applet == null)
+      this.applet = LXStudioApp.instance;
+    boolean createGraphics = false;
+    boolean disposeGraphics = false;
+    if(this.pg == null) {
+      createGraphics = true;
+    } else if(this.pg.width != newModel.width || this.pg.height != newModel.height) {
+      createGraphics = true;
+      disposeGraphics = true;
+    }
+    if(disposeGraphics) {
+      this.pg.dispose();
+    }
+    if(createGraphics) {
+      this.pg = this.applet.createGraphics(
+          newModel.width + 1, newModel.height + 1, PGraphics.P3D);
+      this.frame = new PImage(this.pg.width, this.pg.height);
+      this.frameSize = Math.max(this.pg.width, this.pg.height);
+    }
+  }
+
   @Override
   public void dispose() {
     synchronized(LPPanel3DGraphicsPattern.class) {
       ((P3LX)this.lx).ui.removeLoopTask(this.renderTask);
     }
     super.dispose();
+    this.pg.dispose();
   }
 
   @Override

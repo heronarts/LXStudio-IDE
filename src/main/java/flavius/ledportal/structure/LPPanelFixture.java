@@ -165,10 +165,10 @@ public class LPPanelFixture extends SerialProtocolFixture {
     for(int i = 0; i < newSize; i++) {
       this.gridIndices[i] = parsed.getJSONArray(i).getIntArray();
       for(int j = 0; j < 2; j++){
-        this.worldGridIndices[i][j] = (this.gridIndices[i][0]
-          * this.gridTransform[j][0])
-          + (this.gridIndices[i][1] * this.gridTransform[j][1])
-          + this.gridTransform[j][2];
+        this.worldGridIndices[i][j] = //
+        /**/ (this.gridIndices[i][0] * this.gridTransform[j][0]) //
+        /**/ + (this.gridIndices[i][1] * this.gridTransform[j][1]) //
+        /**/ + this.gridTransform[j][2];
       }
     }
   }

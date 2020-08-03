@@ -26,6 +26,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -33,6 +35,8 @@ import flavius.ledportal.LPDecoration;
 import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.pattern.LPPanelHexLife;
+import flavius.ledportal.pattern.LPPanelSolidState;
+import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanel3DRotatingCube;
 import flavius.ledportal.structure.LPPanelFixture;
 import flavius.ledportal.structure.LPPanelStructureListener;
@@ -85,6 +89,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public static LXStudio studio;
   public static LXStudioApp instance;
   public static LPPanelStructureListener panelStructure;
+  public static HashMap<String, PImage> textures;
 
   private Movie movie;
   private Robot robot;
@@ -140,6 +145,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(VideoFrame.class);
     // lx.registry.addPattern(Panel3DBLM.class);
     lx.registry.addPattern(LPPanel3DRotatingCube.class);
+    lx.registry.addPattern(LPPanelTexture.class);
+    lx.registry.addPattern(LPPanelSolidState.class);
     lx.registry.addPattern(LPPanelHexLife.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
@@ -148,14 +155,19 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
     if (videoFrame == null)
       initializeVideo(lx);
+
+    if (textures == null)
+      initializeTextures(lx);
   }
 
   void initializeVideo(LX lx) {
     String mediaPrefix = "Content/media/";
     try {
-      mediaPrefix = lx.getMediaFolder(Media.CONTENT).getCanonicalPath() + "/media/";
+      mediaPrefix = lx.getMediaFolder(Media.CONTENT).getCanonicalPath()
+        + "/media/";
     } catch (IOException e) {
-      logger.severe(String.format("could not get mediaPrefix: %s", e.toString()));
+      logger
+        .severe(String.format("could not get mediaPrefix: %s", e.toString()));
     }
     if (config.activeImage != null) {
       videoFrame = loadImage(mediaPrefix + config.activeImage);
@@ -195,6 +207,41 @@ public class LXStudioApp extends PApplet implements LXPlugin {
         videoFrame.height));
   }
 
+  public void initializeTextures(LX lx) {
+    textures = new HashMap<String, PImage>();
+
+    String texturePrefix = "Content/textures/";
+    try {
+      texturePrefix = lx.getMediaFolder(Media.CONTENT).getCanonicalPath()
+        + "/textures/";
+    } catch (IOException e) {
+      logger
+        .severe(String.format("could not get texturePrefix: %s", e.toString()));
+    }
+
+    File dir = new File(texturePrefix);
+    File[] directoryListing = dir.listFiles();
+
+    List<String> imgExtensions = new ArrayList<String>();
+    imgExtensions.add("gif");
+    imgExtensions.add("jpg");
+    imgExtensions.add("tga");
+    imgExtensions.add("png");
+
+    if (directoryListing != null) {
+      for (File child : directoryListing) {
+        String[] name_tokens = child.getName().split("\\.(?=[^\\.]+$)");
+        String extension = name_tokens[name_tokens.length - 1];
+        if (!imgExtensions.contains(extension))
+          continue;
+        String name = String.join(".",
+          Arrays.copyOfRange(name_tokens, 0, name_tokens.length - 1));
+        logger.info(String.format("name %s, extension %s", name, extension));
+        textures.put(name, loadImage(child.getAbsolutePath()));
+      }
+    }
+  }
+
   public void initializeUI(LXStudio lx, LXStudio.UI ui) {
     // Here is where you may modify the initial settings of the UI before it is
     // fully
@@ -207,13 +254,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     }
 
     try {
-      MethodUtils.invokeMethod(
-        FieldUtils.readField(ui, "registry", true),
-        true,
-        "addUIFixtureControls",
-        new Object[] { UIPanelFixture.class }
-      );
-      logger.info(String.format("ui.registry.fixtureControls: %s", FieldUtils.readField(ui, "registry", true)));
+      MethodUtils.invokeMethod(FieldUtils.readField(ui, "registry", true), true,
+        "addUIFixtureControls", new Object[] { UIPanelFixture.class });
+      logger.info(String.format("ui.registry.fixtureControls: %s",
+        FieldUtils.readField(ui, "registry", true)));
     } catch (Exception e) {
       logger.warning(e.toString());
     }
