@@ -2,45 +2,12 @@ package flavius.ledportal.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXParameter;
 import processing.core.PGraphics;
 import processing.core.PMatrix3D;
 
 public class LPPanelSolidState extends LPPanel3DGraphicsPattern {
 
   public final String marqueeText = "SOLIDSTATE";
-
-  public final CompoundParameter xOffset = new CompoundParameter("X-Off", 0, -1,
-    1).setDescription("Sets the placement in the X axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter yOffset = new CompoundParameter("Y-Off", 0, -1,
-    1).setDescription("Sets the placement in the Y axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter zOffset = new CompoundParameter("Z-Off", 0, -1,
-    1).setDescription("Sets the placement in the Z axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter xRotate = new CompoundParameter("X-Rot", 0, -1,
-    1).setDescription("Sets the rotation about the X axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter yRotate = new CompoundParameter("Y-Rot", 0, -1,
-    1).setDescription("Sets the rotation about the Y axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter zRotate = new CompoundParameter("Z-Rot", 0, -1,
-    1).setDescription("Sets the rotation about the Z axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter scale = new CompoundParameter("Size", 1, -1, 1)
-    .setDescription("Sets the size");
-
-  public final DiscreteParameter beats = new DiscreteParameter("Beats", 4, 1, 16)
-    .setDescription("The number of beats between a letter change");
 
   public LPPanelSolidState(LX lx) {
     super(lx);
@@ -53,6 +20,9 @@ public class LPPanelSolidState extends LPPanel3DGraphicsPattern {
     addParameter("zRotate", this.zRotate);
     addParameter("size", this.scale);
     addParameter("beats", this.beats);
+    addParameter("xScanFuckery", this.xScanFuckery);
+    addParameter("yScanFuckery", this.yScanFuckery);
+    addParameter("pScanFuckery", this.pScanFuckery);
   }
 
   @Override

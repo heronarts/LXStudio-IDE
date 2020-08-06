@@ -7,7 +7,6 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
-import heronarts.lx.parameter.LXParameter;
 import processing.core.PGraphics;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
@@ -22,40 +21,6 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
   List<int[]> edges = new ArrayList<int[]>();
 
   public static float φ = (float)(1 + Math.sqrt(5))/2;
-
-  public final CompoundParameter xOffset =
-    new CompoundParameter("X-Off", 0, -1, 1)
-    .setDescription("Sets the placement in the X axis")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter yOffset =
-    new CompoundParameter("Y-Off", 0, -1, 1)
-    .setDescription("Sets the placement in the Y axis")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter zOffset =
-    new CompoundParameter("Z-Off", 0, -1, 1)
-    .setDescription("Sets the placement in the Z axis")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter xRotate =
-    new CompoundParameter("X-Rot", 0, -1, 1)
-    .setDescription("Sets the rotation about the X axis")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter yRotate =
-    new CompoundParameter("Y-Rot", 0, -1, 1)
-    .setDescription("Sets the rotation about the Y axis")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter zRotate =
-    new CompoundParameter("Z-Rot", 0, -1, 1)
-    .setDescription("Sets the rotation about the Z axis")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter scale =
-    new CompoundParameter("Size", 1, 0, 20)
-    .setDescription("Sets the size");
 
   public final CompoundParameter thicc =
     new CompoundParameter("Thicc", 1, 0, 10)
@@ -80,6 +45,9 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
     addParameter("size", this.scale);
     addParameter("thicc", this.thicc);
     addParameter("shape", this.shape);
+    addParameter("xScanFuckery", this.xScanFuckery);
+    addParameter("yScanFuckery", this.yScanFuckery);
+    addParameter("pScanFuckery", this.pScanFuckery);
 
     // youreACubeHarry();
     // youreADodecahedronHarry();
