@@ -1,6 +1,6 @@
 {
   "version": "0.2.1-SNAPSHOT",
-  "timestamp": 1596433784856,
+  "timestamp": 1596787226741,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -21,9 +21,10 @@
       "parameters": {
         "label": "Output",
         "enabled": true,
+        "brightness": 1.0,
         "fps": 0.0,
         "gamma": 1.0,
-        "brightness": 1.0
+        "gammaMode": 1
       },
       "children": {}
     },
@@ -169,8 +170,7 @@
         },
         "children": {}
       }
-    ],
-    "file": "BigWTop.lxm"
+    ]
   },
   "engine": {
     "id": 1,
@@ -182,7 +182,7 @@
       "label": "Engine",
       "multithreaded": true,
       "channelMultithreaded": false,
-      "networkMultithreaded": true,
+      "networkMultithreaded": false,
       "framesPerSecond": 300.0,
       "speed": 1.0
     },
@@ -368,12 +368,12 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 1
+              "focusedPattern": 0
             },
             "children": {},
             "effects": [],
             "clips": [],
-            "patternIndex": 1,
+            "patternIndex": 0,
             "patterns": [
               {
                 "id": 74,
@@ -434,7 +434,7 @@
                 },
                 "parameters": {
                   "label": "Gradient",
-                  "xAmount": 0.0,
+                  "xAmount": 1.0,
                   "yAmount": -1.0,
                   "zAmount": 0.0,
                   "xOffset": 0.0,
@@ -490,6 +490,41 @@
                 "children": {
                   "modulation": {
                     "id": 2006,
+                    "class": "heronarts.lx.modulation.LXModulationEngine",
+                    "internal": {
+                      "modulationColor": 0
+                    },
+                    "parameters": {
+                      "label": "Modulation"
+                    },
+                    "children": {},
+                    "modulators": [],
+                    "modulations": [],
+                    "triggers": []
+                  }
+                },
+                "deviceVersion": -1
+              },
+              {
+                "id": 10000055,
+                "class": "heronarts.lx.pattern.color.SolidPattern",
+                "internal": {
+                  "modulationColor": 0,
+                  "expanded": true,
+                  "modulationExpanded": false,
+                  "autoCycleEligible": true
+                },
+                "parameters": {
+                  "label": "Solid",
+                  "color/brightness": 100.0,
+                  "color/saturation": 100.0,
+                  "color/hue": 0.0,
+                  "colorMode": 0,
+                  "paletteIndex": 1
+                },
+                "children": {
+                  "modulation": {
+                    "id": 10000056,
                     "class": "heronarts.lx.modulation.LXModulationEngine",
                     "internal": {
                       "modulationColor": 0
@@ -634,7 +669,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.18942676015714663
+            "basis": 0.7080123297738852
           },
           {
             "id": 1745,
@@ -661,7 +696,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.9136044953400833
+            "basis": 0.513933052182452
           },
           {
             "id": 1747,
@@ -688,7 +723,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.7567114025419311
+            "basis": 0.1366277388061465
           }
         ],
         "modulations": [
@@ -796,9 +831,10 @@
         "parameters": {
           "label": "Output",
           "enabled": true,
+          "brightness": 1.0,
           "fps": 0.0,
           "gamma": 1.0,
-          "brightness": 0.48571428284049034
+          "gammaMode": 1
         },
         "children": {}
       },
@@ -814,6 +850,12 @@
         },
         "children": {},
         "inputs": [
+          {
+            "name": "IAC Driver",
+            "channel": false,
+            "control": false,
+            "sync": true
+          },
           {
             "name": "Twitch",
             "channel": false,
@@ -926,8 +968,14 @@
           "label": "Snapshots",
           "recallMixer": true,
           "recallModulation": true,
+          "channelMode": 0,
+          "missingChannelMode": 0,
           "transitionEnabled": false,
-          "transitionTimeSecs": 5.0
+          "transitionTimeSecs": 5.0,
+          "autoCycleEnabled": false,
+          "autoCycleMode": 0,
+          "autoCycleTimeSecs": 60.0,
+          "autoCycleIndex": -1
         },
         "children": {},
         "snapshots": []

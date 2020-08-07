@@ -1,6 +1,6 @@
 {
   "version": "0.2.1-SNAPSHOT",
-  "timestamp": 1596698980464,
+  "timestamp": 1596786873308,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -21,9 +21,10 @@
       "parameters": {
         "label": "Output",
         "enabled": true,
+        "brightness": 1.0,
         "fps": 0.0,
         "gamma": 1.0,
-        "brightness": 1.0
+        "gammaMode": 1
       },
       "children": {}
     },
@@ -181,8 +182,8 @@
       "label": "Engine",
       "multithreaded": true,
       "channelMultithreaded": false,
-      "networkMultithreaded": true,
-      "framesPerSecond": 29.0,
+      "networkMultithreaded": false,
+      "framesPerSecond": 31.0,
       "speed": 1.0
     },
     "children": {
@@ -644,7 +645,10 @@
                   "zRotate": 0.13999999314546585,
                   "size": 16.79999964684248,
                   "thicc": 2.099999975413084,
-                  "shape": 2
+                  "shape": 2,
+                  "xScanFuckery": 0.0,
+                  "yScanFuckery": 0.0,
+                  "pScanFuckery": 0.0
                 },
                 "children": {
                   "modulation": {
@@ -871,11 +875,11 @@
                 "index": 0,
                 "parameterLanes": [
                   {
-                    "laneType": "pattern",
+                    "laneType": "midiNote",
                     "events": []
                   },
                   {
-                    "laneType": "midiNote",
+                    "laneType": "pattern",
                     "events": []
                   }
                 ]
@@ -1443,7 +1447,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.006933837811004651
+            "basis": 0.4016461168805492
           },
           {
             "id": 535,
@@ -1470,7 +1474,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.2552003783582535
+            "basis": 0.05123458766041189
           },
           {
             "id": 722,
@@ -1480,7 +1484,7 @@
             },
             "parameters": {
               "label": "LFO 3",
-              "running": true,
+              "running": false,
               "trigger": false,
               "loop": false,
               "tempoSync": true,
@@ -1497,7 +1501,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.2552003783582535
+            "basis": 0.0
           },
           {
             "id": 993,
@@ -1560,7 +1564,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.07467141460945664
+            "basis": 0.026210166917178368
           },
           {
             "id": 1515,
@@ -1605,7 +1609,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.02080151343301395
+            "basis": 0.20493835064164756
           },
           {
             "id": 10000529,
@@ -1632,7 +1636,7 @@
               "exp": 1.0
             },
             "children": {},
-            "basis": 0.02080151343301395
+            "basis": 0.20493835064164756
           }
         ],
         "modulations": [
@@ -2235,9 +2239,10 @@
         "parameters": {
           "label": "Output",
           "enabled": true,
+          "brightness": 0.9142857119441032,
           "fps": 0.0,
           "gamma": 1.0,
-          "brightness": 0.9142857119441032
+          "gammaMode": 1
         },
         "children": {}
       },
@@ -2522,8 +2527,14 @@
           "label": "Snapshots",
           "recallMixer": true,
           "recallModulation": true,
+          "channelMode": 0,
+          "missingChannelMode": 0,
           "transitionEnabled": false,
-          "transitionTimeSecs": 5.0
+          "transitionTimeSecs": 5.0,
+          "autoCycleEnabled": false,
+          "autoCycleMode": 0,
+          "autoCycleTimeSecs": 60.0,
+          "autoCycleIndex": -1
         },
         "children": {},
         "snapshots": []
