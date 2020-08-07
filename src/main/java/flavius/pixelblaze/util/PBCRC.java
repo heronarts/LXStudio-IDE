@@ -1,12 +1,10 @@
 package flavius.pixelblaze.util;
 
-import java.util.logging.Logger;
-
 /**
  * PBCRC PixelBlaze implementation of CRC
  */
 public class PBCRC {
-  private static final Logger logger = Logger.getLogger(PBCRC.class.getName());
+  // private static final Logger logger = Logger.getLogger(PBCRC.class.getName());
 
   public static long[] table = new long[] { 0x00000000L, 0x77073096L,
     0xee0e612cL, 0x990951baL, 0x076dc419L, 0x706af48fL, 0xe963a535L,
@@ -67,27 +65,33 @@ public class PBCRC {
       .asUint8(ByteUtils.asUint32(crc) ^ ByteUtils.asUint32(b));
     long newcrc = ByteUtils.asUint32(table[tbl_idx])
       ^ ByteUtils.asUint32(crc >> 8);
-    logger.fine(String.format(
-      "d: 0x%02x\n" + "(uint32_t)d: 0x%08x\n" + "crc: 0x%08x\n"
-        + "(uint32_t)crc: 0x%08x\n" + "(uint32_t)crc ^ (uint32_t)b: 0x%08x\n"
-        + "tbl_idx: 0d%02d\n" + "crc_table[tbl_idx]: 0x%08x\n"
-        + "(uint32_t)crc_table[tbl_idx]: 0x%08x\n" + "crc >> 8: 0x%08x\n"
-        + "(uint32_t)crc >> 8: 0x%08x\n"
-        + "(uint32_t)crc_table[tbl_idx] ^ (uint32_t)(crc >> 8): 0x%08x\n"
-        + "newcrc: 0x%08x\n",
-      b, ByteUtils.asUint32(b), crc, ByteUtils.asUint32(crc),
-      ByteUtils.asUint32(crc) ^ ByteUtils.asUint32(b), tbl_idx, table[tbl_idx],
-      ByteUtils.asUint32(table[tbl_idx]), crc >> 8,
-      ByteUtils.asUint32(crc >> 8),
-      ByteUtils.asUint32(table[tbl_idx]) ^ ByteUtils.asUint32(crc >> 8),
-      newcrc));
+    // logger.fine(String.format(
+    //   "d: 0x%02x\n" + "(uint32_t)d: 0x%08x\n" + "crc: 0x%08x\n"
+    //     + "(uint32_t)crc: 0x%08x\n" + "(uint32_t)crc ^ (uint32_t)b: 0x%08x\n"
+    //     + "tbl_idx: 0d%02d\n" + "crc_table[tbl_idx]: 0x%08x\n"
+    //     + "(uint32_t)crc_table[tbl_idx]: 0x%08x\n" + "crc >> 8: 0x%08x\n"
+    //     + "(uint32_t)crc >> 8: 0x%08x\n"
+    //     + "(uint32_t)crc_table[tbl_idx] ^ (uint32_t)(crc >> 8): 0x%08x\n"
+    //     + "newcrc: 0x%08x\n",
+    //   b, ByteUtils.asUint32(b), crc, ByteUtils.asUint32(crc),
+    //   ByteUtils.asUint32(crc) ^ ByteUtils.asUint32(b), tbl_idx, table[tbl_idx],
+    //   ByteUtils.asUint32(table[tbl_idx]), crc >> 8,
+    //   ByteUtils.asUint32(crc >> 8),
+    //   ByteUtils.asUint32(table[tbl_idx]) ^ ByteUtils.asUint32(crc >> 8),
+    //   newcrc));
     crc = newcrc;
   }
 
   public void updateBytes(byte[] bytes, int start, int end) {
+    // String logMessage = "";
+    // for(byte b: bytes) {
+    //   logMessage += String.format("%02x", b);
+    // }
+    // logger.info(String.format("crc: %d, bytes: %s, start: %d, end: %d", crc, logMessage, start, end));
     for (int i = start; i < end; i++) {
       this.updateByte(bytes[i]);
     }
+    // logger.info(String.format("crc: %d", crc));
   }
 
   public void updateBytes(byte[] bytes) {

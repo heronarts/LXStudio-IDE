@@ -140,8 +140,8 @@ public abstract class LPMeshable {
     for (PVector vertex : this.vertices) {
       worldVertices.add(getWorldCoordinate(vertex));
     }
-    logger.fine(
-      String.format("world vertices: %s", formatPVectorList(worldVertices)));
+    // logger.fine(
+    //   String.format("world vertices: %s", formatPVectorList(worldVertices)));
     return worldVertices;
   }
 
@@ -151,7 +151,7 @@ public abstract class LPMeshable {
       result = result.add(point);
     }
     result.div(points.size());
-    logger.fine(String.format("centroid %s", LPMeshable.formatPVector(result)));
+    // logger.fine(String.format("centroid %s", LPMeshable.formatPVector(result)));
     return result;
   }
 
@@ -171,7 +171,7 @@ public abstract class LPMeshable {
     PVector anticlockwise = PVector.sub(points.get(2), points.get(0));
     PVector clockwise = PVector.sub(points.get(1), points.get(0));
     PVector result = clockwise.cross(anticlockwise);
-    logger.fine(String.format("normal %s", LPMeshable.formatPVector(result)));
+    // logger.fine(String.format("normal %s", LPMeshable.formatPVector(result)));
     return result;
   }
 
@@ -189,24 +189,24 @@ public abstract class LPMeshable {
     PVector crossZ = normal.cross(zAxis);
     float zenith = PVector.angleBetween(normal, zAxis);
     float azimuth = PVector.angleBetween(crossZ, xAxis);
-    logger.fine(String.format("zenith: %7.3f radians, azimuth: %7.3f radians",
-      zenith, azimuth));
+    // logger.fine(String.format("zenith: %7.3f radians, azimuth: %7.3f radians",
+    //   zenith, azimuth));
     List<PMatrix3D> result = new ArrayList<PMatrix3D>();
     PMatrix3D azimuthMatrix = new PMatrix3D();
     azimuthMatrix.rotate(-azimuth, zAxis.x, zAxis.y, zAxis.z);
     result.add(azimuthMatrix);
-    logger
-      .fine(String.format("azimuthMatrix: %s", formatPMatrix3D(azimuthMatrix)));
+    // logger
+    //   .fine(String.format("azimuthMatrix: %s", formatPMatrix3D(azimuthMatrix)));
     PMatrix3D zenithMatrix = new PMatrix3D();
     zenithMatrix.rotate(zenith, crossZ.x, crossZ.y, crossZ.z);
     result.add(zenithMatrix);
-    logger
-      .fine(String.format("zenithMatrix: %s", formatPMatrix3D(zenithMatrix)));
+    // logger
+    //   .fine(String.format("zenithMatrix: %s", formatPMatrix3D(zenithMatrix)));
     PMatrix3D translationMatrix = new PMatrix3D();
     translationMatrix.translate(-center.x, -center.y, -center.z);
     result.add(translationMatrix);
-    logger.fine(String.format("translationMatrix: %s",
-      formatPMatrix3D(translationMatrix)));
+    // logger.fine(String.format("translationMatrix: %s",
+    //   formatPMatrix3D(translationMatrix)));
     return result;
   }
 
@@ -215,7 +215,7 @@ public abstract class LPMeshable {
     for (PMatrix3D matrix : matrices) {
       result.apply(matrix);
     }
-    logger.fine(String.format("result: %s", formatPMatrix3D(result)));
+    // logger.fine(String.format("result: %s", formatPMatrix3D(result)));
     return result;
   }
 
@@ -224,11 +224,11 @@ public abstract class LPMeshable {
     Collections.reverse(matrices);
     for (PMatrix3D matrix : matrices) {
       Boolean success = matrix.invert();
-      logger.fine(String.format("applying: %s, success %b",
-        formatPMatrix3D(matrix), success));
+      // logger.fine(String.format("applying: %s, success %b",
+      //   formatPMatrix3D(matrix), success));
       result.apply(matrix);
     }
-    logger.fine(String.format("result: %s", formatPMatrix3D(result)));
+    // logger.fine(String.format("result: %s", formatPMatrix3D(result)));
     return result;
   }
 

@@ -50,11 +50,11 @@ public class VideoFrame extends LXPattern {
       v = (flattenedPosition.y - bounds[1][0]) / (bounds[1][1] - bounds[1][0]);
       pixelValue = frame.get((int) (frame.width * u), (int) (frame.height * v));
       if (firstRun && point.index < 10) {
-        logger.fine(String.format(
-          "point[%d] at %s -> %s -> %s has u %7.3f , v %7.3f, %7x", point.index,
-          LPMeshable.formatPVector(uiPosition),
-          LPMeshable.formatPVector(worldPosition),
-          LPMeshable.formatPVector(flattenedPosition), u, v, pixelValue));
+        // logger.fine(String.format(
+        //   "point[%d] at %s -> %s -> %s has u %7.3f , v %7.3f, %7x", point.index,
+        //   LPMeshable.formatPVector(uiPosition),
+        //   LPMeshable.formatPVector(worldPosition),
+        //   LPMeshable.formatPVector(flattenedPosition), u, v, pixelValue));
       }
       setColor(point.index, pixelValue);
     }

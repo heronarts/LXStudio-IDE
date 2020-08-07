@@ -3,18 +3,18 @@ package heronarts.lx.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import heronarts.lx.output.SerialPacket;
+import heronarts.lx.output.SerialMessage;
 
 /**
- * Extends {@link SerialModel} to allow for sending serial packets in addition to datagrams
+ * Extends {@link SerialModel} to allow for sending serial messages in addition to datagrams
  */
 public class SerialModel extends LXModel {
   // TODO(dev): is SerialModel necessary?
 
   /**
-   * An ordered list of packets that should be sent for this model.
+   * An ordered list of messages that should be sent for this model.
    */
-  public final List<SerialPacket> packets = new ArrayList<SerialPacket>();
+  public final List<SerialMessage> messages = new ArrayList<SerialMessage>();
 
   /**
    * Constructs a null model with no points

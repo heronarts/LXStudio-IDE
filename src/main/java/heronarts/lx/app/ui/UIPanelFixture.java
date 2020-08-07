@@ -85,6 +85,8 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
 
   public UI2dComponent[][] buildDatagramProtocolSection(UIFixture uiFixture,
     LPPanelFixture fixture, final boolean includeReverseOption) {
+
+    // TODO(Dev): Grab the latest DatagramProtocol section stuff from 0.2.1
     final UITextBox outputHost = new UITextBox(0.0f, 0.0f,
       GRID_CONTROL_WIDTH_MEDIUM,
       (float) GRID_HEIGHT).setParameter(fixture.host);

@@ -108,7 +108,7 @@ public class SerialDefinition {
     // for(byte b: message) {
     // debug_msg += String.format("%02x", b);
     // }
-    // logger.info(String.format("this %s, message: %s", this, debug_msg));
+    // logger.info(String.format("this %s, message: %s, portName: %s", this, debug_msg, this.portName));
     if (!isConnected(this.portName)) {
       if (isValidPortName(this.portName)) {
         try {

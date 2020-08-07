@@ -49,7 +49,7 @@ import heronarts.lx.app.ui.UIPanelFixture;
 import heronarts.lx.app.ui.UIVideoFrame;
 import heronarts.lx.app.ui.UIWireFrame;
 import heronarts.lx.pattern.GraphicEqualizerPattern;
-import heronarts.lx.structure.SerialPacketStructure;
+// import heronarts.lx.structure.SerialMessageStructure;
 import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -262,12 +262,12 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       logger.warning(e.toString());
     }
 
-    try {
-      SerialPacketStructure structure = new SerialPacketStructure(lx);
-      lx.addOutput(structure.serialOutput);
-    } catch (Exception x) {
-      x.printStackTrace();
-    }
+    // try {
+    //   SerialMessageStructure structure = new SerialMessageStructure(lx);
+    //   lx.addOutput(structure.serialOutput);
+    // } catch (Exception x) {
+    //   x.printStackTrace();
+    // }
   }
 
   public void onUIReady(LXStudio lx, LXStudio.UI ui) {
