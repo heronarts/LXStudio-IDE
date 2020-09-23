@@ -5,7 +5,6 @@ This is a fork of the excellent [LX Studio](http://lx.studio/) by Heronarts, Ple
 ## LEDPortal
 
 [![LEDJing at SolidState](img/Solid%20State%20LeapMotion.gif)](https://www.youtube.com/watch?v=Ui-maztzuMk)
-![LEDJing Practice](img/ledjing.gif)
 
 ![Render Compromise Side](img/render_compromise_side.png)![Render Compromise Front](img/render_compromise_front.png)
 
