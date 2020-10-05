@@ -42,16 +42,16 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
 
   public void afterDraw(PGraphics pg) {}
 
-  public final CompoundParameter xOffset = new CompoundParameter("X-Off", 0, -1,
-    1).setDescription("Sets the placement in the X axis")
+  public final CompoundParameter xOffset = new CompoundParameter("X-Off", 0, -2,
+    2).setDescription("Sets the placement in the X axis")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
-  public final CompoundParameter yOffset = new CompoundParameter("Y-Off", 0, -1,
-    1).setDescription("Sets the placement in the Y axis")
+  public final CompoundParameter yOffset = new CompoundParameter("Y-Off", 0, -2,
+    2).setDescription("Sets the placement in the Y axis")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
-  public final CompoundParameter zOffset = new CompoundParameter("Z-Off", 0, -1,
-    1).setDescription("Sets the placement in the Z axis")
+  public final CompoundParameter zOffset = new CompoundParameter("Z-Off", 0, -2,
+    2).setDescription("Sets the placement in the Z axis")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter xRotate = new CompoundParameter("X-Rot", 0, -1,
