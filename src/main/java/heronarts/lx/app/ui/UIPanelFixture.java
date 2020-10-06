@@ -8,9 +8,11 @@ import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.structure.LXFixture;
+import heronarts.lx.structure.LXProtocolFixture;
 import heronarts.lx.studio.LXStudio;
 import heronarts.lx.studio.LXStudio.UI;
 import heronarts.lx.studio.ui.fixture.UIFixture;
+import heronarts.lx.studio.ui.fixture.UIFixture.Section;
 import heronarts.lx.studio.ui.fixture.UIFixtureControls;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UITheme;
@@ -63,8 +65,7 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
       { (UI2dComponent) uiFixture.newParameterLabel("Grid Matrix (JSON)",
         (float) GRID_CONTROL_WIDTH_FULL) },
       { (UI2dComponent) uiFixture.newControlTextBox(fixture.globalGridMatrix,
-        (float) (GRID_CONTROL_WIDTH_FULL)) },
-    };
+        (float) (GRID_CONTROL_WIDTH_FULL)) }, };
   }
 
   public UI2dComponent[][] buildWiringSection(UIFixture uiFixture,
@@ -76,95 +77,6 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
         .setParameter(fixture.splitPacket).setLabel("Multi-Packet"),
         (UI2dComponent) uiFixture.newControlIntBox(fixture.pointsPerPacket,
           (float) (uiFixture.getContentWidth() - 98.0f)) } };
-  }
-
-  public UI2dComponent[][] buildDatagramProtocolSection(UIFixture uiFixture,
-    LPPanelFixture fixture) {
-    return buildDatagramProtocolSection(uiFixture, fixture, false);
-  }
-
-  public UI2dComponent[][] buildDatagramProtocolSection(UIFixture uiFixture,
-    LPPanelFixture fixture, final boolean includeReverseOption) {
-
-    // TODO(Dev): Grab the latest DatagramProtocol section stuff from 0.2.1
-    final UITextBox outputHost = new UITextBox(0.0f, 0.0f,
-      GRID_CONTROL_WIDTH_MEDIUM,
-      (float) GRID_HEIGHT).setParameter(fixture.host);
-    final UIIntegerBox outputUniverse = new UIIntegerBox(0.0f, 0.0f,
-      (float) GRID_CONTROL_WIDTH_MEDIUM, (float) GRID_HEIGHT);
-    final UILabel outputUniverseLabel = uiFixture.newControlLabel("Universe",
-      (float) GRID_LABEL_WIDTH);
-    final UIButton reverseButton = includeReverseOption
-      ? new UIButton(0.0f, 0.0f, 24.0f, (float) GRID_HEIGHT)
-        .setParameter(fixture.reverse).setActiveLabel("\u2190")
-        .setInactiveLabel("\u2192")
-      : null;
-    final UIIntegerBox outputPort = uiFixture.newControlIntBox(fixture.opcPort,
-          (float) (GRID_CONTROL_WIDTH_MEDIUM));
-    UI ui = null;
-    try {
-      ui = (UI) (FieldUtils.readField(uiFixture, "ui", true));
-    } catch (Exception e) {
-      logger.warning(e.toString());
-    }
-    if (ui == null) {
-      return new UI2dComponent[][] {};
-    }
-    final UITheme theme = ui.theme;
-
-    fixture.unknownHost.addListener(p -> outputHost
-      .setFontColor(fixture.unknownHost.isOn() ? theme.getAttentionColor()
-        : theme.getControlTextColor()));
-    final LXParameterListener protocolListener = p -> {
-      outputHost
-        .setEnabled(fixture.protocol.getEnum() != LXFixture.Protocol.NONE);
-      switch ((LXFixture.Protocol) fixture.protocol.getEnum()) {
-      case ARTNET:
-      case SACN: {
-        outputUniverse.setParameter(fixture.artNetUniverse).setEnabled(true);
-        outputPort.setEnabled(true);
-        outputUniverseLabel.setLabel("Universe");
-        break;
-      }
-      case DDP: {
-        outputUniverse.setParameter(fixture.ddpDataOffset).setEnabled(true);
-        outputPort.setEnabled(true);
-        outputUniverseLabel.setLabel("Offset");
-        break;
-      }
-      case OPC: {
-        outputUniverse.setParameter(fixture.opcChannel).setEnabled(true);
-        outputPort.setEnabled(true);
-        outputUniverseLabel.setLabel("Channel");
-        break;
-      }
-      case KINET: {
-        outputUniverse.setParameter(fixture.kinetPort).setEnabled(true);
-        outputPort.setEnabled(true);
-        outputUniverseLabel.setLabel("Port");
-        break;
-      }
-      case NONE: {
-        outputUniverse.setParameter((DiscreteParameter) null).setEnabled(false);
-        outputPort.setEnabled(false);
-        break;
-      }
-      }
-    };
-    fixture.protocol.addListener(protocolListener);
-    protocolListener.onParameterChanged((LXParameter) fixture.protocol);
-    return new UI2dComponent[][] {
-      { (UI2dComponent) new UIDropMenu(0.0f, 0.0f,
-        (reverseButton == null) ? uiFixture.getContentWidth()
-          : (uiFixture.getContentWidth() - 2.0f - reverseButton.getWidth()),
-        (float) GRID_HEIGHT, (DiscreteParameter) fixture.protocol),
-        (UI2dComponent) reverseButton },
-      { (UI2dComponent) uiFixture.newControlLabel("Host", GRID_LABEL_WIDTH),
-        (UI2dComponent) outputHost },
-      { (UI2dComponent) uiFixture.newControlLabel("Port", GRID_LABEL_WIDTH),
-        (UI2dComponent) outputPort },
-      { (UI2dComponent) outputUniverseLabel,
-        (UI2dComponent) outputUniverse }, };
   }
 
   public UI2dComponent[][] buildSerialProtocolSection(UIFixture uiFixture,
@@ -242,8 +154,7 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
       this.buildFixtureSection(uiFixture, fixture));
     uiFixture.addSection("Wiring", this.buildWiringSection(uiFixture, fixture));
     // uiFixture.addProtocolSection((LXProtocolFixture) fixture);
-    uiFixture.addSection("Datagram Protocol",
-      this.buildDatagramProtocolSection(uiFixture, fixture, true));
+    uiFixture.addProtocolSection((LXProtocolFixture) fixture, true);
     uiFixture.addSection("Serial Protocol",
       this.buildSerialProtocolSection(uiFixture, fixture, true));
   }

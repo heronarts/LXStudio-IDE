@@ -21,6 +21,8 @@ import heronarts.lx.output.KinetDatagram;
 import heronarts.lx.output.LXBufferOutput;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCDatagram;
+import heronarts.lx.output.OPCOutput;
+import heronarts.lx.output.OPCSocket;
 import heronarts.lx.output.SerialDefinition;
 import heronarts.lx.output.SerialMessage;
 import heronarts.lx.output.StreamingACNDatagram;
@@ -58,9 +60,6 @@ public class LPPanelFixture extends SerialProtocolFixture {
   public final StringParameter pointIndicesJSON = new StringParameter(
     "Point Indices", "[[0,0]]")
       .setDescription("A JSON array of integer points that make up this panel");
-
-  public final DiscreteParameter opcPort = new DiscreteParameter("OPC Port", 1,
-    1, 65535).setDescription("UDP Port to use for OPC");
 
   public final BoundedParameter rowSpacing = new BoundedParameter("Row Spacing",
     10, 0, 1000000).setDescription("Spacing between rows in the grid");
@@ -110,12 +109,12 @@ public class LPPanelFixture extends SerialProtocolFixture {
     super(lx, "Panel");
     addParameter("host", this.host);
     addOutputParameter("protocol", this.protocol);
+    addOutputParameter("transport", this.transport);
+    addOutputParameter("port", this.port);
     addOutputParameter("artNetUniverse", this.artNetUniverse);
     addOutputParameter("opcChannel", this.opcChannel);
     addOutputParameter("ddpDataOffset", this.ddpDataOffset);
     addOutputParameter("kinetPort", this.kinetPort);
-
-    addOutputParameter("opcPort", this.opcPort);
     addOutputParameter("splitPacket", this.splitPacket);
     addOutputParameter("pointsPerPacket", this.pointsPerPacket);
 
@@ -170,10 +169,10 @@ public class LPPanelFixture extends SerialProtocolFixture {
     for (int i = 0; i < newSize; i++) {
       this.gridIndices[i] = parsed.getJSONArray(i).getIntArray();
       for (int j = 0; j < 2; j++) {
-        this.worldGridIndices[i][j] = //
-          /**/ (this.gridIndices[i][0] * this.gridTransform[j][0]) //
-            /**/ + (this.gridIndices[i][1] * this.gridTransform[j][1]) //
-            /**/ + this.gridTransform[j][2];
+        this.worldGridIndices[i][j] = (this.gridIndices[i][0]
+          * this.gridTransform[j][0])
+          + (this.gridIndices[i][1] * this.gridTransform[j][1])
+          + this.gridTransform[j][2];
       }
     }
   }
@@ -266,7 +265,8 @@ public class LPPanelFixture extends SerialProtocolFixture {
     // Okay, good to go, construct the model
 
     // TODO(Dev): Deal with childModels
-    // LXModel model = instantiateModel( this.modelPoints, childModels.toArray(new LXModel[0]), getModelKeys() );
+    // LXModel model = instantiateModel( this.modelPoints,
+    // childModels.toArray(new LXModel[0]), getModelKeys() );
 
     LPPanelModel model = new LPPanelModel(modelPoints.stream()
       .map(point -> (Point) point).collect(Collectors.toList()));
@@ -300,38 +300,6 @@ public class LPPanelFixture extends SerialProtocolFixture {
     return this.gridIndices.length;
   }
 
-  private void addOutput(InetAddress address, int[] indexBuffer, int channel) {
-    LXOutput output = null;
-    switch (this.protocol.getEnum()) {
-    case ARTNET:
-      output = new ArtNetDatagram(this.lx, indexBuffer, channel);
-      break;
-    case SACN:
-      output = new StreamingACNDatagram(this.lx, indexBuffer, channel);
-      break;
-    case DDP:
-      output = new DDPDatagram(this.lx, indexBuffer, channel);
-      break;
-    case KINET:
-      output = new KinetDatagram(this.lx, indexBuffer, channel);
-      break;
-    case OPC:
-      output = new OPCDatagram(this.lx, indexBuffer, (byte) channel);
-      break;
-    default:
-      LX.error(
-        "Undefined output protocol in GridFixture: " + this.protocol.getEnum());
-      break;
-    }
-    if (output != null) {
-      output.enabled.setValue(address != null);
-      if (address != null && (output instanceof LXOutput.InetOutput)) {
-        ((LXOutput.InetOutput) output).setAddress(address);
-      }
-      addOutput(output);
-    }
-  }
-
   private void addOutput(SerialDefinition definition, int[] indexBuffer,
     int channel) {
     LXOutput output = null;
@@ -355,6 +323,47 @@ public class LPPanelFixture extends SerialProtocolFixture {
       output.enabled.setValue(definition != null);
       if (definition != null && output instanceof SerialMessage) {
         ((SerialMessage) output).setDefinition(definition);
+      }
+      addOutput(output);
+    }
+  }
+
+  private void addOutput(InetAddress address, int[] indexBuffer, int channel) {
+    LXOutput output = null;
+    switch (this.protocol.getEnum()) {
+    case ARTNET:
+      output = new ArtNetDatagram(this.lx, indexBuffer, channel);
+      break;
+    case SACN:
+      output = new StreamingACNDatagram(this.lx, indexBuffer, channel);
+      break;
+    case OPC:
+      switch (this.transport.getEnum()) {
+      case TCP:
+        output = new OPCSocket(this.lx, indexBuffer, (byte) channel);
+        break;
+      default:
+      case UDP:
+        output = new OPCDatagram(this.lx, indexBuffer, (byte) channel);
+        break;
+      }
+      ((OPCOutput) output).setPort(this.port.getValuei());
+      break;
+    case DDP:
+      output = new DDPDatagram(this.lx, indexBuffer, channel);
+      break;
+    case KINET:
+      output = new KinetDatagram(this.lx, indexBuffer, channel);
+      break;
+    default:
+      LX.error(
+        "Undefined output protocol in GridFixture: " + this.protocol.getEnum());
+      break;
+    }
+    if (output != null) {
+      output.enabled.setValue(address != null);
+      if (address != null && (output instanceof LXOutput.InetOutput)) {
+        ((LXOutput.InetOutput) output).setAddress(address);
       }
       addOutput(output);
     }
