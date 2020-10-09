@@ -25,15 +25,15 @@
 			<artifactId>lx</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${project-path}/LX/target/lx-${project.version}-jar-with-dependencies.jar</systemPath>
+			<systemPath>${basedir}/lib/lx-${project.version}-jar-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>heronarts</groupId>
-			<artifactId>lx</artifactId>
+			<artifactId>p3lx</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${project-path}/P3LX/target/p3lx-${project.version}-jar-with-dependencies.jar</systemPath>
+			<systemPath>${basedir}/lib/p3lx-${project.version}-jar-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -41,7 +41,7 @@
 			<artifactId>lxstudio</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/lxstudio-${project.version}.jar</systemPath>
+			<systemPath>${basedir}/lib/lxstudio-${project.version}-jar-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<dependency>

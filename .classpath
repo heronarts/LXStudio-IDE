@@ -46,9 +46,9 @@
 			<attribute name="m2e-apt" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/lx/target/lx-0.2.1-SNAPSHOT-jar-with-dependencies.jar"/>
-	<classpathentry kind="lib" path="/p3lx/target/p3lx-0.2.1-SNAPSHOT-jar-with-dependencies.jar"/>
-	<classpathentry kind="lib" path="lib/lxstudio-0.2.1-SNAPSHOT-jar-with-dependencies.jar" sourcepath="/Users/derwent/Documents/GitHub/lxstudio-0.2.1-SNAPSHOT_source_from_Procyon"/>
+	<classpathentry kind="lib" path="lib/lx-0.2.1-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="lib/p3lx-0.2.1-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="lib/lxstudio-0.2.1-SNAPSHOT-jar-with-dependencies.jar"/>
 	<classpathentry kind="src" output="target/classes" path="src/main/java">
 		<attributes>
 			<attribute name="optional" value="true"/>
@@ -57,9 +57,9 @@
 	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
+			<attribute name="test" value="true"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">

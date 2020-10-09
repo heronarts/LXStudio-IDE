@@ -1,7 +1,6 @@
 package heronarts.lx.structure;
 
 import java.net.InetAddress;
-import java.util.logging.Logger;
 
 import heronarts.lx.LX;
 import heronarts.lx.output.LXOutput;

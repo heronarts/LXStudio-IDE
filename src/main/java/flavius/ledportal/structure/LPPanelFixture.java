@@ -1,9 +1,9 @@
 package flavius.ledportal.structure;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import flavius.ledportal.LPMeshable;
@@ -34,12 +34,14 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.structure.GridFixture.PositionMode;
 import heronarts.lx.structure.GridFixture.Wiring;
-import heronarts.lx.structure.LXFixture;
 import heronarts.lx.structure.SerialProtocolFixture;
 import heronarts.lx.transform.LXMatrix;
 import processing.data.JSONArray;
 
 public class LPPanelFixture extends SerialProtocolFixture {
+
+  private static final Logger logger = Logger
+  .getLogger(LPPanelFixture.class.getName());
 
   public final EnumParameter<PositionMode> positionMode = new EnumParameter<PositionMode>(
     "Mode", PositionMode.CORNER).setDescription(
@@ -178,107 +180,45 @@ public class LPPanelFixture extends SerialProtocolFixture {
   }
 
   /**
-   * Creates point objects, but does not position them. That is left to
-   * {@link regeneratePointGeometry}
-   */
-  protected void regeneratePoints() {
-    regenerateGridIndices();
-    // We may have a totally new size, blow out the points array and rebuild
-    this.mutablePoints.clear();
-
-    int pointIndex = this.firstPointIndex;
-    for (int i = 0; i < this.size(); i++) {
-      int[] local = this.gridIndices[i];
-      int[] world = this.worldGridIndices[i];
-      LXPoint p = new Point(world[0], world[1], local[0], local[1], 0, 0, 0);
-      p.index = pointIndex++;
-      this.mutablePoints.add(p);
-    }
-  }
-
-  /**
-   * Invoked when this fixture has been loaded or added to some container. Will
-   * rebuild the points and the metrics, and notify container of the change to
-   * this fixture's generation
-   */
-  @Override
-  protected void regenerate() {
-    regeneratePoints();
-
-    // A new model will have to be created, forget these points
-    this.model = null;
-    this.modelPoints.clear();
-
-    // Regenerate our geometry, note that we bypass regenerateGeometry() here
-    // because we don't need
-    // to notify our container about the change. We're going to notify them
-    // after this of even
-    // more substantive generation change.
-    _regenerateGeometry();
-
-    // Rebuild output objects
-    regenerateOutputs();
-
-    onRegenerate();
-
-    // Let our container know that our structural generation has changed
-    if (this.container != null) {
-      this.container.fixtureGenerationChanged(this);
-    }
-  }
-
-  /**
-   * Constructs an LXModel object for this Fixture
+   * Override to use LPPanelModel.Point as point type
    *
-   * @return Model representation of this fixture
+   * @param localIndex Index of the point relative to this fixture
+   * @return LXPoint cast from LPPanelModel.Point subclass
    */
-  @Override
-  public LXModel toModel() {
-    // Creating a new model, clear our set of points
-    this.modelPoints.clear();
+  protected LXPoint constructPoint(int localIndex) {
+    // It would be great to only have to do this call once at the start of regenerate()
+    regenerateGridIndices();
+    int[] local = this.gridIndices[localIndex];
+    int[] world = this.worldGridIndices[localIndex];
+    return (LXPoint) new Point(world[0], world[1], local[0], local[1], 0, 0, 0);
+  }
 
-    // Note: we make a deep copy here because a change to the number of points
-    // in one fixture will alter point indices in all fixtures after it.
-    // When we're in multi-threaded mode, that point might have been passed to
-    // the UI, which holds a reference to the model.
-    // The indices passed to the UI cannot be changed mid-flight, so we make new
-    // copies of all points here to stay safe.
-    for (LXPoint p : this.points) {
-      modelPoints.add((new Point().set((Point) p)));
+  /**
+   * Override to use LPPanelModel.Point as point type
+   *
+   * @param copy Point to make a copy of
+   * @return LXPoint cast from LPPanelModel.Point subclass
+   */
+  protected LXPoint copyPoint(LXPoint copy) {
+    if(!Point.class.isInstance(copy)) {
+      return (LXPoint) new Point().set(copy);
     }
+    return (LXPoint) new Point().set((Point)copy);
+  }
 
-    // Now iterate over our children and add their points too
-    List<LXModel> childModels = new ArrayList<LXModel>();
-    for (LXFixture child : this.children) {
-      LXModel childModel = child.toModel();
-      for (LXPoint p : childModel.points) {
-        this.modelPoints.add(p);
-      }
-      childModels.add(childModel);
-    }
-
-    // Generate any submodels references into of this fixture
-    for (Submodel submodel : toSubmodels()) {
-      childModels.add(submodel);
-    }
-
-    // Okay, good to go, construct the model
-
-    // TODO(Dev): Deal with childModels
-    // LXModel model = instantiateModel( this.modelPoints,
-    // childModels.toArray(new LXModel[0]), getModelKeys() );
-
+  /**
+   * Override to use LPPanelModel as model type
+   *
+   * @param modelPoints Points in the model
+   * @param childModels Child models
+   * @param modelKeys   Model keys
+   * @return LPPanelModel Instance
+   */
+  protected LXModel constructModel(List<LXPoint> modelPoints,
+    List<? extends LXModel> childModels, String[] modelKeys) {
     LPPanelModel model = new LPPanelModel(modelPoints.stream()
-      .map(point -> (Point) point).collect(Collectors.toList()));
-    model.transform.set(this.geometryMatrix);
-
-    // for (Point p : model.points) {
-    // // this.modelPoints.add((LXPoint) new Point(p.xi, p.yi, p.x,
-    // // p.y, p.z));
-    // this.mutablePoints.add(p);
-    // }
-
-    return this.model = model;
+      .map(point -> (Point)copyPoint(point)).collect(Collectors.toList()));
+    return model;
   }
 
   public List<LXParameter> gridIndexParameters = Arrays
@@ -434,9 +374,8 @@ public class LPPanelFixture extends SerialProtocolFixture {
 
   @Override
   protected void computePointGeometry(LXMatrix matrix, List<LXPoint> points) {
-    int size = this.size();
-    for (int i = 0; i < size; i++) {
-      ((Point) points.get(i)).localIndexTransform(matrix);
+    for(LXPoint p : points) {
+      ((Point) p).localIndexTransform(matrix);
     }
   }
 

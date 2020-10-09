@@ -105,6 +105,9 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
     renderTask = new LXLoopTask() {
       @Override
       public void loop(double deltaMs) {
+        if(!LPPanelModel.class.isInstance(getModel())) {
+          logger.warning(String.format("model is not an LPPanelModel: %s", model.toString()));
+        }
         synchronized(LPPanel3DGraphicsPattern.class) {
           beforeDraw(pg);
           pg.beginDraw();
@@ -134,7 +137,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
     boolean disposeGraphics = false;
     if(this.pg == null) {
       createGraphics = true;
-    } else if(this.pg.width != newModel.width || this.pg.height != newModel.height) {
+    } else if(this.pg.width != newModel.width + 1 || this.pg.height != newModel.height + 1) {
       createGraphics = true;
       disposeGraphics = true;
     }
@@ -155,6 +158,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
       ((P3LX)this.lx).ui.removeLoopTask(this.renderTask);
     }
     super.dispose();
+    // TODO(Dev): Figure out why this causes a segfault
     // this.pg.dispose();
   }
 

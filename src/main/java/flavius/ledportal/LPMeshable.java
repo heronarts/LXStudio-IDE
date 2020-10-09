@@ -224,11 +224,11 @@ public abstract class LPMeshable {
     Collections.reverse(matrices);
     for (PMatrix3D matrix : matrices) {
       Boolean success = matrix.invert();
-      // logger.fine(String.format("applying: %s, success %b",
-      //   formatPMatrix3D(matrix), success));
+      if(!success) {
+        logger.warning(String.format("matrix inversion unsuccessful: %s", matrix));
+      }
       result.apply(matrix);
     }
-    // logger.fine(String.format("result: %s", formatPMatrix3D(result)));
     return result;
   }
 

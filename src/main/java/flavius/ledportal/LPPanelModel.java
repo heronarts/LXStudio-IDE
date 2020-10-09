@@ -3,6 +3,7 @@ package flavius.ledportal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import heronarts.lx.model.LXPoint;
@@ -14,6 +15,10 @@ import heronarts.lx.transform.LXMatrix;
  * have a different length
  */
 public class LPPanelModel extends SerialModel {
+
+  private static final Logger logger = Logger
+    .getLogger(LPPanelModel.class.getName());
+
   public static int[][] getIndexBounds(int[][] indices) {
     int[][] result = new int[][] {
       new int[] { Integer.MAX_VALUE, Integer.MIN_VALUE },
@@ -116,6 +121,10 @@ public class LPPanelModel extends SerialModel {
       this.yiMax = indexBounds[1][1];
       this.width = xiMax - xiMin;
       this.height = yiMax - yiMin;
+      if(!(this.width > 0 && this.height > 0)) {
+        logger.warning(String.format(
+          "potential invalid width, height: %d, %d", this.width, this.height));
+      }
       this.indices = indices;
     }
 

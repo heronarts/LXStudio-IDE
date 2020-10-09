@@ -1,7 +1,5 @@
 package heronarts.lx.app.pattern;
 
-import java.util.logging.Logger;
-
 import flavius.ledportal.LPMeshable;
 import heronarts.lx.LX;
 import heronarts.lx.LXCategory;
@@ -14,8 +12,6 @@ import processing.core.PVector;
 
 @LXCategory(LXCategory.TEXTURE)
 public class VideoFrame extends LXPattern {
-  private static final Logger logger = Logger
-    .getLogger(VideoFrame.class.getName());
 
   public VideoFrame(LX lx) {
     super(lx);

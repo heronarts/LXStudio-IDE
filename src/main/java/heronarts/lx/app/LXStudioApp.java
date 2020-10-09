@@ -39,7 +39,6 @@ import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanel3DRotatingCube;
 import flavius.ledportal.structure.LPPanelFixture;
-import flavius.ledportal.structure.LPPanelStructureListener;
 import heronarts.lx.LX;
 import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
@@ -49,7 +48,6 @@ import heronarts.lx.app.ui.UIPanelFixture;
 import heronarts.lx.app.ui.UIVideoFrame;
 import heronarts.lx.app.ui.UIWireFrame;
 import heronarts.lx.pattern.GraphicEqualizerPattern;
-// import heronarts.lx.structure.SerialMessageStructure;
 import heronarts.lx.studio.LXStudio;
 import heronarts.p3lx.ui.UI.CoordinateSystem;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -88,7 +86,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public static float[][] modelBounds;
   public static LXStudio studio;
   public static LXStudioApp instance;
-  public static LPPanelStructureListener panelStructure;
   public static HashMap<String, PImage> textures;
 
   private Movie movie;
@@ -132,13 +129,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   @Override
   public void initialize(LX lx) {
     // Here is where you should register any custom components or make
-    // modifications
-    // to the LX engine or hierarchy. This is also used in headless mode, so
-    // note that
-    // you cannot assume you are working with an LXStudio class or that any UI
-    // will be
-    // available.
-    panelStructure = new LPPanelStructureListener(lx);
+    // modifications to the LX engine or hierarchy. This is also used in
+    // headless mode, so note that you cannot assume you are working with an
+    // LXStudio class or that any UI will be available.
 
     // Register custom pattern and effect types
     // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
@@ -244,10 +237,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   public void initializeUI(LXStudio lx, LXStudio.UI ui) {
     // Here is where you may modify the initial settings of the UI before it is
-    // fully
-    // built. Note that this will not be called in headless mode. Anything
-    // required
-    // for headless mode should go in the raw initialize method above.
+    // fully built. Note that this will not be called in headless mode. Anything
+    // required for headless mode should go in the raw initialize method above.
 
     if (LPMeshable.useRightHandedCoordinates) {
       ui.setCoordinateSystem(CoordinateSystem.valueOf("RIGHT_HANDED"));
@@ -262,18 +253,11 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       logger.warning(e.toString());
     }
 
-    // try {
-    //   SerialMessageStructure structure = new SerialMessageStructure(lx);
-    //   lx.addOutput(structure.serialOutput);
-    // } catch (Exception x) {
-    //   x.printStackTrace();
-    // }
   }
 
   public void onUIReady(LXStudio lx, LXStudio.UI ui) {
     // At this point, the LX Studio application UI has been built. You may now
-    // add
-    // additional views and components to the Ui hierarchy.
+    // add additional views and components to the Ui hierarchy.
 
     for (LPDecoration decoration : config.decorations) {
       ui.preview.addComponent(new UIWireFrame(decoration));
@@ -321,8 +305,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   @Override
   public void draw() {
     // All handled by core LX engine, do not modify, method exists only so that
-    // Processing
-    // will run a draw-loop.
+    // Processing will run a draw-loop.
     if (movie != null && movie.available()) {
       movie.read();
       videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0, movie.width,
@@ -374,9 +357,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     }
     if (headless) {
       // We're not actually going to run this as a PApplet, but we need to
-      // explicitly
-      // construct and set the initialize callback so that any custom components
-      // will be run
+      // explicitly construct and set the initialize callback so that any custom
+      // components will be run
       LX.Flags flags = new LX.Flags();
       flags.initialize = new LXStudioApp();
       flags.mediaPath = System.getProperty("user.dir");
@@ -388,5 +370,4 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       PApplet.main(LXStudioApp.class, args);
     }
   }
-
 }

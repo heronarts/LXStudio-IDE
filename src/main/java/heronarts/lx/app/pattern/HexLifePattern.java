@@ -165,8 +165,8 @@ public class HexLifePattern extends LXModelPattern<LPPanelModel> {
         this.transition();
       }
     }
-    double ramp = this.lx.engine.tempo.ramp();
-    ramp = ramp * ramp;
+    double basis = this.lx.engine.tempo.basis();
+    basis = basis * basis;
     for (int i = 0; i < this.model.size; ++i) {
       double b = 0;
       switch (this.state[i]) {
@@ -174,13 +174,13 @@ public class HexLifePattern extends LXModelPattern<LPPanelModel> {
         b = 100;
         break;
       case BIRTHING:
-        b = ramp * 100;
+        b = basis * 100;
         break;
       case DEAD:
         b = 0;
         break;
       case DYING:
-        b = 100 * (1 - ramp);
+        b = 100 * (1 - basis);
         break;
       }
       this.colors[i] = LXColor.gray(b);
