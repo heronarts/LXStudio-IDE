@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.model.SerialModel;
 import heronarts.lx.transform.LXMatrix;
 
 /**
  * Basically {@link heronarts.lx.model.GridModel} but each row in the grid can
  * have a different length
  */
-public class LPPanelModel extends SerialModel {
+public class LPPanelModel extends LXModel {
 
   private static final Logger logger = Logger
     .getLogger(LPPanelModel.class.getName());
@@ -38,7 +38,7 @@ public class LPPanelModel extends SerialModel {
 
   public static int[][] extractIndices(List<Point> points) {
     int[][] result = new int[points.size()][2];
-    for(int i = 0; i < points.size(); i++) {
+    for (int i = 0; i < points.size(); i++) {
       result[i][0] = points.get(i).xi;
       result[i][1] = points.get(i).yi;
     }
@@ -70,12 +70,15 @@ public class LPPanelModel extends SerialModel {
     public Point() {
       this(0, 0);
     }
+
     public Point(int xi, int yi) {
-      this(xi, yi, (float)xi, (float)yi, 0.f);
+      this(xi, yi, (float) xi, (float) yi, 0.f);
     }
+
     public Point(int xi, int yi, float x, float y, float z) {
       this(xi, yi, xi, yi, x, y, z);
     }
+
     public Point(int xi, int yi, int xil, int yil, float x, float y, float z) {
       super(x, y, z);
       this.xi = xi;
@@ -94,13 +97,13 @@ public class LPPanelModel extends SerialModel {
     }
 
     public LXPoint set(Point that) {
-      set((LXPoint)that);
+      set((LXPoint) that);
       this.xi = that.xi;
       this.yi = that.yi;
       this.xil = that.xi;
       this.yil = that.yi;
 
-      return (LXPoint)this;
+      return (LXPoint) this;
     }
   }
 
@@ -121,9 +124,9 @@ public class LPPanelModel extends SerialModel {
       this.yiMax = indexBounds[1][1];
       this.width = xiMax - xiMin;
       this.height = yiMax - yiMin;
-      if(!(this.width > 0 && this.height > 0)) {
-        logger.warning(String.format(
-          "potential invalid width, height: %d, %d", this.width, this.height));
+      if (!(this.width > 0 && this.height > 0)) {
+        logger.warning(String.format("potential invalid width, height: %d, %d",
+          this.width, this.height));
       }
       this.indices = indices;
     }
@@ -132,8 +135,7 @@ public class LPPanelModel extends SerialModel {
       List<LXPoint> points = new ArrayList<LXPoint>(indices.length);
       int index = 0;
       for (int[] coordinates : indices) {
-        Point point = new Point(
-          coordinates[0], coordinates[1],
+        Point point = new Point(coordinates[0], coordinates[1],
           (float) coordinates[0], (float) coordinates[1], 0.f);
         point.index = index++;
         point.multiply(transform);
@@ -143,7 +145,7 @@ public class LPPanelModel extends SerialModel {
     }
   }
 
-  public class Strip extends SerialModel {
+  public class Strip extends LXModel {
 
     public int index;
     public int xiMin = Integer.MAX_VALUE;
@@ -156,7 +158,7 @@ public class LPPanelModel extends SerialModel {
     public Strip(int index, List<LXPoint> pointList) {
       super(pointList);
       this.index = index;
-      LXPoint[] points = ((SerialModel) this).points;
+      LXPoint[] points = ((LXModel) this).points;
       this.points = new Point[points.length];
       System.arraycopy(points, 0, this.points, 0, points.length);
       for (LXPoint point : pointList) {
@@ -227,6 +229,7 @@ public class LPPanelModel extends SerialModel {
 
   /**
    * Get the point at indices xi, yi
+   *
    * @param xi
    * @param yi
    * @return
@@ -235,8 +238,8 @@ public class LPPanelModel extends SerialModel {
     Strip row = this.getRowStrip(yi);
     if (row == null)
       return null;
-    for(Point point : row.points) {
-      if(point.xi == xi) {
+    for (Point point : row.points) {
+      if (point.xi == xi) {
         return point;
       }
     }
@@ -275,7 +278,7 @@ public class LPPanelModel extends SerialModel {
    */
 
   public LPPanelModel(PanelMetrics metrics, LXMatrix transform) {
-    super(metrics.toPoints(transform), SerialModel.Key.GRID);
+    super(metrics.toPoints(transform), LXModel.Key.GRID);
     this.metrics = metrics;
     this.width = metrics.width;
     this.height = metrics.height;
@@ -290,7 +293,7 @@ public class LPPanelModel extends SerialModel {
 
   public LPPanelModel(PanelMetrics metrics, List<Point> points) {
     super(points.stream().map(point -> (LXPoint) point)
-      .collect(Collectors.toList()), SerialModel.Key.GRID);
+      .collect(Collectors.toList()), LXModel.Key.GRID);
     this.metrics = metrics;
 
     this.width = metrics.width;

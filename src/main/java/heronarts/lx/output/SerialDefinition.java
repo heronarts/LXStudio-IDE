@@ -45,7 +45,7 @@ public class SerialDefinition {
     this.dataBits = dataBits;
     this.stopBits = stopBits;
     this.parity = parity;
-    // TODO(dev): Something better thatn this
+    // TODO(dev): Something better than this
     if (ports.containsKey(portName)) {
       ports.get(portName).dispose();
     }
