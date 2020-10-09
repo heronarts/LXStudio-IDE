@@ -16,6 +16,7 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.opengl.PGraphicsOpenGL;
 
 /**
  * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed
@@ -129,27 +130,31 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
     font = this.applet.createFont(fontPrefix + "uni0553-webfont.ttf", 8);
   }
 
+  public void disposePG() {
+    if(PGraphicsOpenGL.class.isInstance(this.pg)) {
+      logger.warning(String.format("could not dispose pg: %s", this.pg.toString()));
+      // TODO(Dev): Figure out why this causes a segfault
+      // this.pg.dispose();
+      return;
+    }
+    this.pg.dispose();
+  }
+
   @Override
   public void beforeUpdateModel(LPPanelModel newModel) {
     if(this.applet == null)
       this.applet = LXStudioApp.instance;
-    boolean createGraphics = false;
-    boolean disposeGraphics = false;
-    if(this.pg == null) {
-      createGraphics = true;
-    } else if(this.pg.width != newModel.width + 1 || this.pg.height != newModel.height + 1) {
-      createGraphics = true;
-      disposeGraphics = true;
+    if(this.pg != null) {
+      if(this.pg.width != newModel.width + 1 || this.pg.height != newModel.height + 1) {
+        this.disposePG();
+      } else {
+        return;
+      }
     }
-    if(disposeGraphics) {
-      this.pg.dispose();
-    }
-    if(createGraphics) {
-      this.pg = this.applet.createGraphics(
-          newModel.width + 1, newModel.height + 1, PGraphics.P3D);
-      this.frame = new PImage(this.pg.width, this.pg.height);
-      this.frameSize = Math.max(this.pg.width, this.pg.height);
-    }
+    this.pg = this.applet.createGraphics(
+        newModel.width + 1, newModel.height + 1, PGraphics.P3D);
+    this.frame = new PImage(this.pg.width, this.pg.height);
+    this.frameSize = Math.max(this.pg.width, this.pg.height);
   }
 
   @Override
@@ -158,8 +163,6 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
       ((P3LX)this.lx).ui.removeLoopTask(this.renderTask);
     }
     super.dispose();
-    // TODO(Dev): Figure out why this causes a segfault
-    // this.pg.dispose();
   }
 
   @Override

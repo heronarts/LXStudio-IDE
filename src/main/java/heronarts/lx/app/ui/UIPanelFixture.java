@@ -8,6 +8,7 @@ import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.structure.LXProtocolFixture;
+import heronarts.lx.structure.SerialProtocolFixture.SerialProtocol;
 import heronarts.lx.studio.LXStudio;
 import heronarts.lx.studio.LXStudio.UI;
 import heronarts.lx.studio.ui.fixture.UIFixture;
@@ -115,7 +116,7 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
     final LXParameterListener protocolListener = p -> {
       outputSerialPort.setEnabled(
         fixture.serialProtocol.getEnum() != LPPanelFixture.SerialProtocol.NONE);
-      switch ((LPPanelFixture.SerialProtocol) fixture.serialProtocol
+      switch ((SerialProtocol) fixture.serialProtocol
         .getEnum()) {
       case PBX_WS281X:
       case PBX_APA102: {

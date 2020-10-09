@@ -38,6 +38,7 @@ import flavius.ledportal.pattern.LPPanelHexLife;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanel3DRotatingCube;
+import flavius.ledportal.pattern.LPPanelBLM;
 import flavius.ledportal.structure.LPPanelFixture;
 import heronarts.lx.LX;
 import heronarts.lx.LX.Media;
@@ -136,7 +137,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     // Register custom pattern and effect types
     // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
     lx.registry.addPattern(VideoFrame.class);
-    // lx.registry.addPattern(Panel3DBLM.class);
+    lx.registry.addPattern(LPPanelBLM.class);
     lx.registry.addPattern(LPPanel3DRotatingCube.class);
     lx.registry.addPattern(LPPanelTexture.class);
     lx.registry.addPattern(LPPanelSolidState.class);

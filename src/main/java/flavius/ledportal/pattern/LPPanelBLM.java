@@ -1,5 +1,6 @@
-package heronarts.lx.app.pattern;
+package flavius.ledportal.pattern;
 
+import flavius.ledportal.pattern.LPPanel3DGraphicsPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import processing.core.PGraphics;
@@ -9,9 +10,9 @@ import processing.core.PMatrix2D;
  * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed
  * grid pattern
  */
-public class Panel3DBLM extends Panel3DGraphicsPattern {
+public class LPPanelBLM extends LPPanel3DGraphicsPattern {
 
-  public Panel3DBLM(LX lx) {
+  public LPPanelBLM(LX lx) {
     super(lx);
   }
 

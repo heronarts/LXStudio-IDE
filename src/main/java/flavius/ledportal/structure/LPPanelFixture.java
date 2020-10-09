@@ -129,14 +129,14 @@ public class LPPanelFixture extends SerialProtocolFixture {
     addMetricsParameter("wiring", this.wiring);
     addMetricsParameter("reverse", this.reverse);
 
-    addGeometryParameter("pointIndicesJSON", this.pointIndicesJSON);
-    addGeometryParameter("globalGridOriginX", this.globalGridOriginX);
-    addGeometryParameter("globalGridOriginY", this.globalGridOriginY);
-    addGeometryParameter("globalGridMatrix", this.globalGridMatrix);
-    addGeometryParameter("rowSpacing", this.rowSpacing);
-    addGeometryParameter("columnSpacing", this.columnSpacing);
-    addGeometryParameter("rowShear", this.rowShear);
-    addGeometryParameter("positionMode", this.positionMode);
+    addMetricsParameter("pointIndicesJSON", this.pointIndicesJSON);
+    addMetricsParameter("globalGridOriginX", this.globalGridOriginX);
+    addMetricsParameter("globalGridOriginY", this.globalGridOriginY);
+    addMetricsParameter("globalGridMatrix", this.globalGridMatrix);
+    addMetricsParameter("rowSpacing", this.rowSpacing);
+    addMetricsParameter("columnSpacing", this.columnSpacing);
+    addMetricsParameter("rowShear", this.rowShear);
+    addMetricsParameter("positionMode", this.positionMode);
   }
 
   public void regenerateGridTransform() {
@@ -186,8 +186,6 @@ public class LPPanelFixture extends SerialProtocolFixture {
    * @return LXPoint cast from LPPanelModel.Point subclass
    */
   protected LXPoint constructPoint(int localIndex) {
-    // It would be great to only have to do this call once at the start of regenerate()
-    regenerateGridIndices();
     int[] local = this.gridIndices[localIndex];
     int[] world = this.worldGridIndices[localIndex];
     return (LXPoint) new Point(world[0], world[1], local[0], local[1], 0, 0, 0);
@@ -222,11 +220,20 @@ public class LPPanelFixture extends SerialProtocolFixture {
   }
 
   public List<LXParameter> gridIndexParameters = Arrays
-    .asList(new LXParameter[] { this.globalGridOriginX, this.globalGridOriginY,
-      this.globalGridMatrix, this.pointIndicesJSON });
+    .asList(new LXParameter[] {
+      this.pointIndicesJSON,
+      this.globalGridOriginX,
+      this.globalGridOriginY,
+      this.globalGridMatrix,
+      this.rowSpacing,
+      this.columnSpacing,
+      this.rowShear,
+      this.positionMode,
+    });
 
   @Override
   public void onParameterChanged(LXParameter p) {
+    logger.warning(String.format("parameter changed: %s", p.toString()));
     if (gridIndexParameters.contains(p)) {
       regenerateGridIndices();
     }
@@ -235,8 +242,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
 
   @Override
   protected int size() {
-    if (this.gridIndices == null)
-      regenerateGridIndices();
+    regenerateGridIndices();
     return this.gridIndices.length;
   }
 
@@ -374,6 +380,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
 
   @Override
   protected void computePointGeometry(LXMatrix matrix, List<LXPoint> points) {
+    regenerateGridIndices();
     for(LXPoint p : points) {
       ((Point) p).localIndexTransform(matrix);
     }
