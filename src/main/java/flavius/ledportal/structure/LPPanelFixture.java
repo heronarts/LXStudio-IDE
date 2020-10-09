@@ -1,9 +1,7 @@
 package flavius.ledportal.structure;
 
 import java.net.InetAddress;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import flavius.ledportal.LPMeshable;
@@ -39,9 +37,6 @@ import heronarts.lx.transform.LXMatrix;
 import processing.data.JSONArray;
 
 public class LPPanelFixture extends SerialProtocolFixture {
-
-  private static final Logger logger = Logger
-  .getLogger(LPPanelFixture.class.getName());
 
   public final EnumParameter<PositionMode> positionMode = new EnumParameter<PositionMode>(
     "Mode", PositionMode.CORNER).setDescription(
@@ -109,7 +104,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
 
   public LPPanelFixture(LX lx) {
     super(lx, "Panel");
-    addParameter("host", this.host);
+    addOutputParameter("host", this.host);
     addOutputParameter("protocol", this.protocol);
     addOutputParameter("transport", this.transport);
     addOutputParameter("port", this.port);
@@ -219,24 +214,9 @@ public class LPPanelFixture extends SerialProtocolFixture {
     return model;
   }
 
-  public List<LXParameter> gridIndexParameters = Arrays
-    .asList(new LXParameter[] {
-      this.pointIndicesJSON,
-      this.globalGridOriginX,
-      this.globalGridOriginY,
-      this.globalGridMatrix,
-      this.rowSpacing,
-      this.columnSpacing,
-      this.rowShear,
-      this.positionMode,
-    });
-
   @Override
   public void onParameterChanged(LXParameter p) {
-    logger.warning(String.format("parameter changed: %s", p.toString()));
-    if (gridIndexParameters.contains(p)) {
-      regenerateGridIndices();
-    }
+    regenerateGridIndices();
     super.onParameterChanged(p);
   }
 

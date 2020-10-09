@@ -73,10 +73,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   private static int HEIGHT = 800;
   private static boolean FULLSCREEN = false;
 
-  // TODO: get these from config
-  public final int APA102_CLOCK_CHANNEL = 7;
-  public final int APA102_FREQ = 800000;
-
   private static final Logger logger = Logger
     .getLogger(LXStudioApp.class.getName());
   public static LPSimConfig config;

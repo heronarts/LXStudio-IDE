@@ -1,6 +1,5 @@
 package flavius.ledportal.pattern;
 
-import flavius.ledportal.pattern.LPPanel3DGraphicsPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import processing.core.PGraphics;
