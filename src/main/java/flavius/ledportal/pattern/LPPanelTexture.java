@@ -67,7 +67,13 @@ public class LPPanelTexture extends LPPanel3DGraphicsPattern {
     addParameter("texture", this.texture);
 
     refreshForeground();
-    this.texture.addListener(p -> this.refreshForeground());
+  }
+
+  public void onParameterChanged(LXParameter p) {
+    super.onParameterChanged(p);
+    if(p == this.texture) {
+      refreshForeground();
+    }
   }
 
   public void refreshForeground() {
