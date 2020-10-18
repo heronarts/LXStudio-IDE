@@ -25,6 +25,7 @@ import processing.opengl.PGraphicsOpenGL;
 public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
   PImage frame;
   boolean frameReady = false;
+  boolean pgNeedsDisposal = false;
   PFont font;
   double totalMs;
   PApplet applet;
@@ -108,6 +109,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
       public void loop(double deltaMs) {
         if(!LPPanelModel.class.isInstance(getModel())) {
           logger.warning(String.format("model is not an LPPanelModel: %s", model.toString()));
+          return;
         }
         synchronized(LPPanel3DGraphicsPattern.class) {
           beforeDraw(pg);
@@ -124,6 +126,24 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
     synchronized(LPPanel3DGraphicsPattern.class) {
       ((P3LX)lx).ui.addLoopTask(renderTask);
     }
+
+    LXLoopTask pgGarbageCollector = new LXLoopTask() {
+      @Override
+      /**
+       * Gotta schedule the disposal of pg in the UI thread otherwise segfaults happen!
+       */
+      public void loop(double deltaMs) {
+        synchronized(LPPanel3DGraphicsPattern.class) {
+          if(pgNeedsDisposal) {
+            pg.dispose();
+            pgNeedsDisposal = false;
+          }
+        }
+      }
+    };
+    synchronized(LPPanel3DGraphicsPattern.class) {
+      ((P3LX)lx).ui.addLoopTask(pgGarbageCollector);
+    }
   }
 
   public void refreshFont() {
@@ -132,9 +152,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
 
   public void disposePG() {
     if(PGraphicsOpenGL.class.isInstance(this.pg)) {
-      logger.warning(String.format("could not dispose pg: %s", this.pg.toString()));
-      // TODO(Dev): Figure out why this causes a segfault
-      // this.pg.dispose();
+      pgNeedsDisposal = true;
       return;
     }
     this.pg.dispose();
