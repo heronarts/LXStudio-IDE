@@ -22,11 +22,49 @@ This has only been tested on MacOS, if you're a Java wizard, you may be able to 
 - Install [Processing](https://processing.org/)
 - Install Processing Video library: **Sketch** → **Import Library** → **Add Library**
 - Java JDK 1.8 (included with Processing on MacOS)
-- Some kind of Java wizard who knows about classpaths
+- Maven (if not using IntelliJ / Eclipse)
+
+### Installing libraries
+
+**With IntelliJ / Eclipse:** your IDE will handle this for you.
+
+**With VScode / Maven:**
+
+The jars in the lib folder need to be placed in your local maven repository (`~/.m2/repository`). The `groupId`, `artifactId` and `version` fields should match what's in `pom.xml`
+You can do this with the following commands:
+
+```bash
+export PROJ_VERSION="0.2.1-SNAPSHOT"
+mvn install:install-file -Dfile=lib/lxstudio-${PROJ_VERSION}-jar-with-dependencies.jar -DgroupId=heronarts -DartifactId=lxstudio -Dversion=${PROJ_VERSION} -Dpackaging=jar
+mvn install:install-file -Dfile=lib/lx-${PROJ_VERSION}-jar-with-dependencies.jar -DgroupId=heronarts -DartifactId=lx -Dversion=${PROJ_VERSION} -Dpackaging=jar
+mvn install:install-file -Dfile=lib/p3lx-${PROJ_VERSION}-jar-with-dependencies.jar -DgroupId=heronarts -DartifactId=p3lx -Dversion=${PROJ_VERSION} -Dpackaging=jar
+```
+
+If you need to make modifications to these projects, you can clone a repository and `mvn install` on each one.
+
+### Compiling
+
+**With IntelliJ / Eclipse:** your IDE will handle this for you.
+
+**With VScode / Maven:**
+
+You can compile this repository with the following commands, you may need to adjust your java home
+
+```bash
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+mvn compiler:compile assembly:single
+```
 
 ### Usage
 
-Open this repo with Eclipse and hit play. If you're very lucky it might just work.
+**With IntelliJ / Eclipse:** Open this repo in your IDE and hit run.
+
+**With VScode / Maven:**
+
+```bash
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+java -cp "target/lxstudio-ide-0.2.1-SNAPSHOT-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar" heronarts.lx.app.LXStudioApp
+```
 
 ## LX Studio Notices
 
