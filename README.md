@@ -24,14 +24,40 @@ This has only been tested on MacOS, if you're a Java wizard, you may be able to 
 - Java JDK 1.8 (included with Processing on MacOS)
 - Maven (if not using IntelliJ / Eclipse)
 
+### Determine Java Home
+
+If you have multiple versions of Java installed, you will need to explicitly set the `$JAVA_HOME` environment variable for any shell you use to build / run this project.
+
+On MacOS, you can list possible Java homes with
+
+```bash
+/usr/libexec/java_home -V
+```
+
+```txt
+Matching Java Virtual Machines (4):
+  14.0.1, x86_64:    "AdoptOpenJDK 14" /Library/Java/JavaVirtualMachines/adoptopenjdk-14.jdk/Contents/Home
+  12.0.1, x86_64:    "OpenJDK 12.0.1"  /Library/Java/JavaVirtualMachines/openjdk-12.0.1.jdk/Contents/Home
+  11.0.2, x86_64:    "Java SE 11.0.2"  /Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk/Contents/Home
+  1.8.0_222, x86_64: "AdoptOpenJDK 8"  /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+```
+
+In this case, we want to set `JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"`
+
 ### Installing libraries
 
-**With IntelliJ / Eclipse:** your IDE will handle this for you.
+**With IntelliJ / Eclipse:** build config files provided, your IDE will handle this for you.
 
 **With VScode / Maven:**
 
-The jars in the lib folder need to be placed in your local maven repository (`~/.m2/repository`). The `groupId`, `artifactId` and `version` fields should match what's in `pom.xml`
-You can do this with the following commands:
+To build `pom.xml` with Maven, you will need to install the following 3rd party (not available on mvnrepository) libraries, whose jars are provided in `lib/`:
+
+- [heronarts.lx](https://github.com/heronarts/lx)
+- [heronarts.p3lx](https://github.com/heronarts/p3lx)
+- heronarts.lxstudio (private)
+
+These jars need to be installed into your local maven repository (e.g. `~/.m2/repository`) manually. The `groupId`, `artifactId` and `version` fields should match what's in `pom.xml`
+You can do this with the following commands (exact jar locations could change):
 
 ```bash
 export PROJ_VERSION="0.2.1-SNAPSHOT"
@@ -40,11 +66,11 @@ mvn install:install-file -Dfile=lib/lx-${PROJ_VERSION}-jar-with-dependencies.jar
 mvn install:install-file -Dfile=lib/p3lx-${PROJ_VERSION}-jar-with-dependencies.jar -DgroupId=heronarts -DartifactId=p3lx -Dversion=${PROJ_VERSION} -Dpackaging=jar
 ```
 
-If you need to make modifications to these projects, you can clone a repository and `mvn install` on each one.
+You can also clone into the source code repositories (where available) and `mvn install` if you want to modify them.
 
 ### Compiling
 
-**With IntelliJ / Eclipse:** your IDE will handle this for you.
+**With IntelliJ / Eclipse:** build config files provided, your IDE will handle this for you.
 
 **With VScode / Maven:**
 
@@ -55,6 +81,8 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/
 mvn compiler:compile assembly:single
 ```
 
+This is provided as a VSCode build task in `.vscode/tasks.json`
+
 ### Usage
 
 **With IntelliJ / Eclipse:** Open this repo in your IDE and hit run.
@@ -62,9 +90,11 @@ mvn compiler:compile assembly:single
 **With VScode / Maven:**
 
 ```bash
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
 java -cp "target/lxstudio-ide-0.2.1-SNAPSHOT-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar" heronarts.lx.app.LXStudioApp
 ```
+
+This is provided as a VSCode build task in `.vscode/tasks.json`
 
 ## LX Studio Notices
 
