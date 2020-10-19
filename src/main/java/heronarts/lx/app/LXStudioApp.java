@@ -41,6 +41,7 @@ import flavius.ledportal.pattern.LPPanel3DRotatingCube;
 import flavius.ledportal.pattern.LPPanelBLM;
 import flavius.ledportal.structure.LPPanelFixture;
 import heronarts.lx.LX;
+import heronarts.lx.LXLoopTask;
 import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
 import heronarts.lx.app.pattern.VideoFrame;
@@ -117,10 +118,25 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     flags.useGLPointCloud = false;
     flags.startMultiThreaded = true;
     flags.mediaPath = System.getProperty("user.dir");
-    // model = config.getModel();
     studio = new LXStudio(this, flags);
-    // studio = new LXStudio(this, flags, model);
     this.surface.setTitle(WINDOW_TITLE);
+
+    LXLoopTask videoFrameTask = new LXLoopTask() {
+      @Override
+      public void loop(double deltaMs) {
+        if (movie != null && movie.available()) {
+          movie.read();
+          videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0,
+            movie.width, movie.height);
+        } else if (screenCapRectangle != null) {
+          PImage screenBuffer = new PImage(
+            robot.createScreenCapture(screenCapRectangle));
+          videoFrame.copy(screenBuffer, 0, 0, screenBuffer.width,
+            screenBuffer.height, 0, 0, screenBuffer.width, screenBuffer.height);
+        }
+      }
+    };
+    this.addDrawLoopTask(videoFrameTask);
   }
 
   @Override
@@ -299,20 +315,100 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     ui.preview.addComponent(new UIVideoFrame(vertexUVPairs, videoFrame));
   }
 
+  protected boolean inDrawLoop;
+  private final List<LXLoopTask> drawLoopTasks = new ArrayList<LXLoopTask>();
+  private final List<LXLoopTask> drawLoopTasksToRemove = new ArrayList<LXLoopTask>();
+  private final List<LXLoopTask> drawLoopTasksToAdd = new ArrayList<LXLoopTask>();
+
+  /**
+   * Add a task to be performed on every loop of draw().
+   *
+   * Can't be called from within a draw loop task, see
+   * scheduleDrawLoopTask
+   *
+   * @param drawLoopTask Task to be performed on every UI frame
+   * @return this
+   */
+  public LXStudioApp addDrawLoopTask(LXLoopTask drawLoopTask) {
+    drawLoopTasks.add(drawLoopTask);
+    return this;
+  }
+
+  /**
+   * Remove a draw loop task
+   *
+   * Can't be called from within a draw loop task, see
+   * scheduleDrawLoopTaskRemoval
+   *
+   * @param drawLoopTask Task to be removed from work list
+   * @return this
+   */
+  public LXStudioApp removeDrawLoopTask(LXLoopTask drawLoopTask) {
+    drawLoopTasks.remove(drawLoopTask);
+    return this;
+  }
+
+  /**
+   * Schedule a task to be added to the draw loop tasks after the loop
+   *
+   * unlike addDrawLoopTask, this is safe to call from a loop task
+   *
+   * @param drawLoopTask Task to be removed from work list
+   * @return this
+   */
+  public LXStudioApp scheduleDrawLoopTask(LXLoopTask drawLoopTask) {
+    drawLoopTasksToAdd.add(drawLoopTask);
+    return this;
+  }
+
+  /**
+   * Schedule a task to be removed the draw loop tasks
+   *
+   * unlike removeDrawLoopTask, this is safe to call from a loop task
+   *
+   * @param drawLoopTask Task to be removed from work list
+   * @return this
+   */
+  public LXStudioApp scheduleDrawLoopTaskRemoval(LXLoopTask drawLoopTask) {
+    drawLoopTasksToRemove.add(drawLoopTask);
+    return this;
+  }
+
+  /**
+   * Schedule a task to be run once in the draw loop, disposes the task.
+   *
+   * unlike removeDrawLoopTask, this is safe to call from a loop task
+   *
+   * @param drawLoopTask Task to be removed from work list
+   * @return this
+   */
+  public LXStudioApp scheduleDrawLoopTaskOnce(LXLoopTask drawLoopTask) {
+    LXLoopTask oneOffTask = new LXLoopTask() {
+      @Override
+      public void loop(double deltaMs) {
+        drawLoopTask.loop(deltaMs);
+        scheduleDrawLoopTaskRemoval(this);
+      }
+    };
+    scheduleDrawLoopTask(oneOffTask);
+    return this;
+  }
+
   @Override
   public void draw() {
     // All handled by core LX engine, do not modify, method exists only so that
     // Processing will run a draw-loop.
-    if (movie != null && movie.available()) {
-      movie.read();
-      videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0, movie.width,
-        movie.height);
-    } else if (screenCapRectangle != null) {
-      PImage screenBuffer = new PImage(
-        robot.createScreenCapture(screenCapRectangle));
-      videoFrame.copy(screenBuffer, 0, 0, screenBuffer.width,
-        screenBuffer.height, 0, 0, screenBuffer.width, screenBuffer.height);
+    for (LXLoopTask drawLoopTask : this.drawLoopTasksToAdd) {
+      addDrawLoopTask(drawLoopTask);
     }
+    drawLoopTasksToAdd.clear();
+    for (LXLoopTask drawLoopTask : this.drawLoopTasks) {
+      drawLoopTask.loop(0.f);
+    }
+    for (LXLoopTask drawLoopTask : this.drawLoopTasksToRemove) {
+      removeDrawLoopTask(drawLoopTask);
+    }
+    drawLoopTasksToRemove.clear();
   }
 
   /**

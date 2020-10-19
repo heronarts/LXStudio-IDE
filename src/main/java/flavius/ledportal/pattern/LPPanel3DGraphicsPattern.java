@@ -11,7 +11,6 @@ import heronarts.lx.app.LXStudioApp;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.p3lx.P3LX;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -80,17 +79,19 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
   public final CompoundParameter xScanFuckery = new CompoundParameter("X-Scan",
     0, 0, 1)
       .setDescription("Sets the amount of fuckery in the x axis when scanning")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter yScanFuckery = new CompoundParameter("Y-Scan",
     0, 0, 1)
       .setDescription("Sets the amount of fuckery in the y axis when scanning")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter pScanFuckery = new CompoundParameter("F-Scan",
     0, 0, 1)
       .setDescription("Sets the period (inv of freq) of fuckery when scanning")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public static boolean modelWarningFired = false;
 
   public LPPanel3DGraphicsPattern(LX lx) {
     super(lx);
@@ -117,11 +118,16 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
     renderTask = new LXLoopTask() {
       @Override
       public void loop(double deltaMs) {
-        if(!LPPanelModel.class.isInstance(getModel())) {
-          logger.warning(String.format("model is not an LPPanelModel: %s", model.toString()));
-          return;
-        }
-        synchronized(LPPanel3DGraphicsPattern.class) {
+        synchronized (LPPanel3DGraphicsPattern.class) {
+          if (!LPPanelModel.class.isInstance(getModel())) {
+            if(!modelWarningFired) {
+              logger.warning(String.format(
+                "This pattern only works with LPPanelFixture or LPPanelModel models, not %s",
+                model.toString()));
+              modelWarningFired = true;
+            }
+            return;
+          }
           beforeDraw(pg);
           pg.beginDraw();
           onDraw(pg);
@@ -133,27 +139,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
       }
     };
 
-    synchronized(LPPanel3DGraphicsPattern.class) {
-      ((P3LX)lx).ui.addLoopTask(renderTask);
-    }
-
-    LXLoopTask pgGarbageCollector = new LXLoopTask() {
-      @Override
-      /**
-       * Gotta schedule the disposal of pg in the UI thread otherwise segfaults happen!
-       */
-      public void loop(double deltaMs) {
-        synchronized(LPPanel3DGraphicsPattern.class) {
-          if(pgNeedsDisposal) {
-            pg.dispose();
-            pgNeedsDisposal = false;
-          }
-        }
-      }
-    };
-    synchronized(LPPanel3DGraphicsPattern.class) {
-      ((P3LX)lx).ui.addLoopTask(pgGarbageCollector);
-    }
+    LXStudioApp.instance.scheduleDrawLoopTask(renderTask);
   }
 
   public void refreshFont() {
@@ -161,8 +147,16 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
   }
 
   public void disposePG() {
-    if(PGraphicsOpenGL.class.isInstance(this.pg)) {
-      pgNeedsDisposal = true;
+    if (PGraphicsOpenGL.class.isInstance(this.pg)) {
+      synchronized (LPPanel3DGraphicsPattern.class) {
+        LXLoopTask pgDisposalTask = new LXLoopTask() {
+          @Override
+          public void loop(double deltaMs) {
+            pg.dispose();
+          }
+        };
+        LXStudioApp.instance.scheduleDrawLoopTaskOnce(pgDisposalTask);
+      }
       return;
     }
     this.pg.dispose();
@@ -188,8 +182,8 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
 
   @Override
   public void dispose() {
-    synchronized(LPPanel3DGraphicsPattern.class) {
-      ((P3LX)this.lx).ui.removeLoopTask(this.renderTask);
+    synchronized (LPPanel3DGraphicsPattern.class) {
+      LXStudioApp.instance.scheduleDrawLoopTaskRemoval(this.renderTask);
     }
     super.dispose();
     this.disposePG();
