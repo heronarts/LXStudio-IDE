@@ -8,31 +8,31 @@ import flavius.ledportal.LPPanelModel.Point;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.app.LXStudioApp;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
-import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PImage;
-import processing.opengl.PGraphicsOpenGL;
 
 /**
  * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed
  * grid pattern
  */
-public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
+public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
   PImage frame;
   boolean frameReady = false;
   boolean pgNeedsDisposal = false;
   PFont font;
   double totalMs;
-  PApplet applet;
   PGraphics pg;
   LXLoopTask renderTask;
   int frameSize;
   String mediaPrefix;
   String fontPrefix;
+
+  public final String renderer = PGraphics.P3D;
 
   protected static final Logger logger = Logger
     .getLogger(LPPanel3DGraphicsPattern.class.getName());
@@ -91,8 +91,6 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
       .setDescription("Sets the period (inv of freq) of fuckery when scanning")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
-  public static boolean modelWarningFired = false;
-
   public LPPanel3DGraphicsPattern(LX lx) {
     super(lx);
 
@@ -114,20 +112,15 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
     }
 
     refreshFont();
+    scheduleRenderTask();
+  }
 
+  public void scheduleRenderTask() {
     renderTask = new LXLoopTask() {
       @Override
       public void loop(double deltaMs) {
         synchronized (LPPanel3DGraphicsPattern.class) {
-          if (!LPPanelModel.class.isInstance(getModel())) {
-            if(!modelWarningFired) {
-              logger.warning(String.format(
-                "This pattern only works with LPPanelFixture or LPPanelModel models, not %s",
-                model.toString()));
-              modelWarningFired = true;
-            }
-            return;
-          }
+          getModel();
           beforeDraw(pg);
           pg.beginDraw();
           onDraw(pg);
@@ -143,41 +136,44 @@ public class LPPanel3DGraphicsPattern extends LPPanelStructurePattern {
   }
 
   public void refreshFont() {
-    font = this.applet.createFont(fontPrefix + "uni0553-webfont.ttf", 8);
+    font = LXStudioApp.instance.createFont(fontPrefix + "uni0553-webfont.ttf",
+      8);
   }
 
   public void disposePG() {
-    if (PGraphicsOpenGL.class.isInstance(this.pg)) {
-      synchronized (LPPanel3DGraphicsPattern.class) {
-        LXLoopTask pgDisposalTask = new LXLoopTask() {
-          @Override
-          public void loop(double deltaMs) {
-            pg.dispose();
-          }
-        };
-        LXStudioApp.instance.scheduleDrawLoopTaskOnce(pgDisposalTask);
+    LXLoopTask disposalTask = new LXLoopTask() {
+      @Override
+      public void loop(double deltaMs) {
+        if (pg != null) {
+          pg.dispose();
+          pg = null;
+        }
       }
-      return;
-    }
-    this.pg.dispose();
+    };
+    LXStudioApp.instance.scheduleDrawLoopTaskOnce(disposalTask);
+  }
+
+  public void resize(int width, int height) {
+    LXLoopTask resizeTask = new LXLoopTask() {
+      @Override
+      public void loop(double deltaMs) {
+        if (pg != null)
+          pg.dispose();
+        pg = LXStudioApp.instance.createGraphics(width, height, renderer);
+        frame = new PImage(pg.width, pg.height);
+        frameSize = Math.max(pg.width, pg.height);
+      }
+    };
+    LXStudioApp.instance.scheduleDrawLoopTaskOnce(resizeTask);
   }
 
   @Override
   public void beforeUpdateModel(LPPanelModel newModel) {
-    if (this.applet == null)
-      this.applet = LXStudioApp.instance;
-    if (this.pg != null) {
-      if (this.pg.width != newModel.width + 1
-        || this.pg.height != newModel.height + 1) {
-        this.disposePG();
-      } else {
-        return;
-      }
+    if (pg != null && pg.width == newModel.width + 1
+      && pg.height == newModel.height + 1) {
+      return;
     }
-    this.pg = this.applet.createGraphics(newModel.width + 1,
-      newModel.height + 1, PGraphics.P3D);
-    this.frame = new PImage(this.pg.width, this.pg.height);
-    this.frameSize = Math.max(this.pg.width, this.pg.height);
+    resize(newModel.width + 1, newModel.height + 1);
   }
 
   @Override

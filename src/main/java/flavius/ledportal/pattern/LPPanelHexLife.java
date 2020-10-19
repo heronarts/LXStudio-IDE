@@ -28,7 +28,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.utils.LXUtils;
 
 @LXCategory(LXCategory.FORM)
-public class LPPanelHexLife extends LPPanelStructurePattern {
+public class LPPanelHexLife extends LPPanelModelPattern {
 
   private enum CellState {
     DEAD, BIRTHING, ALIVE, DYING

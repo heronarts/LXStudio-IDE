@@ -1,6 +1,7 @@
 package flavius.ledportal.pattern;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import flavius.ledportal.LPPanelModel;
 import heronarts.lx.LX;
@@ -14,13 +15,16 @@ import heronarts.lx.pattern.LXModelPattern;
  * @param <T> Type of LXModel class that is always expected
  */
 // public abstract class LPPanelStructurePattern extends LXPattern {
-public abstract class LPPanelStructurePattern
+public abstract class LPPanelModelPattern
   extends LXModelPattern<LPPanelModel> {
   protected LXModel structureModel;
 
-  protected LPPanelStructurePattern(LX lx) {
+  protected static final Logger logger = Logger
+    .getLogger(LPPanelModelPattern.class.getName());
+
+  protected LPPanelModelPattern(LX lx) {
     super(lx);
-    this.getModel();
+    getModel();
   }
 
   public void beforeUpdateModel(LPPanelModel newModel) {
@@ -33,24 +37,27 @@ public abstract class LPPanelStructurePattern
   @Override
   public LPPanelModel getModel() {
     LXModel newStructureModel = lx.structure.getModel();
-    if (isLPPanelModel(this.model)
-      && newStructureModel == this.structureModel) {
-      return this.model;
+    if (isLPPanelModel(model) && newStructureModel == structureModel) {
+      return model;
     }
-    structureModel = newStructureModel;
-    LXModel[] fixtureModels = structureModel.children;
-    LPPanelModel[] childModels = Arrays.stream(fixtureModels)
+    LPPanelModel[] childModels = Arrays.stream(newStructureModel.children)
       .filter(model -> LPPanelModel.class.isInstance(model))
       .map(model -> (LPPanelModel) (model)).toArray(LPPanelModel[]::new);
+    if (childModels.length == 0 && newStructureModel.children.length != 0) {
+      logger.warning(String.format(
+        "This pattern only works with LPPanelModels, none found in %s",
+        newStructureModel.toString()));
+    }
+    structureModel = newStructureModel;
     LPPanelModel newModel = new LPPanelModel(childModels);
     if (!(newModel.width > 0 && newModel.height > 0)) {
       throw new IllegalArgumentException(
         "model must have nonzero width and height");
     }
     if (newModel != this.model) {
-      this.beforeUpdateModel(newModel);
-      this.model = newModel;
+      beforeUpdateModel(newModel);
+      model = newModel;
     }
-    return this.model;
+    return model;
   }
 }

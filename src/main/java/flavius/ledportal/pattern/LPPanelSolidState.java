@@ -1,6 +1,7 @@
 package flavius.ledportal.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.app.LXStudioApp;
 import heronarts.lx.color.LXColor;
 import processing.core.PGraphics;
 import processing.core.PMatrix3D;
@@ -27,7 +28,7 @@ public class LPPanelSolidState extends LPPanel3DGraphicsPattern {
 
   @Override
   public void refreshFont() {
-    font = this.applet.createFont(fontPrefix + "Solid-State.ttf", 96);
+    font = LXStudioApp.instance.createFont(fontPrefix + "Solid-State.ttf", 96);
   }
 
   @Override

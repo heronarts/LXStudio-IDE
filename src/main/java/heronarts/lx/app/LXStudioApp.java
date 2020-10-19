@@ -119,8 +119,11 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     flags.startMultiThreaded = true;
     flags.mediaPath = System.getProperty("user.dir");
     studio = new LXStudio(this, flags);
-    this.surface.setTitle(WINDOW_TITLE);
+    surface.setTitle(WINDOW_TITLE);
+    addVideoFrameDrawLoopTask();
+  }
 
+  public void addVideoFrameDrawLoopTask() {
     LXLoopTask videoFrameTask = new LXLoopTask() {
       @Override
       public void loop(double deltaMs) {
