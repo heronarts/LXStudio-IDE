@@ -7,7 +7,7 @@
       "command": "mvn",
       "args": [
         "compiler:compile",
-        "assembly:single",
+        "assembly:single"
       ]
     },
     {
@@ -17,14 +17,21 @@
       "args": [
         "-cp",
         "target/lxstudio-ide-0.2.1-SNAPSHOT-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar",
-        "heronarts.lx.app.LXStudioApp",
+        "heronarts.lx.app.LXStudioApp"
       ],
-      "dependsOn": ["mvn compile assemble"],
+      "dependsOn": [
+        "mvn compile assemble"
+      ],
       "options": {
         "env": {
           "JAVA_HOME": "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
         }
       },
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }
