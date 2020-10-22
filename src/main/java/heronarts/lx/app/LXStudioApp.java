@@ -96,6 +96,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
    * @param args Command-line arguments
    */
   public static void main(String[] args) {
+    LX.log("Initializing LX version " + LXStudio.VERSION);
     boolean headless = false;
     File projectFile = null;
     for (int i = 0; i < args.length; ++i) {
