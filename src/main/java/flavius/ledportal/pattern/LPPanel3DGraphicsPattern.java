@@ -1,6 +1,5 @@
 package flavius.ledportal.pattern;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import flavius.ledportal.LPPanelModel;
@@ -8,111 +7,145 @@ import flavius.ledportal.LPPanelModel.Point;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.app.LXStudioApp;
-import heronarts.lx.model.LXModel;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
-import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.core.PMatrix2D;
 
 /**
- * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed
- * grid pattern
+ * Draw a PGraphics.P3D-rendered pattern directly to a panel where pixels are
+ * arranged in a fixed grid pattern
  */
+// TODO: rename LPPanelGraphicsPattern
 public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
-  PImage frame;
-  boolean frameReady = false;
-  boolean pgNeedsDisposal = false;
-  PFont font;
-  double totalMs;
+  /**
+   * A graphics object perfectly aligned with the grid of an LPPanelModel to
+   * which animations are written during a render which must occur in UI thread.
+   */
   PGraphics pg;
-  LXLoopTask renderTask;
+  /**
+   * The most recently rendered frame.
+   */
+  PImage frame;
+  /**
+   * Signals that a render task is complete, and a frame is ready to be written
+   * to indexBuffers
+   */
+  boolean frameReady = false;
+  /**
+   * The maximum of the current frame's width and height
+   */
   int frameSize;
-  String mediaPrefix;
-  String fontPrefix;
+  /**
+   * Sum of all deltaMs seen by calls to run()
+   */
+  double totalMs;
+  /**
+   * loop task to render animation to pg in the UI thread.
+   */
+  LXLoopTask renderTask;
 
   public final String renderer = PGraphics.P3D;
 
   protected static final Logger logger = Logger
     .getLogger(LPPanel3DGraphicsPattern.class.getName());
 
+  public final CompoundParameter fov //
+    = new CompoundParameter("fov", Math.PI/4, Math.PI/8, Math.PI)
+      .setDescription("The camera field of view");
+
+  public final CompoundParameter depth //
+    = new CompoundParameter("depth", 3, 1, 10)
+      .setDescription("The camera depth");
+
+  public final CompoundParameter xOffset //
+    = new CompoundParameter("X-Off", 0, -2, 2)
+      .setDescription("The foreground placement in the X axis")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final CompoundParameter yOffset //
+    = new CompoundParameter("Y-Off", 0, -2, 2)
+      .setDescription("The foreground placement in the Y axis")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final CompoundParameter zOffset //
+    = new CompoundParameter("Z-Off", 0, -2, 2)
+      .setDescription("The foreground placement in the Z axis")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final CompoundParameter xRotate //
+    = new CompoundParameter("X-Rot", 0, -1, 1)
+      .setDescription("The foreground rotation about the X axis")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final CompoundParameter yRotate //
+    = new CompoundParameter("Y-Rot", 0, -1, 1)
+      .setDescription("The foreground rotation about the Y axis")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final CompoundParameter zRotate //
+    = new CompoundParameter("Z-Rot", 0, -1, 1)
+      .setDescription("The foreground rotation about the Z axis")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final CompoundParameter scale //
+    = new CompoundParameter("Scale", 1, 0, 2).setDescription("The foreground Scale")
+    .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final DiscreteParameter beats //
+    = new DiscreteParameter("Beats", 4, 1, 16)
+      .setDescription("The number of beats between a letter change");
+
+  public final CompoundParameter xScanFuckery //
+    = new CompoundParameter("X-Scan", 0, 0, 1)
+      .setDescription("The amount of fuckery in the x axis when scanning")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final CompoundParameter yScanFuckery //
+    = new CompoundParameter("Y-Scan", 0, 0, 1)
+      .setDescription("The amount of fuckery in the y axis when scanning")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final CompoundParameter pScanFuckery //
+    = new CompoundParameter("F-Scan", 0, 0, 1)
+      .setDescription("The period (inv of freq) of fuckery when scanning")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public final CompoundParameter xShear //
+    = new CompoundParameter("X-Shear", -0.5, -2, 2)
+      .setDescription("The shear of the foreground X axis with increasing Y")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
+  public LPPanel3DGraphicsPattern(LX lx) {
+    super(lx);
+    scheduleRenderTask();
+  }
+
+
   public void beforeDraw(PGraphics pg) {
+    if (pg == null) {
+      return;
+    }
+    final float fov = this.fov.getValuef();
+    final float depth = this.depth.getValuef();
+    int pgSize = Math.max(pg.width, pg.height);
+    float cameraZ = (float) (pgSize / Math.tan(fov / 2.0f));
+    pg.camera( //
+      0, 0, cameraZ * depth, //
+      0, 0, 0, //
+      0, 1, 0 //
+    );
+    pg.perspective(fov, (float) (pg.width / pg.height), cameraZ / (depth * depth),
+      cameraZ * (depth * depth));
   }
 
   public void onDraw(PGraphics pg) {
   }
 
   public void afterDraw(PGraphics pg) {
-  }
-
-  public final CompoundParameter xOffset = new CompoundParameter("X-Off", 0, -2,
-    2).setDescription("Sets the placement in the X axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter yOffset = new CompoundParameter("Y-Off", 0, -2,
-    2).setDescription("Sets the placement in the Y axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter zOffset = new CompoundParameter("Z-Off", 0, -2,
-    2).setDescription("Sets the placement in the Z axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter xRotate = new CompoundParameter("X-Rot", 0, -1,
-    1).setDescription("Sets the rotation about the X axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter yRotate = new CompoundParameter("Y-Rot", 0, -1,
-    1).setDescription("Sets the rotation about the Y axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter zRotate = new CompoundParameter("Z-Rot", 0, -1,
-    1).setDescription("Sets the rotation about the Z axis")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter scale = new CompoundParameter("Size", 1, 0, 20)
-    .setDescription("Sets the size");
-
-  public final DiscreteParameter beats = new DiscreteParameter("Beats", 4, 1,
-    16).setDescription("The number of beats between a letter change");
-
-  public final CompoundParameter xScanFuckery = new CompoundParameter("X-Scan",
-    0, 0, 1)
-      .setDescription("Sets the amount of fuckery in the x axis when scanning")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter yScanFuckery = new CompoundParameter("Y-Scan",
-    0, 0, 1)
-      .setDescription("Sets the amount of fuckery in the y axis when scanning")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public final CompoundParameter pScanFuckery = new CompoundParameter("F-Scan",
-    0, 0, 1)
-      .setDescription("Sets the period (inv of freq) of fuckery when scanning")
-      .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-  public LPPanel3DGraphicsPattern(LX lx) {
-    super(lx);
-
-    fontPrefix = "Content/fonts/";
-    try {
-      fontPrefix = lx.getMediaFolder(LX.Media.CONTENT).getCanonicalPath()
-        + "/fonts/";
-    } catch (IOException e) {
-      logger
-        .severe(String.format("could not get fontPrefix: %s", e.toString()));
-    }
-    mediaPrefix = "Content/media/";
-    try {
-      mediaPrefix = lx.getMediaFolder(LX.Media.CONTENT).getCanonicalPath()
-        + "/media/";
-    } catch (IOException e) {
-      logger
-        .severe(String.format("could not get mediaPrefix: %s", e.toString()));
-    }
-
-    refreshFont();
-    scheduleRenderTask();
   }
 
   public void scheduleRenderTask() {
@@ -126,8 +159,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
           onDraw(pg);
           pg.endDraw();
           afterDraw(pg);
-          frame.set(0, 0, pg.get());
-          frameReady = true;
+          refreshFrame();
         }
       }
     };
@@ -135,33 +167,49 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     LXStudioApp.instance.scheduleDrawLoopTask(renderTask);
   }
 
-  public void refreshFont() {
-    font = LXStudioApp.instance.createFont(fontPrefix + "uni0553-webfont.ttf",
-      8);
+  /**
+   * copy the graphics object to fame
+   */
+  protected void refreshFrame() {
+    synchronized (LPPanel3DGraphicsPattern.class) {
+      if (pg == null) {
+        return;
+      }
+      frame.set(0, 0, pg.get());
+      frameReady = true;
+    }
   }
 
-  public void disposePG() {
+  protected void _disposePG() {
+    if (pg != null) {
+      pg.dispose();
+      pg = null;
+    }
+  }
+
+  public void scheduleDisposePG() {
     LXLoopTask disposalTask = new LXLoopTask() {
       @Override
       public void loop(double deltaMs) {
-        if (pg != null) {
-          pg.dispose();
-          pg = null;
-        }
+        _disposePG();
       }
     };
     LXStudioApp.instance.scheduleDrawLoopTaskOnce(disposalTask);
   }
 
-  public void resize(int width, int height) {
+  protected void _resize(int width, int height) {
+    if (pg != null)
+      pg.dispose();
+    pg = LXStudioApp.instance.createGraphics(width, height, renderer);
+    frame = new PImage(pg.width, pg.height);
+    frameSize = Math.max(pg.width, pg.height);
+  }
+
+  public void scheduleResize(int width, int height) {
     LXLoopTask resizeTask = new LXLoopTask() {
       @Override
       public void loop(double deltaMs) {
-        if (pg != null)
-          pg.dispose();
-        pg = LXStudioApp.instance.createGraphics(width, height, renderer);
-        frame = new PImage(pg.width, pg.height);
-        frameSize = Math.max(pg.width, pg.height);
+        _resize(width, height);
       }
     };
     LXStudioApp.instance.scheduleDrawLoopTaskOnce(resizeTask);
@@ -173,7 +221,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       && pg.height == newModel.height + 1) {
       return;
     }
-    resize(newModel.width + 1, newModel.height + 1);
+    scheduleResize(newModel.width + 1, newModel.height + 1);
   }
 
   @Override
@@ -182,12 +230,73 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       LXStudioApp.instance.scheduleDrawLoopTaskRemoval(this.renderTask);
     }
     super.dispose();
-    this.disposePG();
+    this.scheduleDisposePG();
+  }
+
+  public void applyBackground(int colour) {
+    pg.background(colour);
+  }
+
+  public void applyBackground() {
+    applyBackground(LXColor.BLACK);
+  }
+
+  public void applyShear() {
+    final float xShear = this.xShear.getValuef();
+    pg.applyMatrix(new PMatrix2D( //
+      1.f, xShear, 0.f, //
+      0.f, 1.f, 0.f //
+    )); ///
+  }
+
+  public void applyRotation() {
+    final float xRotate = this.xRotate.getValuef();
+    final float yRotate = this.yRotate.getValuef();
+    final float zRotate = this.zRotate.getValuef();
+    pg.rotateX((float) Math.PI * xRotate);
+    pg.rotateY((float) Math.PI * yRotate);
+    pg.rotateZ((float) Math.PI * zRotate);
+  }
+
+  public void applyTranslation() {
+    final float xOffset = this.xOffset.getValuef();
+    final float yOffset = this.yOffset.getValuef();
+    final float zOffset = this.zOffset.getValuef();
+    pg.translate( //
+      xOffset * model.width, //
+      yOffset * model.height, //
+      zOffset * Math.max(model.width, model.height));
+  }
+
+  public void applyScale() {
+    final float scale = (float) Math.pow(this.scale.getValue(), 2.d);
+    pg.scale(scale * frameSize);
+  }
+
+  public void applyForeground(PImage foreground) {
+    if (foreground == null) {
+      logger.warning("foreground is null");
+      return;
+    }
+    int foreSize = Math.max(foreground.width, foreground.height);
+    int foreHeight = foreground.height;
+    int foreWidth = foreground.width;
+    pg.noStroke();
+    pg.beginShape();
+    pg.texture(foreground);
+    float foreX = frameSize * foreWidth / foreSize / 2;
+    float foreY = frameSize * foreHeight / foreSize / 2;
+    pg.vertex(-foreX, -foreY, 0, 0, 0);
+    pg.vertex(foreX, -foreY, 0, foreWidth, 0);
+    pg.vertex(foreX, foreY, 0, foreWidth, foreHeight);
+    pg.vertex(-foreX, foreY, 0, 0, foreHeight);
+    pg.endShape();
   }
 
   @Override
   public void run(double deltaMs) {
     totalMs += deltaMs;
+    // TODO: is sync necessary?
     synchronized (LPPanel3DGraphicsPattern.class) {
       LPPanelModel.PanelMetrics metrics = ((LPPanelModel) (this
         .getModel())).metrics;

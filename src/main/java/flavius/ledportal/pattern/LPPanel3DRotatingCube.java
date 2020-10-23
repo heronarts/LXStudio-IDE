@@ -7,34 +7,36 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
+import heronarts.lx.parameter.LXParameter;
 import processing.core.PGraphics;
-import processing.core.PMatrix3D;
 import processing.core.PVector;
 
 /**
  * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed
  * grid pattern
  */
+// TODO: rename LPPanel3DRotatingGeometry
 public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
   int lineLength;
   List<PVector> vertices = new ArrayList<PVector>();
   List<int[]> edges = new ArrayList<int[]>();
 
-  public static float φ = (float)(1 + Math.sqrt(5))/2;
+  public static float φ = (float) (1 + Math.sqrt(5)) / 2;
 
-  public final CompoundParameter thicc =
-    new CompoundParameter("Thicc", 1, 0, 10)
-    .setDescription("Sets the thiccness of the cube lines");
+  public final CompoundParameter thicc = new CompoundParameter("Thicc", 0.5, 0, 1)
+    .setDescription("The thiccness of the polyhedron lines")
+    .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public enum Shape {
     CUBE, OCTAHEDRON, DODECAHEDRON
   };
 
-  public final EnumParameter<Shape> shape = new EnumParameter<LPPanel3DRotatingCube.Shape>("shape", Shape.CUBE);
+  public final EnumParameter<Shape> shape = new EnumParameter<LPPanel3DRotatingCube.Shape>(
+    "shape", Shape.CUBE);
 
   public LPPanel3DRotatingCube(LX lx) {
     super(lx);
-    lineLength = (int)(Math.min(model.width, model.height) * 0.8);
+    lineLength = (int) (Math.min(model.width, model.height) * 0.8);
 
     addParameter("xOffset", this.xOffset);
     addParameter("yOffset", this.yOffset);
@@ -42,12 +44,15 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
     addParameter("xRotate", this.xRotate);
     addParameter("yRotate", this.yRotate);
     addParameter("zRotate", this.zRotate);
-    addParameter("size", this.scale);
+    addParameter("xShear", this.xShear);
+    addParameter("scale", this.scale);
     addParameter("thicc", this.thicc);
     addParameter("shape", this.shape);
     addParameter("xScanFuckery", this.xScanFuckery);
     addParameter("yScanFuckery", this.yScanFuckery);
     addParameter("pScanFuckery", this.pScanFuckery);
+    addParameter("fov", this.fov);
+    addParameter("depth", this.depth);
 
     // youreACubeHarry();
     // youreADodecahedronHarry();
@@ -157,6 +162,7 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
     edges.add(new int[] { 3, 9 });
   }
 
+  @Override
   public void beforeDraw(final PGraphics pg) {
     super.beforeDraw(pg);
     pg.smooth(8);
@@ -164,49 +170,37 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
 
   @Override
   public void onDraw(final PGraphics pg) {
-    final float xOffset = this.xOffset.getValuef();
-    final float yOffset = this.yOffset.getValuef();
-    final float zOffset = this.zOffset.getValuef();
-    final float xRotate = this.xRotate.getValuef();
-    final float yRotate = this.yRotate.getValuef();
-    final float zRotate = this.zRotate.getValuef();
-    final float scale = this.scale.getValuef();
     final float thicc = this.thicc.getValuef();
     final Shape shape = this.shape.getEnum();
 
-    switch(shape) {
-      case CUBE:
-        youreACubeHarry();
-        break;
-      case DODECAHEDRON:
-        youreADodecahedronHarry();
-        break;
-      default:
-      case OCTAHEDRON:
-        youreAnOctahedronHarry();
-        break;
+    switch (shape) {
+    case CUBE:
+      youreACubeHarry();
+      break;
+    case DODECAHEDRON:
+      youreADodecahedronHarry();
+      break;
+    default:
+    case OCTAHEDRON:
+      youreAnOctahedronHarry();
+      break;
     }
 
     pg.pushMatrix();
-    pg.background(LXColor.BLACK);
+    applyBackground();
     pg.stroke(LXColor.WHITE);
-    pg.translate(xOffset * model.width, yOffset * model.height,
-      zOffset * Math.max(model.width, model.height));
-    pg.applyMatrix(new PMatrix3D(1.f, -0.5f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f,
-      0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f));
-    pg.rotateX((float) Math.PI * xRotate);
-    pg.rotateY((float) Math.PI * yRotate);
-    pg.rotateZ((float) Math.PI * zRotate);
+    final float weight = (float) (Math.pow(10, (double) (2 * (thicc - 0.5) - 2)));
+    applyScale();
+    applyTranslation();
+    applyShear();
+    applyRotation();
     pg.noFill();
-    pg.scale(scale);
-    final float weight = (float) Math.exp((double) (thicc - 5));
     pg.strokeWeight(weight);
-    // pg.strokeWeight(thicc * thicc);
-    for (int i = 0; i < edges.size(); i++) {
-      final PVector from = vertices.get(edges.get(i)[0]);
-      final PVector to = vertices.get(edges.get(i)[1]);
+    applyScale();
+    for (int[] edge : edges) {
+      final PVector from = vertices.get(edge[0]);
+      final PVector to = vertices.get(edge[1]);
       pg.line(from.x, from.y, from.z, to.x, to.y, to.z);
-      // logger.info(String.format("from %s to %s", from, to));
     }
     pg.popMatrix();
   }

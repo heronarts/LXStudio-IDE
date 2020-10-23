@@ -24,12 +24,14 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
+import java.lang.IllegalArgumentException;
 
 import flavius.ledportal.LPDecoration;
 import flavius.ledportal.LPMeshable;
@@ -55,6 +57,7 @@ import heronarts.p3lx.ui.UI.CoordinateSystem;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
@@ -68,28 +71,64 @@ import processing.video.Movie;
  */
 public class LXStudioApp extends PApplet implements LXPlugin {
 
+  // Window Settings
   private static final String WINDOW_TITLE = "LEDPortal";
-
   private static int WIDTH = 1280;
   private static int HEIGHT = 800;
   private static boolean FULLSCREEN = false;
 
   private static final Logger logger = Logger
     .getLogger(LXStudioApp.class.getName());
+
+  // TODO: make this false, and have patterns schedule prepareFOO()
+  private static boolean PREPARE_MEDIA = true;
+  // TODO: move the following fields to contentLibrary class, make hashmaps
+  // private
+  /**
+   * A list of image filenames to paths available to load from Content/images
+   */
+  public static HashMap<String, String> imageListing = new HashMap<String, String>();
+  /**
+   * A cache of PImage objects previously loaded from imageListing
+   */
+  public static HashMap<String, PImage> images = new HashMap<String, PImage>();
+  /**
+   * A map of video filenames to paths available to load from Content/videos
+   */
+  public static HashMap<String, String> videoListing = new HashMap<String, String>();
+  /**
+   * A hashmap of Movie objects previously loaded from Content/video
+   */
+  public static HashMap<String, Movie> videos = new HashMap<String, Movie>();
+  /**
+   * A list of font filenames to paths available to load from Content/fonts
+   */
+  public static HashMap<String, String> fontListing = new HashMap<String, String>();
+  /**
+   * A hashmap of PFont objects previously loaded from Content/fonts
+   */
+  public static HashMap<String, PFont> fonts = new HashMap<String, PFont>();
+
+  public static final int DEFAULT_FONT_SIZE = 96;
+
+  // TODO: Move these to individual video patterns
+  private Movie movie;
+  // TODO: Move these to individual screencap patterns
+  private Robot robot;
+  private GraphicsDevice activeScreen;
+  private Rectangle screenCapRectangle;
+  // TODO: deprecate LPSimConfig
   public static LPSimConfig config;
+  // TODO: deprecate videoFrame, use videos instead
   public static PImage videoFrame;
+  // TODO: move these metrics out of LXStudioApp
   public static PMatrix3D flattener;
   public static PMatrix3D unflattener;
   public static float[][] flatBounds;
   public static float[][] modelBounds;
+  // TODO: move these metrics out of LXStudioApp
   public static LXStudio studio;
   public static LXStudioApp instance;
-  public static HashMap<String, PImage> textures;
-
-  private Movie movie;
-  private Robot robot;
-  private GraphicsDevice activeScreen;
-  private Rectangle screenCapRectangle;
 
   @Override
   public void settings() {
@@ -162,28 +201,182 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
     lx.registry.addFixture(LPPanelFixture.class);
 
-    if (videoFrame == null)
-      initializeVideo(lx);
+    initializeImages(lx);
+    initializeVideos(lx);
+    initializeFonts(lx);
 
-    if (textures == null)
-      initializeTextures(lx);
+    if (videoFrame == null)
+      initializeVideoFrame(lx);
   }
 
-  void initializeVideo(LX lx) {
-    String mediaPrefix = "Content/media/";
+  // TODO: move the following functions to media.ContentLibrary class +
+  // subclasses
+  String getCanonicalContentPath(LX lx, String contentSubdirectory) {
+    String contentPath = String.format("Content/%s/", contentSubdirectory);
     try {
-      mediaPrefix = lx.getMediaFolder(Media.CONTENT).getCanonicalPath()
-        + "/media/";
+      contentPath = lx.getMediaFolder(Media.CONTENT).getCanonicalPath()
+        + String.format("/%s/", contentSubdirectory);
     } catch (IOException e) {
       logger
-        .severe(String.format("could not get mediaPrefix: %s", e.toString()));
+        .severe(String.format("failed to get media folder: %s", e.toString()));
     }
+    return contentPath;
+  }
+
+  String[] splitExt(String fileName) {
+    String[] result = fileName.split("\\.(?=[^\\.]+$)");
+    if(result.length > 0){
+      return result;
+    }
+    result = new String[] {fileName, ""};
+    // String[] result = new String[2];
+    // result[0] = fileName;
+    // result[1] = "";
+    // String[] name_tokens = fileName.split("\\.(?=[^\\.]+$)");
+    // if(name_tokens.length > 0) {
+    //   result[1] = name_tokens[name_tokens.length - 1];
+    //   result[0] = fileName.substring(0, fileName.length() - result[1].length() - 1);
+    // }
+    return result;
+  }
+
+  FileFilter getFileFilterForExtensions(List<String> extensions) {
+    return new FileFilter() {
+      @Override
+      public boolean accept(File file) {
+        return extensions.contains(splitExt(file.getName())[1]);
+      }
+    };
+  }
+
+  public void initializeImages(LX lx) {
+    String contentPath = getCanonicalContentPath(lx, "images");
+
+    File dir = new File(contentPath);
+    FileFilter filter = getFileFilterForExtensions(
+      Arrays.asList("gif", "jpg", "tga", "png"));
+    File[] directoryListing = dir.listFiles(filter);
+
+    if (directoryListing != null) {
+      for (File child : directoryListing) {
+        imageListing.put(child.getName(), child.getAbsolutePath());
+        if (PREPARE_MEDIA) {
+          prepareImage(child.getName());
+        }
+      }
+    }
+
+    logger.info(String.format("imageListing: %s", imageListing.keySet().toString()));
+  }
+
+  public PImage prepareImage(String name) {
+    PImage result = images.get(name);
+    if (result != null) {
+      return result;
+    }
+    String fullPath = imageListing.get(name);
+    if (fullPath == null) {
+      throw new IllegalArgumentException(String.format(
+        "name %s not in listing: %s", name, imageListing.keySet().toString()));
+    }
+
+    result = loadImage(fullPath);
+    images.put(name, result);
+    return result;
+  }
+
+  public void initializeVideos(LX lx) {
+    String contentPath = getCanonicalContentPath(lx, "videos");
+
+    File dir = new File(contentPath);
+    FileFilter filter = getFileFilterForExtensions(Arrays.asList("mov", "mp4"));
+    File[] directoryListing = dir.listFiles(filter);
+
+    if (directoryListing != null) {
+      for (File child : directoryListing) {
+        videoListing.put(child.getName(), child.getAbsolutePath());
+        if (PREPARE_MEDIA) {
+          prepareVideo(child.getName());
+        }
+      }
+    }
+
+    logger.info(String.format("videoListing: %s", videoListing.keySet().toString()));
+  }
+
+  public Movie prepareVideo(String name) {
+    Movie result = videos.get(name);
+    if (result != null) {
+      return result;
+    }
+    String fullPath = videoListing.get(name);
+    if (fullPath == null) {
+      throw new IllegalArgumentException(String.format(
+        "name %s not in listing: %s", name, videoListing.keySet().toString()));
+    }
+    result = new Movie(this, fullPath);
+    result.loop();
+    videos.put(name, result);
+    return result;
+  }
+
+  public Movie prepareVideo(String name, float volume) {
+    Movie result = prepareVideo(name);
+    result.volume(volume);
+    return result;
+  }
+
+  public void initializeFonts(LX lx) {
+    String contentPath = getCanonicalContentPath(lx, "fonts");
+
+    File dir = new File(contentPath);
+    FileFilter filter = getFileFilterForExtensions(Arrays.asList("ttf", "otf", "vlw"));
+    File[] directoryListing = dir.listFiles(filter);
+
+    if (directoryListing != null) {
+      for (File child : directoryListing) {
+        fontListing.put(child.getName(), child.getAbsolutePath());
+        if (PREPARE_MEDIA) {
+          prepareFont(child.getName());
+        }
+      }
+    }
+
+    logger.info(String.format("fontListing: %s", fontListing.keySet().toString()));
+  }
+
+  public PFont prepareFont(String name, int size) {
+    String fullPath = fontListing.get(name);
+    if (fullPath == null) {
+      throw new IllegalArgumentException(String.format(
+        "name %s not in listing: %s", name, fontListing.keySet().toString()));
+    }
+    String[] splitResult = splitExt(fullPath);
+    if(splitResult[1] != "vlw") {
+      name = String.join(".", String.format("%s-%d", splitResult[0], size), "vlw");
+    }
+    PFont result = fonts.get(name);
+    if (result != null) {
+      return result;
+    }
+    if(splitResult[1] != "vlw") {
+      result = createFont(fullPath, size);
+    } else {
+      result = loadFont(fullPath);
+    }
+    fonts.put(name, result);
+    return result;
+  }
+
+  public PFont prepareFont(String name) {
+    return prepareFont(name, DEFAULT_FONT_SIZE);
+  }
+
+  void initializeVideoFrame(LX lx) {
     if (config.activeImage != null) {
-      videoFrame = loadImage(mediaPrefix + config.activeImage);
+      videoFrame = prepareImage(config.activeImage);
     } else if (config.activeMovie != null) {
-      movie = new Movie(this, (mediaPrefix + config.activeMovie));
-      movie.loop();
-      movie.volume(config.movieVolume);
+      movie = prepareVideo(config.activeMovie, config.movieVolume);
       while (!movie.available())
         ;
       movie.read();
@@ -216,41 +409,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
         videoFrame.height));
   }
 
-  public void initializeTextures(LX lx) {
-    textures = new HashMap<String, PImage>();
-
-    String texturePrefix = "Content/textures/";
-    try {
-      texturePrefix = lx.getMediaFolder(Media.CONTENT).getCanonicalPath()
-        + "/textures/";
-    } catch (IOException e) {
-      logger
-        .severe(String.format("could not get texturePrefix: %s", e.toString()));
-    }
-
-    File dir = new File(texturePrefix);
-    File[] directoryListing = dir.listFiles();
-
-    List<String> imgExtensions = new ArrayList<String>();
-    imgExtensions.add("gif");
-    imgExtensions.add("jpg");
-    imgExtensions.add("tga");
-    imgExtensions.add("png");
-
-    if (directoryListing != null) {
-      for (File child : directoryListing) {
-        String[] name_tokens = child.getName().split("\\.(?=[^\\.]+$)");
-        String extension = name_tokens[name_tokens.length - 1];
-        if (!imgExtensions.contains(extension))
-          continue;
-        String name = String.join(".",
-          Arrays.copyOfRange(name_tokens, 0, name_tokens.length - 1));
-        logger.info(String.format("name %s, extension %s", name, extension));
-        textures.put(name, loadImage(child.getAbsolutePath()));
-      }
-    }
-  }
-
   public void initializeUI(LXStudio lx, LXStudio.UI ui) {
     // Here is where you may modify the initial settings of the UI before it is
     // fully built. Note that this will not be called in headless mode. Anything
@@ -263,8 +421,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     try {
       MethodUtils.invokeMethod(FieldUtils.readField(ui, "registry", true), true,
         "addUIFixtureControls", new Object[] { UIPanelFixture.class });
-      logger.info(String.format("ui.registry.fixtureControls: %s",
-        FieldUtils.readField(ui, "registry", true)));
+      // logger.info(String.format("ui.registry.fixtureControls: %s",
+      //   FieldUtils.readField(ui, "registry", true)));
     } catch (Exception e) {
       logger.warning(e.toString());
     }
@@ -289,7 +447,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   void onUIReadyMovie(LXStudio lx, LXStudio.UI ui) {
     if (videoFrame == null)
-      initializeVideo(lx);
+      initializeVideoFrame(lx);
     if (videoFrame == null)
       return;
 
@@ -318,7 +476,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     ui.preview.addComponent(new UIVideoFrame(vertexUVPairs, videoFrame));
   }
 
-  protected boolean inDrawLoop;
   private final List<LXLoopTask> drawLoopTasks = new ArrayList<LXLoopTask>();
   private final List<LXLoopTask> drawLoopTasksToRemove = new ArrayList<LXLoopTask>();
   private final List<LXLoopTask> drawLoopTasksToAdd = new ArrayList<LXLoopTask>();
@@ -326,8 +483,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   /**
    * Add a task to be performed on every loop of draw().
    *
-   * Can't be called from within a draw loop task, see
-   * scheduleDrawLoopTask
+   * Can't be called from within a draw loop task, see scheduleDrawLoopTask
    *
    * @param drawLoopTask Task to be performed on every UI frame
    * @return this

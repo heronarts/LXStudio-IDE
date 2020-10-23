@@ -1,7 +1,9 @@
 package flavius.ledportal.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.app.LXStudioApp;
 import heronarts.lx.color.LXColor;
+import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PMatrix2D;
 
@@ -10,11 +12,18 @@ import processing.core.PMatrix2D;
  * grid pattern
  */
 public class LPPanelBLM extends LPPanel3DGraphicsPattern {
+  PFont font;
 
   public LPPanelBLM(LX lx) {
     super(lx);
+    refreshFont();
   }
 
+  public void refreshFont() {
+    font = LXStudioApp.instance.prepareFont("uni0553-webfont.ttf", 8);
+  }
+
+  @Override
   public void beforeDraw(PGraphics pg) {
     super.beforeDraw(pg);
     pg.noSmooth();
@@ -26,17 +35,14 @@ public class LPPanelBLM extends LPPanel3DGraphicsPattern {
     pg.textFont(font);
     pg.textSize(8);
     pg.noStroke();
-    pg.background(LXColor.RED);
+    applyBackground(LXColor.RED);
     pg.fill(LXColor.BLACK);
     pg.rect(0, 0, model.width * 2, model.height/2);
     pg.textAlign(PGraphics.CENTER);
     pg.fill(LXColor.rgb(255, 255, 0));
     pg.translate(0.5f, 0.f);
     pg.text("BLM", Math.round(model.width/2 + 4), model.height);
-    pg.applyMatrix(new PMatrix2D(
-      1.f, -0.5f, 0.f,
-      0.f, 1.f, 0.f
-    ));
+    applyShear();
     pg.translate((float) model.width + 0.5f, model.height/2.f);
     pg.sphere(3.5f);
     pg.popMatrix();
