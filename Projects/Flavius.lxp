@@ -1,6 +1,6 @@
 {
   "version": "0.2.1-SNAPSHOT",
-  "timestamp": 1603432064407,
+  "timestamp": 1603603050525,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -2377,7 +2377,7 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 2,
+              "focusedPattern": 4,
               "triggerPatternCycle": false
             },
             "children": {},
@@ -2501,7 +2501,7 @@
               }
             ],
             "clips": [],
-            "patternIndex": 2,
+            "patternIndex": 4,
             "patterns": [
               {
                 "id": 1230,
@@ -2611,8 +2611,8 @@
                 },
                 "parameters": {
                   "label": "Mailian",
-                  "xOffset": 0.0,
-                  "yOffset": 0.5599999874830246,
+                  "xOffset": 0.11999999731779099,
+                  "yOffset": 0.0,
                   "zOffset": -0.8799999803304672,
                   "xRotate": -1.0,
                   "yRotate": -1.0,
@@ -2652,15 +2652,15 @@
                 },
                 "parameters": {
                   "label": "Flavius Wordart",
-                  "xOffset": 0.8399999812245369,
-                  "yOffset": 0.8399999812245369,
-                  "zOffset": -2.0,
+                  "xOffset": 0.1599999964237213,
+                  "yOffset": 0.0,
+                  "zOffset": 0.0,
                   "xRotate": 0.0,
                   "yRotate": 0.0,
                   "zRotate": 0.0,
                   "xShear": -0.5,
-                  "size": 0.5400000102818012,
-                  "texture": 12,
+                  "size": 0.5000000111758709,
+                  "texture": 13,
                   "fov": 0.7853981633974483,
                   "depth": 3.0
                 },
@@ -2693,21 +2693,63 @@
                 },
                 "parameters": {
                   "label": "Flavius Logo",
-                  "xOffset": 0.5999999865889549,
-                  "yOffset": 0.5799999870359898,
-                  "zOffset": -0.8799999803304672,
+                  "xOffset": 0.1599999964237213,
+                  "yOffset": 0.0,
+                  "zOffset": 0.0,
                   "xRotate": 0.0,
                   "yRotate": 1.0,
                   "zRotate": 0.0,
                   "xShear": -0.5,
-                  "size": 0.5200000107288361,
-                  "texture": 8,
+                  "size": 0.3800000138580799,
+                  "texture": 7,
                   "fov": 0.7853981633974483,
                   "depth": 3.0
                 },
                 "children": {
                   "modulation": {
                     "id": 10002302,
+                    "class": "heronarts.lx.modulation.LXModulationEngine",
+                    "internal": {
+                      "modulationColor": 0
+                    },
+                    "parameters": {
+                      "label": "Modulation"
+                    },
+                    "children": {},
+                    "modulators": [],
+                    "modulations": [],
+                    "triggers": []
+                  }
+                },
+                "deviceVersion": -1
+              },
+              {
+                "id": 10002791,
+                "class": "flavius.ledportal.pattern.LPPanelVideo",
+                "internal": {
+                  "modulationColor": 0,
+                  "expanded": true,
+                  "modulationExpanded": false,
+                  "autoCycleEligible": true
+                },
+                "parameters": {
+                  "label": "LPPanelVideo",
+                  "xOffset": 1.3199999704957008,
+                  "yOffset": 0.0,
+                  "zOffset": 0.0,
+                  "xRotate": 0.0,
+                  "yRotate": 0.0,
+                  "zRotate": 0.0,
+                  "xShear": -0.5,
+                  "size": 0.3800000138580799,
+                  "video": 2,
+                  "volume": 0.14999999664723873,
+                  "fov": 0.7853981633974483,
+                  "depth": 3.0
+                },
+                "children": {
+                  "modulation": {
+                    "id": 10002792,
                     "class": "heronarts.lx.modulation.LXModulationEngine",
                     "internal": {
                       "modulationColor": 0
@@ -2763,7 +2805,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.617193992092183
+            "basis": 0.03623712599317486
           },
           {
             "id": 535,
@@ -2790,7 +2832,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.4628954940691443
+            "basis": 0.02717784449488292
           },
           {
             "id": 722,
@@ -2817,7 +2859,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.4628954940691443
+            "basis": 0.02717784449488292
           },
           {
             "id": 993,
@@ -2880,7 +2922,7 @@
               "exp": 1.0
             },
             "children": {},
-            "basis": 0.8515819762765773
+            "basis": 0.10871137797953168
           }
         ],
         "modulations": [
@@ -3958,21 +4000,21 @@
               "attack": 0.0,
               "release": 100.0,
               "slope": 4.5,
-              "band-1": 0.4422119574500769,
-              "band-2": NaN,
-              "band-3": NaN,
-              "band-4": NaN,
-              "band-5": NaN,
-              "band-6": NaN,
-              "band-7": NaN,
-              "band-8": 0.9492634321304051,
-              "band-9": 0.7643546919624787,
-              "band-10": 0.7904004958860126,
-              "band-11": 0.8610700563807651,
-              "band-12": 0.8479607984826698,
-              "band-13": 0.7146885938727845,
-              "band-14": 0.7404865181140545,
-              "band-15": 0.7755849378395663,
+              "band-1": NaN,
+              "band-2": 0.46185169340492216,
+              "band-3": 0.47932996341472,
+              "band-4": 0.4883731363335654,
+              "band-5": 0.5917870700865473,
+              "band-6": 0.6999049380720048,
+              "band-7": 0.7316294150496259,
+              "band-8": 0.8263507633120755,
+              "band-9": NaN,
+              "band-10": NaN,
+              "band-11": 0.8493614168079683,
+              "band-12": NaN,
+              "band-13": NaN,
+              "band-14": NaN,
+              "band-15": NaN,
               "band-16": NaN
             },
             "children": {}
