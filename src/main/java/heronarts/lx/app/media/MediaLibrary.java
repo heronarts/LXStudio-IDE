@@ -13,8 +13,7 @@ import java.util.logging.Logger;
 public abstract class MediaLibrary<T> {
   protected HashMap<String, String> listing = new HashMap<String, String>();
   protected HashMap<String, T> media = new HashMap<String, T>();
-  // TODO: make this false, and have patterns schedule prepareFOO()
-  protected static final boolean PREPARE_MEDIA = true;
+  protected static final boolean PREPARE_MEDIA = false;
 
   private static final Logger logger = Logger
     .getLogger(MediaLibrary.class.getName());
@@ -70,7 +69,7 @@ public abstract class MediaLibrary<T> {
   }
 
   public String[] getNames(Predicate<String> predicate) {
-    String[] names = media.keySet().stream().filter(predicate).toArray(String[]::new);
+    String[] names = listing.keySet().stream().filter(predicate).toArray(String[]::new);
     return names;
   }
 

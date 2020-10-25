@@ -33,8 +33,6 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
 
     String[] videoNames = LXStudioApp.instance.videoLibrary.getNames();
     // String[] videoNames = LXStudioApp.instance.videoLibrary.getNames((String name) -> name.contains("Steamed"));
-    Arrays.stream(videoNames)
-      .forEach(name -> logger.info(String.format("videoName: %s", name)));
     if (videoNames.length == 0) {
       logger.warning("no videos available");
       video = new ObjectParameter<String>("video", new String[] { "" });
@@ -110,14 +108,6 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
     }
     foreground.copy(movie, 0, 0, movie.width, movie.height, 0, 0,
       foreground.width, foreground.height);
-
-    // TODO: delet this
-    // PImage test_broadcast = LXStudioApp.instance
-    // .imageLibrary.prepareMedia("test_broadcast.jpg");
-    // foreground.copy(test_broadcast, 0, 0, test_broadcast.width,
-    // test_broadcast.height, 0, 0,
-    // foreground.width, foreground.height);
-    // logger.info(String.format("first colour: %s", foreground.get(0, 0)));
   }
 
   public void scheduleRefreshVideoOnce() {
