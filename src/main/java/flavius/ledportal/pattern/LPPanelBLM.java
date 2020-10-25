@@ -19,7 +19,7 @@ public class LPPanelBLM extends LPPanel3DGraphicsPattern {
   }
 
   public void refreshFont() {
-    font = LXStudioApp.instance.prepareFont("uni0553-webfont.ttf", 8);
+    font = LXStudioApp.instance.fontLibrary.prepareMedia("uni0553-webfont.ttf", 8);
   }
 
   @Override

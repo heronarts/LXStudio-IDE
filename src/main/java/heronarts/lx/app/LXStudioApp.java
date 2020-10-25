@@ -24,29 +24,26 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
-import java.lang.IllegalArgumentException;
 
 import flavius.ledportal.LPDecoration;
 import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
+import flavius.ledportal.pattern.LPPanel3DRotatingCube;
+import flavius.ledportal.pattern.LPPanelBLM;
 import flavius.ledportal.pattern.LPPanelHexLife;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
-import flavius.ledportal.pattern.LPPanel3DRotatingCube;
-import flavius.ledportal.pattern.LPPanelBLM;
 import flavius.ledportal.structure.LPPanelFixture;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
-import heronarts.lx.LX.Media;
 import heronarts.lx.LXPlugin;
+import heronarts.lx.app.media.FontLibrary;
+import heronarts.lx.app.media.ImageLibrary;
+import heronarts.lx.app.media.VideoLibrary;
 import heronarts.lx.app.pattern.VideoFrame;
 import heronarts.lx.app.ui.UIAxes;
 import heronarts.lx.app.ui.UIPanelFixture;
@@ -58,7 +55,6 @@ import heronarts.p3lx.ui.UI.CoordinateSystem;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import processing.core.PApplet;
-import processing.core.PFont;
 import processing.core.PImage;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
@@ -81,36 +77,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   private static final Logger logger = Logger
     .getLogger(LXStudioApp.class.getName());
 
-  // TODO: make this false, and have patterns schedule prepareFOO()
-  private static boolean PREPARE_MEDIA = true;
-  // TODO: move the following fields to contentLibrary class, make hashmaps
-  // private
-  /**
-   * A list of image filenames to paths available to load from Content/images
-   */
-  public HashMap<String, String> imageListing = new HashMap<String, String>();
-  /**
-   * A cache of PImage objects previously loaded from imageListing
-   */
-  public HashMap<String, PImage> images = new HashMap<String, PImage>();
-  /**
-   * A map of video filenames to paths available to load from Content/videos
-   */
-  public HashMap<String, String> videoListing = new HashMap<String, String>();
-  /**
-   * A hashmap of Movie objects previously loaded from Content/video
-   */
-  public HashMap<String, Movie> videos = new HashMap<String, Movie>();
-  /**
-   * A list of font filenames to paths available to load from Content/fonts
-   */
-  public HashMap<String, String> fontListing = new HashMap<String, String>();
-  /**
-   * A hashmap of PFont objects previously loaded from Content/fonts
-   */
-  public HashMap<String, PFont> fonts = new HashMap<String, PFont>();
-
-  public static final int DEFAULT_FONT_SIZE = 96;
+  public ImageLibrary imageLibrary = new ImageLibrary();
+  public VideoLibrary videoLibrary = new VideoLibrary();
+  public FontLibrary fontLibrary = new FontLibrary();
 
   // TODO: Move these to individual video patterns
   private Movie movie;
@@ -205,179 +174,19 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
     lx.registry.addFixture(LPPanelFixture.class);
 
-    initializeImages(lx);
-    initializeVideos(lx);
-    initializeFonts(lx);
+    imageLibrary.init(lx);
+    videoLibrary.init(lx);
+    fontLibrary.init(lx);
 
     if (videoFrame == null)
       initializeVideoFrame(lx);
   }
 
-  // TODO: move the following functions to media.ContentLibrary class +
-  // subclasses
-  String getCanonicalContentPath(LX lx, String contentSubdirectory) {
-    String contentPath = String.format("Content/%s/", contentSubdirectory);
-    try {
-      contentPath = lx.getMediaFolder(Media.CONTENT).getCanonicalPath()
-        + String.format("/%s/", contentSubdirectory);
-    } catch (IOException e) {
-      logger
-        .severe(String.format("failed to get media folder: %s", e.toString()));
-    }
-    return contentPath;
-  }
-
-  String[] splitExt(String fileName) {
-    String[] result = fileName.split("\\.(?=[^\\.]+$)");
-    if (result.length > 0) {
-      return result;
-    }
-    result = new String[] { fileName, "" };
-    return result;
-  }
-
-  FileFilter getFileFilterForExtensions(List<String> extensions) {
-    return new FileFilter() {
-      @Override
-      public boolean accept(File file) {
-        return extensions.contains(splitExt(file.getName())[1]);
-      }
-    };
-  }
-
-  public void initializeImages(LX lx) {
-    String contentPath = getCanonicalContentPath(lx, "images");
-
-    File dir = new File(contentPath);
-    FileFilter filter = getFileFilterForExtensions(
-      Arrays.asList("gif", "jpg", "tga", "png"));
-    File[] directoryListing = dir.listFiles(filter);
-
-    if (directoryListing != null) {
-      for (File child : directoryListing) {
-        imageListing.put(child.getName(), child.getAbsolutePath());
-        if (PREPARE_MEDIA) {
-          prepareImage(child.getName());
-        }
-      }
-    }
-
-    logger.info(
-      String.format("imageListing: %s", imageListing.entrySet().toString()));
-  }
-
-  public PImage prepareImage(String name) {
-    PImage result = images.get(name);
-    if (result != null) {
-      return result;
-    }
-    String fullPath = imageListing.get(name);
-    if (fullPath == null) {
-      throw new IllegalArgumentException(String.format(
-        "name %s not in listing: %s", name, imageListing.keySet().toString()));
-    }
-
-    result = loadImage(fullPath);
-    images.put(name, result);
-    return result;
-  }
-
-  public void initializeVideos(LX lx) {
-    String contentPath = getCanonicalContentPath(lx, "videos");
-
-    File dir = new File(contentPath);
-    FileFilter filter = getFileFilterForExtensions(Arrays.asList("mov", "mp4"));
-    File[] directoryListing = dir.listFiles(filter);
-
-    if (directoryListing != null) {
-      for (File child : directoryListing) {
-        videoListing.put(child.getName(), child.getAbsolutePath());
-        if (PREPARE_MEDIA) {
-          prepareVideo(child.getName());
-        }
-      }
-    }
-
-    logger.info(
-      String.format("videoListing: %s", videoListing.entrySet().toString()));
-  }
-
-  public Movie prepareVideo(String name, float volume) {
-    Movie result = videos.get(name);
-    if (result != null) {
-      return result;
-    }
-    String fullPath = videoListing.get(name);
-    if (fullPath == null) {
-      throw new IllegalArgumentException(String.format(
-        "name %s not in listing: %s", name, videoListing.keySet().toString()));
-    }
-    result = new Movie(this, fullPath);
-    result.volume(volume);
-    result.loop();
-    result.volume(volume);
-    videos.put(name, result);
-    return result;
-  }
-
-  public Movie prepareVideo(String name) {
-    return prepareVideo(name, 0.0f);
-  }
-
-  public void initializeFonts(LX lx) {
-    String contentPath = getCanonicalContentPath(lx, "fonts");
-
-    File dir = new File(contentPath);
-    FileFilter filter = getFileFilterForExtensions(
-      Arrays.asList("ttf", "otf", "vlw"));
-    File[] directoryListing = dir.listFiles(filter);
-
-    if (directoryListing != null) {
-      for (File child : directoryListing) {
-        fontListing.put(child.getName(), child.getAbsolutePath());
-        if (PREPARE_MEDIA) {
-          prepareFont(child.getName());
-        }
-      }
-    }
-
-    logger.info(
-      String.format("fontListing: %s", fontListing.entrySet().toString()));
-  }
-
-  public PFont prepareFont(String name, int size) {
-    String fullPath = fontListing.get(name);
-    if (fullPath == null) {
-      throw new IllegalArgumentException(String.format(
-        "name %s not in listing: %s", name, fontListing.keySet().toString()));
-    }
-    String[] splitResult = splitExt(fullPath);
-    if (splitResult[1] != "vlw") {
-      name = String.join(".", String.format("%s-%d", splitResult[0], size),
-        "vlw");
-    }
-    PFont result = fonts.get(name);
-    if (result != null) {
-      return result;
-    }
-    if (splitResult[1] != "vlw") {
-      result = createFont(fullPath, size);
-    } else {
-      result = loadFont(fullPath);
-    }
-    fonts.put(name, result);
-    return result;
-  }
-
-  public PFont prepareFont(String name) {
-    return prepareFont(name, DEFAULT_FONT_SIZE);
-  }
-
   void initializeVideoFrame(LX lx) {
     if (config.activeImage != null) {
-      videoFrame = prepareImage(config.activeImage);
+      videoFrame = imageLibrary.prepareMedia(config.activeImage);
     } else if (config.activeMovie != null) {
-      movie = prepareVideo(config.activeMovie, config.movieVolume);
+      movie = videoLibrary.prepareMedia(config.activeMovie, config.movieVolume);
       while (!movie.available())
         ;
       movie.read();

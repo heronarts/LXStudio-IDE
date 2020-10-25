@@ -30,7 +30,7 @@ public class LPPanelSolidState extends LPPanel3DGraphicsPattern {
   }
 
   public void refreshFont() {
-    font = LXStudioApp.instance.prepareFont("Solid-State.ttf", 96);
+    font = LXStudioApp.instance.fontLibrary.prepareMedia("Solid-State.ttf", 96);
   }
 
   @Override

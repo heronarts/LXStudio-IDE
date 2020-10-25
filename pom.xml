@@ -58,7 +58,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.processing/video -->
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>video</artifactId>
@@ -82,7 +81,6 @@
 			<scope>system</scope>
       <systemPath>${basedir}/lib/video-1.0.1/jna.jar</systemPath>
     </dependency>
-		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.processing/serial -->
 		<dependency>

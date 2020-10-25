@@ -20,8 +20,7 @@ public class LPPanelTexture extends LPPanel3DGraphicsPattern {
   public LPPanelTexture(LX lx) {
     super(lx);
 
-    String[] textureNames = (String[]) LXStudioApp.instance.images.keySet()
-      .stream().toArray(String[]::new);
+    String[] textureNames = LXStudioApp.instance.imageLibrary.getNames();
     this.texture = new ObjectParameter<String>("texture", textureNames);
 
     addParameter("xOffset", this.xOffset);
@@ -48,7 +47,7 @@ public class LPPanelTexture extends LPPanel3DGraphicsPattern {
 
   public void refreshForeground() {
     String textureName = (String) this.texture.getObject();
-    foreground = LXStudioApp.instance.prepareImage(textureName);
+    foreground = LXStudioApp.instance.imageLibrary.prepareMedia(textureName);
   }
 
   @Override

@@ -31,18 +31,15 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
   public LPPanelVideo(LX lx) {
     super(lx);
 
-    String[] allVideoNames = (String[]) LXStudioApp.instance.videos.keySet()
-      .stream().toArray(String[]::new);
-    String[] filteredVideoNames = allVideoNames;
-    // String[] filteredVideoNames = Arrays.stream(allVideoNames)
-    //   .filter(name -> name.contains("Steamed")).toArray(String[]::new);
-    Arrays.stream(filteredVideoNames)
+    String[] videoNames = LXStudioApp.instance.videoLibrary.getNames();
+    // String[] videoNames = LXStudioApp.instance.videoLibrary.getNames((String name) -> name.contains("Steamed"));
+    Arrays.stream(videoNames)
       .forEach(name -> logger.info(String.format("videoName: %s", name)));
-    if (filteredVideoNames.length == 0) {
+    if (videoNames.length == 0) {
       logger.warning("no videos available");
       video = new ObjectParameter<String>("video", new String[] { "" });
     } else {
-      video = new ObjectParameter<String>("video", filteredVideoNames);
+      video = new ObjectParameter<String>("video", videoNames);
     }
 
     addParameter("xOffset", this.xOffset);
@@ -84,7 +81,7 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
     if (name == "") {
       return;
     }
-    Movie newMovie = LXStudioApp.instance.prepareVideo(name);
+    Movie newMovie = LXStudioApp.instance.videoLibrary.prepareMedia(name);
     if (movie != null && movie != newMovie) {
       logger.info(String.format("newMovie: %s", newMovie.toString()));
     }
@@ -116,7 +113,7 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
 
     // TODO: delet this
     // PImage test_broadcast = LXStudioApp.instance
-    // .prepareImage("test_broadcast.jpg");
+    // .imageLibrary.prepareMedia("test_broadcast.jpg");
     // foreground.copy(test_broadcast, 0, 0, test_broadcast.width,
     // test_broadcast.height, 0, 0,
     // foreground.width, foreground.height);
