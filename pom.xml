@@ -62,7 +62,26 @@
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>video</artifactId>
-			<version>3.3.7</version>
+			<version>1.0.1</version>
+			<scope>system</scope>
+      <systemPath>${basedir}/lib/video-1.0.1/video.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>org.gstreamer</groupId>
+			<artifactId>gstreamer-java</artifactId>
+			<version>1.0.1</version>
+			<scope>system</scope>
+      <systemPath>${basedir}/lib/video-1.0.1/gstreamer-java.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>jna</artifactId>
+			<version>4.2.0</version>
+			<scope>system</scope>
+      <systemPath>${basedir}/lib/video-1.0.1/jna.jar</systemPath>
+    </dependency>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.processing/serial -->

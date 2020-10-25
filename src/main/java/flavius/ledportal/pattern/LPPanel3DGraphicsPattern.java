@@ -278,18 +278,24 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       logger.warning("foreground is null");
       return;
     }
+    if(foreground.width == 0 || foreground.height == 0) {
+      logger.warning("foreground is zero-sized");
+      return;
+    }
     int foreSize = Math.max(foreground.width, foreground.height);
     int foreHeight = foreground.height;
     int foreWidth = foreground.width;
     pg.noStroke();
     pg.beginShape();
     pg.texture(foreground);
-    float foreX = frameSize * foreWidth / foreSize / 2;
-    float foreY = frameSize * foreHeight / foreSize / 2;
+    float foreX = frameSize * foreWidth / foreSize / 2.0f;
+    float foreY = frameSize * foreHeight / foreSize / 2.0f;
+    // pg.image(foreground, -foreX, -foreY, foreX * 2.0f, foreY * 2.0f );
     pg.vertex(-foreX, -foreY, 0, 0, 0);
     pg.vertex(foreX, -foreY, 0, foreWidth, 0);
     pg.vertex(foreX, foreY, 0, foreWidth, foreHeight);
     pg.vertex(-foreX, foreY, 0, 0, foreHeight);
+
     pg.endShape();
   }
 

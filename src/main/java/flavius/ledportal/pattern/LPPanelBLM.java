@@ -5,7 +5,6 @@ import heronarts.lx.app.LXStudioApp;
 import heronarts.lx.color.LXColor;
 import processing.core.PFont;
 import processing.core.PGraphics;
-import processing.core.PMatrix2D;
 
 /**
  * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed

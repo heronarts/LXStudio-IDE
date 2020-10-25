@@ -1,6 +1,7 @@
 package heronarts.lx.app.ui;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import flavius.ledportal.LPMeshable;
 import heronarts.p3lx.ui.UI;
@@ -13,6 +14,9 @@ public class UIVideoFrame extends UI3dComponent {
   public List<float[]> vertexUVPairs;
   public PImage videoFrame;
 
+  protected static final Logger logger = Logger
+    .getLogger(UIVideoFrame.class.getName());
+
   public UIVideoFrame(List<float[]> vertexUVPairs, PImage videoFrame) {
     this.vertexUVPairs = vertexUVPairs;
     this.videoFrame = videoFrame;
@@ -24,9 +28,16 @@ public class UIVideoFrame extends UI3dComponent {
     pg.noStroke();
     pg.beginShape();
     pg.tint(255, 126);
-    pg.texture(this.videoFrame);
-
-    for (float[] vertexUVPair : this.vertexUVPairs) {
+    if(videoFrame == null) {
+      logger.warning("videoFrame is null");
+      return;
+    }
+    pg.texture(videoFrame);
+    if(vertexUVPairs == null) {
+      logger.warning("vertexUVPairs is null");
+      return;
+    }
+    for (float[] vertexUVPair : vertexUVPairs) {
       PVector uiPosition = LPMeshable.worldUITransform(
         new PVector(vertexUVPair[0], vertexUVPair[1], vertexUVPair[2]));
       pg.vertex(uiPosition.x, uiPosition.y, uiPosition.z, vertexUVPair[3],

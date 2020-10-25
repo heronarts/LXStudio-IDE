@@ -16,7 +16,7 @@
       "command": "java",
       "args": [
         "-cp",
-        "target/lxstudio-ide-0.2.1-SNAPSHOT-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar",
+        "target/lxstudio-ide-0.2.1-SNAPSHOT-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar",
         "heronarts.lx.app.LXStudioApp"
       ],
       "dependsOn": [
@@ -24,7 +24,7 @@
       ],
       "options": {
         "env": {
-          "JAVA_HOME": "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+          "JAVA_HOME": "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home",
         }
       },
       "problemMatcher": [],

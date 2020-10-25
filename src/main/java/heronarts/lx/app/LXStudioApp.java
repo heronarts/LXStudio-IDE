@@ -39,6 +39,7 @@ import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.pattern.LPPanelHexLife;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
+import flavius.ledportal.pattern.LPPanelVideo;
 import flavius.ledportal.pattern.LPPanel3DRotatingCube;
 import flavius.ledportal.pattern.LPPanelBLM;
 import flavius.ledportal.structure.LPPanelFixture;
@@ -87,27 +88,27 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   /**
    * A list of image filenames to paths available to load from Content/images
    */
-  public static HashMap<String, String> imageListing = new HashMap<String, String>();
+  public HashMap<String, String> imageListing = new HashMap<String, String>();
   /**
    * A cache of PImage objects previously loaded from imageListing
    */
-  public static HashMap<String, PImage> images = new HashMap<String, PImage>();
+  public HashMap<String, PImage> images = new HashMap<String, PImage>();
   /**
    * A map of video filenames to paths available to load from Content/videos
    */
-  public static HashMap<String, String> videoListing = new HashMap<String, String>();
+  public HashMap<String, String> videoListing = new HashMap<String, String>();
   /**
    * A hashmap of Movie objects previously loaded from Content/video
    */
-  public static HashMap<String, Movie> videos = new HashMap<String, Movie>();
+  public HashMap<String, Movie> videos = new HashMap<String, Movie>();
   /**
    * A list of font filenames to paths available to load from Content/fonts
    */
-  public static HashMap<String, String> fontListing = new HashMap<String, String>();
+  public HashMap<String, String> fontListing = new HashMap<String, String>();
   /**
    * A hashmap of PFont objects previously loaded from Content/fonts
    */
-  public static HashMap<String, PFont> fonts = new HashMap<String, PFont>();
+  public HashMap<String, PFont> fonts = new HashMap<String, PFont>();
 
   public static final int DEFAULT_FONT_SIZE = 96;
 
@@ -155,6 +156,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     LXStudio.Flags flags = new LXStudio.Flags(this);
     flags.resizable = true;
     flags.useGLPointCloud = false;
+    // flags.startMultiThreaded = false;
     flags.startMultiThreaded = true;
     flags.mediaPath = System.getProperty("user.dir");
     studio = new LXStudio(this, flags);
@@ -166,8 +168,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     LXLoopTask videoFrameTask = new LXLoopTask() {
       @Override
       public void loop(double deltaMs) {
-        if (movie != null && movie.available()) {
-          movie.read();
+        if (movie != null) {
+          if (movie.available())
+            movie.read();
           videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0,
             movie.width, movie.height);
         } else if (screenCapRectangle != null) {
@@ -196,6 +199,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelTexture.class);
     lx.registry.addPattern(LPPanelSolidState.class);
     lx.registry.addPattern(LPPanelHexLife.class);
+    lx.registry.addPattern(LPPanelVideo.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 
@@ -225,18 +229,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   String[] splitExt(String fileName) {
     String[] result = fileName.split("\\.(?=[^\\.]+$)");
-    if(result.length > 0){
+    if (result.length > 0) {
       return result;
     }
-    result = new String[] {fileName, ""};
-    // String[] result = new String[2];
-    // result[0] = fileName;
-    // result[1] = "";
-    // String[] name_tokens = fileName.split("\\.(?=[^\\.]+$)");
-    // if(name_tokens.length > 0) {
-    //   result[1] = name_tokens[name_tokens.length - 1];
-    //   result[0] = fileName.substring(0, fileName.length() - result[1].length() - 1);
-    // }
+    result = new String[] { fileName, "" };
     return result;
   }
 
@@ -266,7 +262,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       }
     }
 
-    logger.info(String.format("imageListing: %s", imageListing.keySet().toString()));
+    logger.info(
+      String.format("imageListing: %s", imageListing.entrySet().toString()));
   }
 
   public PImage prepareImage(String name) {
@@ -301,10 +298,11 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       }
     }
 
-    logger.info(String.format("videoListing: %s", videoListing.keySet().toString()));
+    logger.info(
+      String.format("videoListing: %s", videoListing.entrySet().toString()));
   }
 
-  public Movie prepareVideo(String name) {
+  public Movie prepareVideo(String name, float volume) {
     Movie result = videos.get(name);
     if (result != null) {
       return result;
@@ -315,22 +313,23 @@ public class LXStudioApp extends PApplet implements LXPlugin {
         "name %s not in listing: %s", name, videoListing.keySet().toString()));
     }
     result = new Movie(this, fullPath);
+    result.volume(volume);
     result.loop();
+    result.volume(volume);
     videos.put(name, result);
     return result;
   }
 
-  public Movie prepareVideo(String name, float volume) {
-    Movie result = prepareVideo(name);
-    result.volume(volume);
-    return result;
+  public Movie prepareVideo(String name) {
+    return prepareVideo(name, 0.0f);
   }
 
   public void initializeFonts(LX lx) {
     String contentPath = getCanonicalContentPath(lx, "fonts");
 
     File dir = new File(contentPath);
-    FileFilter filter = getFileFilterForExtensions(Arrays.asList("ttf", "otf", "vlw"));
+    FileFilter filter = getFileFilterForExtensions(
+      Arrays.asList("ttf", "otf", "vlw"));
     File[] directoryListing = dir.listFiles(filter);
 
     if (directoryListing != null) {
@@ -342,7 +341,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       }
     }
 
-    logger.info(String.format("fontListing: %s", fontListing.keySet().toString()));
+    logger.info(
+      String.format("fontListing: %s", fontListing.entrySet().toString()));
   }
 
   public PFont prepareFont(String name, int size) {
@@ -352,14 +352,15 @@ public class LXStudioApp extends PApplet implements LXPlugin {
         "name %s not in listing: %s", name, fontListing.keySet().toString()));
     }
     String[] splitResult = splitExt(fullPath);
-    if(splitResult[1] != "vlw") {
-      name = String.join(".", String.format("%s-%d", splitResult[0], size), "vlw");
+    if (splitResult[1] != "vlw") {
+      name = String.join(".", String.format("%s-%d", splitResult[0], size),
+        "vlw");
     }
     PFont result = fonts.get(name);
     if (result != null) {
       return result;
     }
-    if(splitResult[1] != "vlw") {
+    if (splitResult[1] != "vlw") {
       result = createFont(fullPath, size);
     } else {
       result = loadFont(fullPath);
@@ -422,7 +423,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       MethodUtils.invokeMethod(FieldUtils.readField(ui, "registry", true), true,
         "addUIFixtureControls", new Object[] { UIPanelFixture.class });
       // logger.info(String.format("ui.registry.fixtureControls: %s",
-      //   FieldUtils.readField(ui, "registry", true)));
+      // FieldUtils.readField(ui, "registry", true)));
     } catch (Exception e) {
       logger.warning(e.toString());
     }
@@ -448,8 +449,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   void onUIReadyMovie(LXStudio lx, LXStudio.UI ui) {
     if (videoFrame == null)
       initializeVideoFrame(lx);
-    if (videoFrame == null)
+    if (videoFrame == null) {
+      logger.warning("videoframe is null");
       return;
+    }
 
     List<float[]> vertexUVPairs = new ArrayList<float[]>();
 
