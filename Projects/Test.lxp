@@ -1,6 +1,6 @@
 {
   "version": "0.2.1-SNAPSHOT",
-  "timestamp": 1596785646837,
+  "timestamp": 1604729348787,
   "model": {
     "id": 2,
     "class": "heronarts.lx.structure.LXStructure",
@@ -43,7 +43,7 @@
           "yaw": 240.0,
           "pitch": 0.0,
           "roll": 0.0,
-          "selected": false,
+          "selected": true,
           "enabled": true,
           "brightness": 1.0,
           "identify": false,
@@ -51,14 +51,15 @@
           "solo": false,
           "host": "127.0.0.1",
           "protocol": 0,
+          "transport": 0,
+          "port": 7890,
           "artNetUniverse": 0,
           "opcChannel": 0,
           "ddpDataOffset": 0,
           "kinetPort": 1,
-          "opcPort": 1,
           "splitPacket": false,
           "pointsPerPacket": 170,
-          "serialPort": "/dev/tty.usbserial-AD025M69",
+          "serialPort": "/dev/tty.usbserial-A9M9DV3R",
           "baudRate": 2000000,
           "unknownSerialPort": false,
           "pixelBlazeChannel": 1,
@@ -90,22 +91,23 @@
           "yaw": 180.0,
           "pitch": 0.0,
           "roll": 0.0,
-          "selected": true,
+          "selected": false,
           "enabled": true,
           "brightness": 1.0,
           "identify": false,
           "mute": false,
-          "solo": true,
+          "solo": false,
           "host": "192.168.0.10",
           "protocol": 0,
+          "transport": 0,
+          "port": 7890,
           "artNetUniverse": 0,
           "opcChannel": 0,
           "ddpDataOffset": 0,
           "kinetPort": 1,
-          "opcPort": 42069,
           "splitPacket": false,
           "pointsPerPacket": 170,
-          "serialPort": "/dev/tty.usbserial-AD025M69",
+          "serialPort": "/dev/tty.usbserial-A9M9DV3R",
           "baudRate": 2000000,
           "unknownSerialPort": false,
           "pixelBlazeChannel": 0,
@@ -145,14 +147,15 @@
           "solo": false,
           "host": "192.168.0.10",
           "protocol": 0,
+          "transport": 0,
+          "port": 7890,
           "artNetUniverse": 0,
           "opcChannel": 0,
           "ddpDataOffset": 0,
           "kinetPort": 1,
-          "opcPort": 42069,
           "splitPacket": false,
           "pointsPerPacket": 170,
-          "serialPort": "/dev/tty.usbserial-AD025M69",
+          "serialPort": "/dev/tty.usbserial-A9M9DV3R",
           "baudRate": 2000000,
           "unknownSerialPort": false,
           "pixelBlazeChannel": 2,
@@ -192,14 +195,15 @@
           "solo": false,
           "host": "127.0.0.1",
           "protocol": 0,
+          "transport": 0,
+          "port": 7890,
           "artNetUniverse": 0,
           "opcChannel": 0,
           "ddpDataOffset": 0,
           "kinetPort": 1,
-          "opcPort": 1,
           "splitPacket": false,
           "pointsPerPacket": 170,
-          "serialPort": "/dev/tty.usbserial-AD025M69",
+          "serialPort": "/dev/tty.usbserial-A9M9DV3R",
           "baudRate": 2000000,
           "unknownSerialPort": false,
           "pixelBlazeChannel": 0,
@@ -230,12 +234,12 @@
       "multithreaded": true,
       "channelMultithreaded": false,
       "networkMultithreaded": true,
-      "framesPerSecond": 1.0,
+      "framesPerSecond": 10.0,
       "speed": 1.0
     },
     "children": {
       "palette": {
-        "id": 4,
+        "id": 5,
         "class": "heronarts.lx.color.LXPalette",
         "internal": {
           "modulationColor": 0
@@ -244,23 +248,29 @@
           "label": "Color Palette",
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
-          "transitionMode": 1
+          "transitionMode": 1,
+          "autoCycleEnabled": false,
+          "autoCycleMode": 0,
+          "autoCycleTimeSecs": 60.0,
+          "autoCycleCursor": -1,
+          "triggerSwatchCycle": false
         },
         "children": {
           "swatch": {
-            "id": 5,
+            "id": 6,
             "class": "heronarts.lx.color.LXSwatch",
             "internal": {
               "modulationColor": 0
             },
             "parameters": {
               "label": "Swatch",
-              "recall": false
+              "recall": false,
+              "autoCycleEligible": true
             },
             "children": {},
             "colors": [
               {
-                "id": 6,
+                "id": 7,
                 "class": "heronarts.lx.color.LXDynamicColor",
                 "internal": {
                   "modulationColor": 0
@@ -303,7 +313,7 @@
         "swatches": []
       },
       "tempo": {
-        "id": 8,
+        "id": 9,
         "class": "heronarts.lx.Tempo",
         "internal": {
           "modulationColor": 0
@@ -322,7 +332,7 @@
         },
         "children": {
           "nudge": {
-            "id": 9,
+            "id": 10,
             "class": "heronarts.lx.modulator.LinearEnvelope",
             "internal": {
               "modulationColor": 0
@@ -342,7 +352,7 @@
         }
       },
       "clips": {
-        "id": 10,
+        "id": 11,
         "class": "heronarts.lx.clip.LXClipEngine",
         "internal": {
           "modulationColor": 0
@@ -354,7 +364,7 @@
         "children": {}
       },
       "mixer": {
-        "id": 11,
+        "id": 12,
         "class": "heronarts.lx.mixer.LXMixerEngine",
         "internal": {
           "modulationColor": 0
@@ -375,7 +385,7 @@
         },
         "children": {
           "master": {
-            "id": 19,
+            "id": 20,
             "class": "heronarts.lx.mixer.LXMasterBus",
             "internal": {
               "modulationColor": 0
@@ -415,7 +425,8 @@
               "transitionEnabled": false,
               "transitionTimeSecs": 5.0,
               "transitionBlendMode": 0,
-              "focusedPattern": 0
+              "focusedPattern": 0,
+              "triggerPatternCycle": false
             },
             "children": {},
             "effects": [],
@@ -510,7 +521,7 @@
         ]
       },
       "modulation": {
-        "id": 20,
+        "id": 21,
         "class": "heronarts.lx.modulation.LXModulationEngine",
         "internal": {
           "modulationColor": 0
@@ -545,7 +556,7 @@
               "exp": 0.0
             },
             "children": {},
-            "basis": 0.7659999999999627
+            "basis": 0.5166090924017226
           }
         ],
         "modulations": [
@@ -576,7 +587,7 @@
         "triggers": []
       },
       "output": {
-        "id": 21,
+        "id": 22,
         "class": "heronarts.lx.LXEngine$Output",
         "internal": {
           "modulationColor": 0
@@ -584,15 +595,40 @@
         "parameters": {
           "label": "Output",
           "enabled": true,
-          "brightness": 1.0,
+          "brightness": 0.0999999949708581,
           "fps": 0.0,
           "gamma": 1.0,
           "gammaMode": 1
         },
         "children": {}
       },
+      "snapshots": {
+        "id": 24,
+        "class": "heronarts.lx.snapshot.LXSnapshotEngine",
+        "internal": {
+          "modulationColor": 0
+        },
+        "parameters": {
+          "label": "Snapshots",
+          "recallMixer": true,
+          "recallModulation": true,
+          "recallPattern": true,
+          "recallEffect": true,
+          "channelMode": 0,
+          "missingChannelMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "autoCycleEnabled": false,
+          "autoCycleMode": 0,
+          "autoCycleTimeSecs": 60.0,
+          "autoCycleCursor": -1,
+          "triggerSnapshotCycle": false
+        },
+        "children": {},
+        "snapshots": []
+      },
       "midi": {
-        "id": 23,
+        "id": 25,
         "class": "heronarts.lx.midi.LXMidiEngine",
         "internal": {
           "modulationColor": 0
@@ -620,7 +656,7 @@
         "mapping": []
       },
       "audio": {
-        "id": 24,
+        "id": 26,
         "class": "heronarts.lx.audio.LXAudioEngine",
         "internal": {
           "modulationColor": 0
@@ -632,7 +668,7 @@
         },
         "children": {
           "input": {
-            "id": 25,
+            "id": 27,
             "class": "heronarts.lx.audio.LXAudioInput",
             "internal": {
               "modulationColor": 0
@@ -644,7 +680,7 @@
             "children": {}
           },
           "output": {
-            "id": 26,
+            "id": 28,
             "class": "heronarts.lx.audio.LXAudioOutput",
             "internal": {
               "modulationColor": 0
@@ -659,7 +695,7 @@
             "children": {}
           },
           "meter": {
-            "id": 27,
+            "id": 29,
             "class": "heronarts.lx.audio.GraphicMeter",
             "internal": {
               "modulationColor": 0
@@ -695,7 +731,7 @@
         }
       },
       "osc": {
-        "id": 28,
+        "id": 30,
         "class": "heronarts.lx.osc.LXOscEngine",
         "internal": {
           "modulationColor": 0
@@ -710,28 +746,6 @@
           "transmitActive": false
         },
         "children": {}
-      },
-      "snapshots": {
-        "id": 29,
-        "class": "heronarts.lx.snapshot.LXSnapshotEngine",
-        "internal": {
-          "modulationColor": 0
-        },
-        "parameters": {
-          "label": "Snapshots",
-          "recallMixer": true,
-          "recallModulation": true,
-          "channelMode": 0,
-          "missingChannelMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
-          "autoCycleEnabled": false,
-          "autoCycleMode": 0,
-          "autoCycleTimeSecs": 60.0,
-          "autoCycleIndex": -1
-        },
-        "children": {},
-        "snapshots": []
       }
     }
   },
