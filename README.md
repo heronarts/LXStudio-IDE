@@ -20,6 +20,8 @@ or alternatively in a headless CLI-only mode.
 To get started, clone this repository and import the project into an IDE like Eclipse or IntelliJ. Configuration files for both are readily
 available in the repository.
 
+Documentation is available on the [LX Studio Wiki &rarr;](https://github.com/heronarts/LXStudio/wiki)
+
 Consult the [LX Studio API reference &rarr;](http://lx.studio/api/)
 
 ### Contact and Collaboration ###
