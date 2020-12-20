@@ -166,10 +166,9 @@ public class LPPanelFixture extends SerialProtocolFixture {
     for (int i = 0; i < newSize; i++) {
       this.gridIndices[i] = parsed.getJSONArray(i).getIntArray();
       for (int j = 0; j < 2; j++) {
-        this.worldGridIndices[i][j] = (this.gridIndices[i][0]
-          * this.gridTransform[j][0])
-          + (this.gridIndices[i][1] * this.gridTransform[j][1])
-          + this.gridTransform[j][2];
+        this.worldGridIndices[i][j] = //
+          (this.gridIndices[i][0] * this.gridTransform[j][0])
+          + (this.gridIndices[i][1] * this.gridTransform[j][1]) + this.gridTransform[j][2];
       }
     }
   }
@@ -193,10 +192,10 @@ public class LPPanelFixture extends SerialProtocolFixture {
    * @return LXPoint cast from LPPanelModel.Point subclass
    */
   protected LXPoint copyPoint(LXPoint copy) {
-    if(!Point.class.isInstance(copy)) {
+    if (!Point.class.isInstance(copy)) {
       return (LXPoint) new Point().set(copy);
     }
-    return (LXPoint) new Point().set((Point)copy);
+    return (LXPoint) new Point().set((Point) copy);
   }
 
   /**
@@ -210,7 +209,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
   protected LXModel constructModel(List<LXPoint> modelPoints,
     List<? extends LXModel> childModels, String[] modelKeys) {
     LPPanelModel model = new LPPanelModel(modelPoints.stream()
-      .map(point -> (Point)copyPoint(point)).collect(Collectors.toList()));
+      .map(point -> (Point)(point)).collect(Collectors.toList()));
     return model;
   }
 
@@ -361,7 +360,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
   @Override
   protected void computePointGeometry(LXMatrix matrix, List<LXPoint> points) {
     regenerateGridIndices();
-    for(LXPoint p : points) {
+    for (LXPoint p : points) {
       ((Point) p).localIndexTransform(matrix);
     }
   }

@@ -1,7 +1,5 @@
 package flavius.ledportal.pattern;
 
-import java.util.Arrays;
-
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.app.LXStudioApp;
@@ -32,7 +30,8 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
     super(lx);
 
     String[] videoNames = LXStudioApp.instance.videoLibrary.getNames();
-    // String[] videoNames = LXStudioApp.instance.videoLibrary.getNames((String name) -> name.contains("Steamed"));
+    // String[] videoNames = LXStudioApp.instance.videoLibrary.getNames((String
+    // name) -> name.contains("Steamed"));
     if (videoNames.length == 0) {
       logger.warning("no videos available");
       video = new ObjectParameter<String>("video", new String[] { "" });
@@ -46,12 +45,12 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
     addParameter("xRotate", this.xRotate);
     addParameter("yRotate", this.yRotate);
     addParameter("zRotate", this.zRotate);
-    addParameter("xShear", this.xShear);
+    // addParameter("xShear", this.xShear);
     addParameter("size", this.scale);
     addParameter("video", this.video);
     addParameter("volume", this.volume);
-    addParameter("fov", this.fov);
-    addParameter("depth", this.depth);
+    // addParameter("fov", this.fov);
+    // addParameter("depth", this.depth);
 
     scheduleRefreshVideoOnce();
     scheduleRefreshForeground();

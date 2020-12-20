@@ -17,26 +17,27 @@ import processing.core.PVector;
  */
 // TODO: rename LPPanel3DRotatingGeometry
 public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
-  int lineLength;
   List<PVector> vertices = new ArrayList<PVector>();
   List<int[]> edges = new ArrayList<int[]>();
+  List<int[]> faces = new ArrayList<int[]>();
 
   public static float φ = (float) (1 + Math.sqrt(5)) / 2;
 
-  public final CompoundParameter thicc = new CompoundParameter("Thicc", 0.5, 0, 1)
-    .setDescription("The thiccness of the polyhedron lines")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
+  public final CompoundParameter thicc = new CompoundParameter("Thicc", 0.5, 0,
+    1).setDescription("The thiccness of the polyhedron lines")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public enum Shape {
     CUBE, OCTAHEDRON, DODECAHEDRON
   };
+
+  protected Shape currentShape;
 
   public final EnumParameter<Shape> shape = new EnumParameter<LPPanel3DRotatingCube.Shape>(
     "shape", Shape.CUBE);
 
   public LPPanel3DRotatingCube(LX lx) {
     super(lx);
-    lineLength = (int) (Math.min(model.width, model.height) * 0.8);
 
     addParameter("xOffset", this.xOffset);
     addParameter("yOffset", this.yOffset);
@@ -44,24 +45,21 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
     addParameter("xRotate", this.xRotate);
     addParameter("yRotate", this.yRotate);
     addParameter("zRotate", this.zRotate);
-    addParameter("xShear", this.xShear);
     addParameter("scale", this.scale);
     addParameter("thicc", this.thicc);
     addParameter("shape", this.shape);
     addParameter("xScanFuckery", this.xScanFuckery);
     addParameter("yScanFuckery", this.yScanFuckery);
     addParameter("pScanFuckery", this.pScanFuckery);
-    addParameter("fov", this.fov);
-    addParameter("depth", this.depth);
 
-    // youreACubeHarry();
-    // youreADodecahedronHarry();
-    youreAnOctahedronHarry();
+    refreshShape();
   }
 
-  public void youreACubeHarry() {
+  public static void youreACubeHarry(List<PVector> vertices, List<int[]> edges,
+    List<int[]> faces) {
     vertices.clear();
     edges.clear();
+    faces.clear();
     final float s = 0.5f;
     vertices.add(new PVector(-s, -s, -s));
     vertices.add(new PVector(-s, -s, s));
@@ -83,9 +81,16 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
     edges.add(new int[] { 5, 7 });
     edges.add(new int[] { 7, 6 });
     edges.add(new int[] { 6, 4 });
+    faces.add(new int[] { 3, 7, 5, 1 });
+    faces.add(new int[] { 0, 4, 5, 1 });
+    faces.add(new int[] { 2, 6, 4, 0 });
+    faces.add(new int[] { 2, 6, 7, 3 });
+    faces.add(new int[] { 2, 3, 1, 0 });
+    faces.add(new int[] { 7, 6, 4, 5 });
   }
 
-  public void youreAnOctahedronHarry() {
+  public static void youreAnOctahedronHarry(List<PVector> vertices,
+    List<int[]> edges, List<int[]> faces) {
     vertices.clear();
     edges.clear();
     final float s = 1;
@@ -109,7 +114,8 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
     edges.add(new int[] { 5, 1 });
   }
 
-  public void youreADodecahedronHarry() {
+  public static void youreADodecahedronHarry(List<PVector> vertices,
+    List<int[]> edges, List<int[]> faces) {
     vertices.clear();
     edges.clear();
     int δ = 10;
@@ -169,27 +175,46 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
   }
 
   @Override
-  public void onDraw(final PGraphics pg) {
-    final float thicc = this.thicc.getValuef();
-    final Shape shape = this.shape.getEnum();
+  public void onParameterChanged(LXParameter p) {
+    super.onParameterChanged(p);
+    if (p == this.shape) {
+      refreshShape();
+    }
+  }
 
+  public void refreshShape() {
+    if (currentShape == null) {
+      currentShape = Shape.CUBE;
+      youreACubeHarry(vertices, edges, faces);
+      return;
+    }
+    final Shape shape = this.shape.getEnum();
+    if (shape == currentShape) {
+      return;
+    }
     switch (shape) {
     case CUBE:
-      youreACubeHarry();
+      youreACubeHarry(vertices, edges, faces);
       break;
     case DODECAHEDRON:
-      youreADodecahedronHarry();
+      youreADodecahedronHarry(vertices, edges, faces);
       break;
     default:
     case OCTAHEDRON:
-      youreAnOctahedronHarry();
+      youreAnOctahedronHarry(vertices, edges, faces);
       break;
     }
+  }
+
+  @Override
+  public void onDraw(final PGraphics pg) {
+    final float thicc = this.thicc.getValuef();
+    final float weight = (float) (Math.pow(10,
+      (double) (2 * (thicc - 0.5) - 2)));
 
     pg.pushMatrix();
     applyBackground();
     pg.stroke(LXColor.WHITE);
-    final float weight = (float) (Math.pow(10, (double) (2 * (thicc - 0.5) - 2)));
     applyScale();
     applyTranslation();
     applyShear();

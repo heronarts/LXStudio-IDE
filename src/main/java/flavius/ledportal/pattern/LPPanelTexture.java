@@ -29,11 +29,11 @@ public class LPPanelTexture extends LPPanel3DGraphicsPattern {
     addParameter("xRotate", this.xRotate);
     addParameter("yRotate", this.yRotate);
     addParameter("zRotate", this.zRotate);
-    addParameter("xShear", this.xShear);
+    // addParameter("xShear", this.xShear);
     addParameter("size", this.scale);
     addParameter("texture", this.texture);
-    addParameter("fov", this.fov);
-    addParameter("depth", this.depth);
+    // addParameter("fov", this.fov);
+    // addParameter("depth", this.depth);
 
     refreshForeground();
   }

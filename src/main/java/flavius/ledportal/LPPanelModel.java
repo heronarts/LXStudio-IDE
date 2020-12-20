@@ -100,8 +100,8 @@ public class LPPanelModel extends LXModel {
       set((LXPoint) that);
       this.xi = that.xi;
       this.yi = that.yi;
-      this.xil = that.xi;
-      this.yil = that.yi;
+      this.xil = that.xil;
+      this.yil = that.yil;
 
       return (LXPoint) this;
     }
