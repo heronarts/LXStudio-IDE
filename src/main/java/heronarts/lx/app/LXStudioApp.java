@@ -37,6 +37,7 @@ import flavius.ledportal.pattern.LPPanelHexLife;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
+import flavius.ledportal.pattern.LPPanelCapture;
 import flavius.ledportal.structure.LPPanelFixture;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
@@ -73,6 +74,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   private static int WIDTH = 1280;
   private static int HEIGHT = 800;
   private static boolean FULLSCREEN = false;
+  // private static boolean FULLSCREEN = true;
 
   private static final Logger logger = Logger
     .getLogger(LXStudioApp.class.getName());
@@ -169,6 +171,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelSolidState.class);
     lx.registry.addPattern(LPPanelHexLife.class);
     lx.registry.addPattern(LPPanelVideo.class);
+    lx.registry.addPattern(LPPanelCapture.class);
+    lx.registry.addPattern(LPPanelShader.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 
