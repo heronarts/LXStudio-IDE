@@ -1,5 +1,12 @@
 {
   "version": "2.0.0",
+  "options": {
+    "env": {
+      "JAVA_HOME": "/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home",
+      "PROCESSING_CORE": "/Applications/Processing.app/Contents/Java",
+      "PROCESSING_LIB": "${env:HOME}/Documents/Processing/libraries"
+    }
+  },
   "tasks": [
     {
       "type": "shell",
@@ -8,25 +15,29 @@
       "args": [
         "compiler:compile",
         "assembly:single"
+      ],
+    },
+    {
+      "type": "shell",
+      "label": "echo java version",
+      "command": "java",
+      "args": [
+        "-version",
       ]
     },
     {
       "type": "shell",
       "label": "run heronarts.lx.app.LXStudioApp",
-      "command": "java",
+      "command": "/Applications/Processing.app/Contents/PlugIns/jdk1.8.0_202.jdk/Contents/Home/jre/bin/java",
       "args": [
         "-cp",
         "target/lxstudio-ide-0.2.1-SNAPSHOT-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar",
+        // "target/lxstudio-ide-0.2.1-SNAPSHOT-jar-with-dependencies.jar:${PROCESSING_CORE}/core.jar:${PROCESSING_CORE}/core/library/gluegen-rt.jar:${PROCESSING_CORE}/core/library/jogl-all.jar:${PROCESSING_LIB}/video/library/video.jar:${PROCESSING_LIB}/video/library/gst1-java-core-1.2.0.jar:${PROCESSING_LIB}/video/library/jna.jar",
         "heronarts.lx.app.LXStudioApp"
       ],
       "dependsOn": [
         "mvn compile assemble"
       ],
-      "options": {
-        "env": {
-          "JAVA_HOME": "/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home",
-        }
-      },
       "problemMatcher": [],
       "group": {
         "kind": "build",

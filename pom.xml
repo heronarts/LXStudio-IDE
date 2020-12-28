@@ -17,6 +17,11 @@
 		<maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
     <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+
+    <!-- <java_home>/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home</java_home>
+    <processing_core>/Applications/Processing.app/Contents/Java</processing_core>
+    <processing_lib>$HOME/Documents/Processing/libraries</processing_lib> -->
+
 	</properties>
 	<dependencies>
 		<dependency>
@@ -40,25 +45,28 @@
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>core</artifactId>
-			<version>3.3.7</version>
-			<scope>provided</scope>
+      <version>3.5.4</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/processing-3.5.4/core.jar</systemPath>
 		</dependency>
 
 		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-main</artifactId>
-			<version>2.3.2</version>
-			<scope>provided</scope>
+			<groupId>com.jogamp</groupId>
+			<artifactId>jogl-all</artifactId>
+      <version>2.3.2</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/processing-3.5.4/jogl-all.jar</systemPath>
 		</dependency>
 
 		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-main</artifactId>
-			<version>2.3.2</version>
-			<scope>provided</scope>
+			<groupId>com.jogamp</groupId>
+			<artifactId>gluegen-rt</artifactId>
+      <version>2.3.2</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/processing-3.5.4/gluegen-rt.jar</systemPath>
 		</dependency>
 
-		<dependency>
+    <dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>video</artifactId>
 			<version>1.0.1</version>
@@ -69,18 +77,41 @@
 		<dependency>
 			<groupId>org.gstreamer</groupId>
 			<artifactId>gstreamer-java</artifactId>
-			<version>1.0.1</version>
+			<version>1.6.2</version>
 			<scope>system</scope>
       <systemPath>${basedir}/lib/video-1.0.1/gstreamer-java.jar</systemPath>
-		</dependency>
+    </dependency>
 
 		<dependency>
-			<groupId>com.sun</groupId>
+      <groupId>com.sun</groupId>
 			<artifactId>jna</artifactId>
 			<version>4.2.0</version>
 			<scope>system</scope>
       <systemPath>${basedir}/lib/video-1.0.1/jna.jar</systemPath>
     </dependency>
+
+		<!--
+    <dependency>
+			<groupId>org.processing</groupId>
+			<artifactId>video</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.gstreamer</groupId>
+			<artifactId>gst1-java-core</artifactId>
+			<version>1.2.0</version>
+			<scope>provided</scope>
+    </dependency>
+
+    <dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>jna</artifactId>
+			<version>5.4.0</version>
+			<scope>provided</scope>
+    </dependency>
+    -->
 
 		<!-- https://mvnrepository.com/artifact/org.processing/serial -->
 		<dependency>
