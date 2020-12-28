@@ -45,25 +45,22 @@
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>core</artifactId>
-      <version>3.5.4</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/processing-3.5.4/core.jar</systemPath>
+			<version>3.5.4</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>com.jogamp</groupId>
-			<artifactId>jogl-all</artifactId>
-      <version>2.3.2</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/processing-3.5.4/jogl-all.jar</systemPath>
+			<groupId>org.jogamp.jogl</groupId>
+			<artifactId>jogl-all-main</artifactId>
+			<version>2.3.2</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>com.jogamp</groupId>
-			<artifactId>gluegen-rt</artifactId>
-      <version>2.3.2</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/processing-3.5.4/gluegen-rt.jar</systemPath>
+			<groupId>org.jogamp.gluegen</groupId>
+			<artifactId>gluegen-rt-main</artifactId>
+			<version>2.3.2</version>
+			<scope>provided</scope>
 		</dependency>
 
     <dependency>

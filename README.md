@@ -152,7 +152,7 @@ This is provided as a VSCode build task in `.vscode/tasks.json`
 
 ```bash
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
-java -cp "target/lxstudio-ide-0.2.1-SNAPSHOT-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar" heronarts.lx.app.LXStudioApp
+java -cp "target/lxstudio-ide-0.2.1-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar" heronarts.lx.app.LXStudioApp
 ```
 
 This is provided as a VSCode build task in `.vscode/tasks.json`
