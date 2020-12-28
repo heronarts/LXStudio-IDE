@@ -172,7 +172,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelHexLife.class);
     lx.registry.addPattern(LPPanelVideo.class);
     lx.registry.addPattern(LPPanelCapture.class);
-    lx.registry.addPattern(LPPanelShader.class);
+    // lx.registry.addPattern(LPPanelShader.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 
