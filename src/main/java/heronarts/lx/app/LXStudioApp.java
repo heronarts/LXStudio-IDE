@@ -34,6 +34,7 @@ import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.pattern.LPPanel3DRotatingCube;
 import flavius.ledportal.pattern.LPPanelBLM;
 import flavius.ledportal.pattern.LPPanelHexLife;
+import flavius.ledportal.pattern.LPPanelProjectedVideo;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
@@ -174,6 +175,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelCapture.class);
     // lx.registry.addPattern(LPPanelShader.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
+    lx.registry.addPattern(LPPanelProjectedVideo.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 
     lx.registry.addFixture(LPPanelFixture.class);
@@ -267,29 +269,29 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       return;
     }
 
-    List<float[]> vertexUVPairs = new ArrayList<float[]>();
+    // List<float[]> vertexUVPairs = new ArrayList<float[]>();
 
-    vertexUVPairs
-      .add(new float[] { flatBounds[0][0], flatBounds[1][0], 0, 0, 0 });
-    vertexUVPairs.add(new float[] { flatBounds[0][1], flatBounds[1][0], 0,
-      videoFrame.width, 0 });
-    vertexUVPairs.add(new float[] { flatBounds[0][1], flatBounds[1][1], 0,
-      videoFrame.width, videoFrame.height });
-    vertexUVPairs.add(new float[] { flatBounds[0][0], flatBounds[1][1], 0, 0,
-      videoFrame.height });
-    for (float[] vertexUVPair : vertexUVPairs) {
-      PVector uvPosition = new PVector(vertexUVPair[0], vertexUVPair[1],
-        vertexUVPair[2]);
-      PVector unflattened = LPMeshable.coordinateTransform(unflattener,
-        uvPosition);
-      vertexUVPair[0] = unflattened.x;
-      vertexUVPair[1] = unflattened.y;
-      vertexUVPair[2] = unflattened.z;
-      logger.fine(String.format("unflattened uv position %s to %s",
-        LPMeshable.formatPVector(uvPosition),
-        LPMeshable.formatPVector(unflattened)));
-    }
-    ui.preview.addComponent(new UIVideoFrame(vertexUVPairs, videoFrame));
+    // vertexUVPairs
+    //   .add(new float[] { flatBounds[0][0], flatBounds[1][0], 0, 0, 0 });
+    // vertexUVPairs.add(new float[] { flatBounds[0][1], flatBounds[1][0], 0,
+    //   videoFrame.width, 0 });
+    // vertexUVPairs.add(new float[] { flatBounds[0][1], flatBounds[1][1], 0,
+    //   videoFrame.width, videoFrame.height });
+    // vertexUVPairs.add(new float[] { flatBounds[0][0], flatBounds[1][1], 0, 0,
+    //   videoFrame.height });
+    // for (float[] vertexUVPair : vertexUVPairs) {
+    //   PVector uvPosition = new PVector(vertexUVPair[0], vertexUVPair[1],
+    //     vertexUVPair[2]);
+    //   PVector unflattened = LPMeshable.coordinateTransform(unflattener,
+    //     uvPosition);
+    //   vertexUVPair[0] = unflattened.x;
+    //   vertexUVPair[1] = unflattened.y;
+    //   vertexUVPair[2] = unflattened.z;
+    //   logger.fine(String.format("unflattened uv position %s to %s",
+    //     LPMeshable.formatPVector(uvPosition),
+    //     LPMeshable.formatPVector(unflattened)));
+    // }
+    // ui.preview.addComponent(new UIVideoFrame(vertexUVPairs, videoFrame));
   }
 
   private final List<LXLoopTask> drawLoopTasks = new ArrayList<LXLoopTask>();

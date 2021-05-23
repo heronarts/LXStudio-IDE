@@ -1,6 +1,7 @@
 package flavius.ledportal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXMatrix;
+import processing.core.PVector;
 
 /**
  * Basically {@link heronarts.lx.model.GridModel} but each row in the grid can
@@ -205,6 +207,10 @@ public class LPPanelModel extends LXModel {
    */
   public final int height;
 
+  public final PVector centroid;
+
+  public final PVector normal;
+
   public Strip getRowStrip(int yi) {
     Strip result = new Strip(0, new ArrayList<LXPoint>());
     for (Strip strip : rows) {
@@ -272,6 +278,19 @@ public class LPPanelModel extends LXModel {
     return Collections.unmodifiableList(columns);
   }
 
+  public PVector getCentroid() {
+    // return LPMeshable.getCentroid(
+    //   Arrays.stream(points).map(point -> new PVector(point.x, point.y, point.z))
+    //     .collect(Collectors.toList()));
+    return new PVector(this.ax, this.ay, this.az);
+  }
+
+  public PVector getNormal() {
+    return LPMeshable.getNormal(
+      Arrays.stream(points).map(point -> new PVector(point.x, point.y, point.z))
+        .collect(Collectors.toList()));
+  }
+
   /**
    * Constructs a panel model with specified grid indices and transformation
    * matrix
@@ -289,6 +308,9 @@ public class LPPanelModel extends LXModel {
 
     this.rows = generateRows();
     this.columns = generateColumns();
+
+    this.centroid = getCentroid();
+    this.normal = getNormal();
   }
 
   public LPPanelModel(PanelMetrics metrics, List<Point> points) {
@@ -303,6 +325,9 @@ public class LPPanelModel extends LXModel {
 
     this.rows = generateRows();
     this.columns = generateColumns();
+
+    this.centroid = getCentroid();
+    this.normal = getNormal();
   }
 
   /**
