@@ -46,6 +46,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     } else {
       size(WIDTH, HEIGHT, PApplet.P3D);
     }
+    pixelDensity(displayDensity());
   }
 
   @Override
