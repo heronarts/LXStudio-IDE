@@ -126,6 +126,16 @@ export VIDEO_LIB="$HOME/code/processing-video/"
 mvn install:install-file -Dfile=${VIDEO_LIB}/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
 mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.4.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.4.0 -Dpackaging=jar
 mvn install:install-file -Dfile=${VIDEO_LIB}/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
+mvn install:install-file -Dfile=${PROCESSING_CORE}/gluegen-rt.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt -Dversion=2.3.2 -Dpackaging=jar
+mvn install:install-file -Dfile=${PROCESSING_CORE}/jogl-all.jar -DgroupId=com.jogamp -DartifactId=jogl-all -Dversion=2.3.2 -Dpackaging=jar
+```
+
+or, on some systems with gstreamer-java 1.2.0
+
+```bash
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.2.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.2.0 -Dpackaging=jar
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
 ```
 
 ## Running with BYO Java
@@ -137,11 +147,22 @@ This has only been tested on MacOS, if you're a Java wizard, you may be able to 
 - Java JDK 1.8.0_202
 - Maven (if not using IntelliJ / Eclipse)
 
+
+**on Windows with choco:**
+
+```powershell
+choco install adoptopenjdk8 -y
+choco install maven Processing -y
+```
+
+- Install `vscjava.vscode-java-pack` VSCode extension
+- Configure Java Runtime
+
 ### Installing Provided libraries
 
 **With IntelliJ / Eclipse:** build config files provided, your IDE will handle this for you.
 
-**With VScode / Maven:**
+**With VScode / Maven**
 
 To build `pom.xml` with Maven, you will need to install the following 3rd party (not available on mvnrepository) libraries, whose jars are provided in `lib/`:
 
@@ -154,20 +175,23 @@ You can do this with the following commands (exact jar locations could change):
 
 ```bash
 export PROJ_VERSION="0.2.1"
-mvn install:install-file -Dfile=lib/lxstudio-${PROJ_VERSION}-jar-with-dependencies.jar -DgroupId=heronarts -DartifactId=lxstudio -Dversion=${PROJ_VERSION} -Dpackaging=jar
-mvn install:install-file -Dfile=lib/lx-${PROJ_VERSION}-jar-with-dependencies.jar -DgroupId=heronarts -DartifactId=lx -Dversion=${PROJ_VERSION} -Dpackaging=jar
-mvn install:install-file -Dfile=lib/p3lx-${PROJ_VERSION}-jar-with-dependencies.jar -DgroupId=heronarts -DartifactId=p3lx -Dversion=${PROJ_VERSION} -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/lxstudio-${PROJ_VERSION}.jar" -DgroupId=heronarts -DartifactId=lxstudio "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/lx-${PROJ_VERSION}-jar-with-dependencies.jar" -DgroupId=heronarts -DartifactId=lx "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/p3lx-${PROJ_VERSION}.jar" -DgroupId=heronarts -DartifactId=p3lx "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
 # mvn install:install-file -Dfile=lib/video-1.0.1/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=1.0.1 -Dpackaging=jar
 # mvn install:install-file -Dfile=lib/video-1.0.1/gstreamer-java.jar -DgroupId=org.gstreamer -DartifactId=gstreamer-java -Dversion=1.6.2 -Dpackaging=jar
 # mvn install:install-file -Dfile=lib/video-1.0.1/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=4.2.0 -Dpackaging=jar
-
-
-# mvn install:install-file -Dfile=lib/lxstudio-${PROJ_VERSION}.jar -DgroupId=heronarts -DartifactId=lxstudio -Dversion=${PROJ_VERSION} -Dpackaging=jar
-# mvn install:install-file -Dfile=lib/lx-${PROJ_VERSION}-jar-with-dependencies.jar -DgroupId=heronarts -DartifactId=lx -Dversion=${PROJ_VERSION} -Dpackaging=jar
-# mvn install:install-file -Dfile=lib/p3lx-${PROJ_VERSION}.jar -DgroupId=heronarts -DartifactId=p3lx -Dversion=${PROJ_VERSION} -Dpackaging=jar
 ```
 
 You can also clone into the source code repositories (where available) and `mvn install` if you want to modify them.
+
+**On Windows:**
+
+You'll also need to install the processing core libraries.
+
+```powershell
+mvn install:install-file "-Dfile=C:\ProgramData\chocolatey\lib\Processing\tools\processing-3.5.4\core\library\core.jar" "-DgroupId=org.processing" "-DartifactId=core" "-Dversion=3.5.4" "-Dpackaging=jar"
+```
 
 ### Compiling
 
