@@ -25,11 +25,19 @@ There are two ways to do this, you can bring your own Java JDK or use the JDK bu
 - Maven (if not using IntelliJ / Eclipse)
 - [Java JDK 1.8.0_202](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html) (or whatever your version of Processing uses)
 
-### Determine Java Home
+note: on linux, install Java with:
+
+```bash
+sudo tar zxvf ~/Downloads/jdk-8u202-linux-x64.tar.gz -C /usr/lib/jvm
+```
+
+#### Set Java Home
 
 If you have multiple versions of Java installed, you will need to explicitly set the `JAVA_HOME` environment variable for any shell you use to build / run this project.
 
-On MacOS, you can list possible Java homes with
+#### on MacOS
+
+You can list possible Java homes with
 
 ```bash
 /usr/libexec/java_home -V
@@ -43,6 +51,15 @@ Matching Java Virtual Machines (4):
     1.8.0_222, x86_64: "AdoptOpenJDK 8" /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
     1.8.0_202, x86_64: "Java SE 8" /Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home
 ```
+
+#### on Linux
+
+```bash
+sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_202/bin/java" 1
+sudo update-alternatives --set "java" "/usr/lib/jvm/jdk1.8.0_202/bin/java"
+```
+
+#### Validating
 
 You can ensure your shell has the correct version set by running
 
@@ -74,6 +91,17 @@ export PROCESSING_CORE="/Applications/Processing.app/Contents/Java"
 export PROCESSING_LIB="$HOME/Documents/Processing/libraries"
 ```
 
+
+```bash
+export PROCESSING_CORE="$HOME/Downloads/processing-3.5.4/core/library"
+export PROCESSING_LIB="$HOME/sketchbook/libraries",
+```
+
+```bash
+export PROCESSING_CORE="$HOME/code/processing/core/library"
+export PROCESSING_LIB="$HOME/sketchbook/libraries",
+```
+
 ### Installing Processing libraries
 
 These jars need to be installed into your local maven repository (e.g. `~/.m2/repository`) manually. The `groupId`, `artifactId` and `version` fields should match the output of  `unzip -q -c <jar path> META-INF/MANIFEST.MF`
@@ -81,11 +109,23 @@ You can do this with the following commands (exact jar locations could change):
 
 ```bash
 mvn install:install-file -Dfile=${PROCESSING_CORE}/core.jar -DgroupId=org.processing -DartifactId=core -Dversion=3.5.4 -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_CORE}/core/library/gluegen-rt.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt -Dversion=2.3.2 -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_CORE}/core/library/jogl-all.jar -DgroupId=com.jogamp -DartifactId=jogl-all -Dversion=2.3.2 -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_LIB}/video/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_LIB}/video/library/gst1-java-core-1.2.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.2.0 -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_LIB}/video/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
+# mvn install:install-file -Dfile=${PROCESSING_CORE}/core/library/gluegen-rt.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt -Dversion=2.3.2 -Dpackaging=jar
+mvn install:install-file -Dfile=${PROCESSING_CORE}/gluegen-rt-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt -Dversion=2.3.2 -Dpackaging=jar
+# mvn install:install-file -Dfile=${PROCESSING_CORE}/core/library/jogl-all.jar -DgroupId=com.jogamp -DartifactId=jogl-all -Dversion=2.3.2 -Dpackaging=jar
+mvn install:install-file -Dfile=${PROCESSING_CORE}/jogl-all-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=jogl-all -Dversion=2.3.2 -Dpackaging=jar
+# mvn install:install-file -Dfile=${PROCESSING_LIB}/video/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
+# mvn install:install-file -Dfile=${PROCESSING_LIB}/video/library/gst1-java-core-1.2.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.2.0 -Dpackaging=jar
+# mvn install:install-file -Dfile=${PROCESSING_LIB}/video/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
+```
+
+```bash
+export VIDEO_LIB="$HOME/code/processing-video/"
+```
+
+```bash
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.4.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.4.0 -Dpackaging=jar
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
 ```
 
 ## Running with BYO Java
@@ -156,6 +196,54 @@ java -cp "target/lxstudio-ide-0.2.1-jar-with-dependencies.jar:lib/processing-3.5
 ```
 
 This is provided as a VSCode build task in `.vscode/tasks.json`
+
+### Debugging
+
+#### Serial ports not working on Ubuntu
+
+Try adding the user to the `tty` and `dialout` groups
+
+```bash
+sudo usermod -a -G tty $USER
+sudo usermod -a -G dialout $USER
+sudo reboot now
+```
+
+Create a new Processing 3 sketch and test your serial port is detected
+
+```java
+import processing.serial.*;
+
+void setup()  {
+  // print a list of the serial ports:
+  printArray(Serial.list());
+}
+```
+
+#### Video not working on Ubuntu
+
+Open the Processing 3 IDE, and go **file -> examples -> video -> movile -> loop**. Run the sketch to test your gstreamer install
+
+If that doesn't work, ensure you have gstreamer libaries installed
+
+```bash
+sudo apt install gstreamer1.0-x libgstreamer-plugins-base1.0-dev libgstreamer-plugins-good1.0-dev
+```
+
+do not install plugins-bad!!
+
+you may also need some codecs to play certain videos
+
+```bash
+sudo apt-get install ubuntu-restricted-extras ffmpeg vlc
+```
+
+install processing from source
+
+```bash
+git clone 
+cd processing
+```
 
 ## LX Studio Notices
 
