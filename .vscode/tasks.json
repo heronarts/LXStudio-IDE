@@ -2,9 +2,9 @@
   "version": "2.0.0",
   "options": {
     "env": {
-      "JAVA_HOME": "/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home",
-      "PROCESSING_CORE": "/Applications/Processing.app/Contents/Java",
-      "PROCESSING_LIB": "${env:HOME}/Documents/Processing/libraries"
+      // "JAVA_HOME": "/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home",
+      // "PROCESSING_CORE": "/Applications/Processing.app/Contents/Java",
+      // "PROCESSING_LIB": "${env:HOME}/Documents/Processing/libraries"
     }
   },
   "tasks": [
@@ -23,12 +23,12 @@
       "command": "java",
       "args": [
         "-version",
-      ]
+      ],
     },
     {
       "type": "shell",
       "label": "run heronarts.lx.app.LXStudioApp",
-      "command": "/Applications/Processing.app/Contents/PlugIns/jdk1.8.0_202.jdk/Contents/Home/jre/bin/java",
+      "command": "java",
       "args": [
         "-cp",
         "target/lxstudio-ide-0.2.1-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar",
