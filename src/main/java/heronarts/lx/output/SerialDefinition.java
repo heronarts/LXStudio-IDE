@@ -46,6 +46,8 @@ public class SerialDefinition {
     this.stopBits = stopBits;
     this.parity = parity;
     // TODO(dev): Something better than this
+    logger.info(String.format("valid portNames %s", validPortNames()));
+
     if (ports.containsKey(portName)) {
       ports.get(portName).dispose();
     }
@@ -108,7 +110,8 @@ public class SerialDefinition {
     // for(byte b: message) {
     // debug_msg += String.format("%02x", b);
     // }
-    // logger.info(String.format("this %s, message: %s, portName: %s", this, debug_msg, this.portName));
+    // logger.info(String.format("this %s, message: %s, portName: %s", this,
+    // debug_msg, this.portName));
     if (!isConnected(this.portName)) {
       if (isValidPortName(this.portName)) {
         try {
