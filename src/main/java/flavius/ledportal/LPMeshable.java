@@ -168,6 +168,10 @@ public abstract class LPMeshable {
    * @return PVector The normal of the plane
    */
   public static PVector getNormal(List<PVector> points) {
+    // TODO: not the best.
+    if(points.size() < 3) {
+      return new PVector(0, 0, 1);
+    }
     PVector anticlockwise = PVector.sub(points.get(2), points.get(0));
     PVector clockwise = PVector.sub(points.get(1), points.get(0));
     PVector result = clockwise.cross(anticlockwise);
