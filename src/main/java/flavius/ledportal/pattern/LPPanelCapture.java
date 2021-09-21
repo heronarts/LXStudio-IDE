@@ -1,20 +1,16 @@
 package flavius.ledportal.pattern;
 
-import java.util.HashSet;
-import java.util.Set;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.Robot;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.app.LXStudioApp;
-import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.ObjectParameter;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.video.Capture;
 
 /**
  * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed
@@ -23,29 +19,9 @@ import processing.core.PImage;
 public class LPPanelCapture extends LPPanel3DGraphicsPattern {
 
   PImage foreground;
-  public float[] screenCapBounds;
-  PImage screenBuffer;
-  private Robot robot;
-  private GraphicsDevice activeScreen;
-  private Rectangle screenCapRectangle;
+  Capture capture;
 
-  public final CompoundParameter boundsXL //
-    = new CompoundParameter("bounds-x-l", 0, 0, 1)
-      .setDescription("The lower x bound");
-
-  public final CompoundParameter boundsYL //
-    = new CompoundParameter("bounds-y-l", 0, 0, 1)
-      .setDescription("The lower y bound");
-
-  public final CompoundParameter boundsXU //
-    = new CompoundParameter("bounds-x-u", 1, 0, 1)
-      .setDescription("The upper x bound");
-
-  public final CompoundParameter boundsYU //
-    = new CompoundParameter("bounds-y-u", 1, 0, 1)
-      .setDescription("The upper y bound");
-
-  private final Set<LXParameter> boundsParameters = new HashSet<LXParameter>();
+  public final ObjectParameter<String> captureName;
 
   public LPPanelCapture(LX lx) {
     super(lx);
@@ -56,28 +32,24 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
     addParameter("xRotate", this.xRotate);
     addParameter("yRotate", this.yRotate);
     addParameter("zRotate", this.zRotate);
-    // addParameter("xShear", this.xShear);
+    addParameter("xShear", this.xShear);
     addParameter("size", this.scale);
-    // addParameter("fov", this.fov);
-    // addParameter("depth", this.depth);
-    addBoundsParameter("bounds-x-l", this.boundsXL);
-    addBoundsParameter("bounds-y-l", this.boundsYL);
-    addBoundsParameter("bounds-x-u", this.boundsXU);
-    addBoundsParameter("bounds-y-u", this.boundsYU);
+    addParameter("fov", this.fov);
+    addParameter("depth", this.depth);
 
-    scheduleRefreshScreenBufferOnce();
+    String[] deviceNames = Capture.list();
+    if (deviceNames.length == 0) {
+      logger.warning("no capture devices available");
+      captureName = new ObjectParameter<String>("capture", new String[] {""});
+    } else {
+      logger.info(String.format("capture devices available: %s", String.join(", ", deviceNames)));
+      captureName = new ObjectParameter<String>("capture", deviceNames);
+    }
+
+    addParameter("capture", captureName);
+
+    scheduleRefreshCaptureOnce();
     scheduleRefreshForeground();
-  }
-
-  /**
-   * Adds a parameter which impacts the screencap bounds.
-   *
-   * @param path      Path to parameter
-   * @param parameter Parameter
-   */
-  protected void addBoundsParameter(String path, LXParameter parameter) {
-    addParameter(path, parameter);
-    this.boundsParameters.add(parameter);
   }
 
   public void scheduleRefreshForeground() {
@@ -92,75 +64,65 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
 
   public void onParameterChanged(LXParameter p) {
     super.onParameterChanged(p);
-    if (this.boundsParameters.contains(p)) {
+    if (p == this.captureName) {
       // Note: this will rebuild this fixture and trigger the structure
       // to rebuild as well
-      regenerateBounds();
+      _refreshCapture();
     }
   }
 
-  public void regenerateBounds() {
-    float[] newScreenCapBounds = new float[] { this.boundsXL.getValuef(),
-      this.boundsYL.getValuef(), this.boundsXU.getValuef(),
-      this.boundsYU.getValuef() };
-    // if (newScreenCapBounds[2] <= newScreenCapBounds[0] ) {
-    // throw new IllegalArgumentException(
-    // String.format("screencap bounds must have maintain x boundary conditions,
-    // instead x-upper (%s) <= x-lower", newScreenCapBounds[2],
-    // newScreenCapBounds[0]));
-    // } else if (newScreenCapBounds[3] <= newScreenCapBounds[1] ) {
-
-    // }
-    screenCapBounds = newScreenCapBounds;
-  }
-
-  protected void _refreshScreenBuffer() {
-    activeScreen = GraphicsEnvironment.getLocalGraphicsEnvironment()
-      .getDefaultScreenDevice();
-    int activeScreenWidth = activeScreen.getDisplayMode().getWidth();
-    int activeScreenHeight = activeScreen.getDisplayMode().getHeight();
-    logger.info(String.format("active screen dimensions: [%d, %d]",
-      activeScreenWidth, activeScreenHeight));
-    regenerateBounds();
-    screenCapRectangle = new Rectangle(
-      (int) (screenCapBounds[0] * activeScreenWidth),
-      (int) (screenCapBounds[1] * activeScreenHeight),
-      (int) (screenCapBounds[2] * activeScreenWidth),
-      (int) (screenCapBounds[3] * activeScreenHeight));
-    logger.info(String.format("screenCap rectangle: %s", screenCapRectangle));
+  protected void _refreshCapture() {
+    String name = (String) this.captureName.getObject();
+    if (name == "") {
+      return;
+    }
+    String captureDevice = "";
     try {
-      robot = new Robot(activeScreen);
+      if( capture != null) {
+        captureDevice = (String) FieldUtils.readField(capture, "device", true);
+      }
     } catch (Exception e) {
-      logger.warning(e.getMessage());
+      logger.warning(e.toString());
     }
-    screenBuffer = new PImage(robot.createScreenCapture(screenCapRectangle));
+    if (capture == null || name != captureDevice) {
+      if (capture != null) {
+        capture.stop();
+      }
+      Capture newCapture = new Capture(LXStudioApp.instance, name);
+      // org.freedesktop.gstreamer.Pipeline pipeline = newCapture.pipeline;
+      // pipeline.play();
+      // pipeline.getState(100);
+      newCapture.start();
+      logger.info(String.format("newCapture (%s) : %s", name, newCapture.toString()));
+      capture = newCapture;
+    }
   }
 
   protected void _refreshForeground() {
-    screenBuffer = new PImage(robot.createScreenCapture(screenCapRectangle));
-    if (screenBuffer == null) {
-      logger.warning("screenBuffer is null");
+    if (capture == null) {
+      logger.warning("capture is null");
       return;
     }
-    int newWidth = screenBuffer.width;
-    int newHeight = screenBuffer.height;
-    if (foreground == null
-      || (foreground.width != newWidth || foreground.height != newHeight)) {
-      foreground = LXStudioApp.instance.createImage(newWidth, newHeight,
-        PConstants.RGB);
+    if (capture.available()) {
+      capture.read();
     }
-    foreground.copy(screenBuffer, 0, 0, screenBuffer.width, screenBuffer.height, 0, 0,
-      foreground.width, foreground.height);
+    int newWidth = capture.width;
+    int newHeight = capture.height;
+    if (foreground == null || foreground.width != newWidth || foreground.height != newHeight ) {
+      foreground = LXStudioApp.instance.createImage(newWidth, newHeight, PConstants.RGB);
+    }
+
+    LXStudioApp.instance.setPixelsFrom(foreground, capture);
   }
 
-  public void scheduleRefreshScreenBufferOnce() {
-    LXLoopTask refreshScreenBufferTask = new LXLoopTask() {
+  public void scheduleRefreshCaptureOnce() {
+    LXLoopTask refreshCaptureTask = new LXLoopTask() {
       @Override
       public void loop(double deltaMs) {
-        _refreshScreenBuffer();
+        _refreshCapture();
       }
     };
-    LXStudioApp.instance.scheduleDrawLoopTaskOnce(refreshScreenBufferTask);
+    LXStudioApp.instance.scheduleDrawLoopTaskOnce(refreshCaptureTask);
   }
 
   @Override

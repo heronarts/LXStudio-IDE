@@ -38,6 +38,7 @@ import flavius.ledportal.pattern.LPPanelProjectedVideo;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
+import flavius.ledportal.pattern.LPPanelScreenCapture;
 import flavius.ledportal.pattern.LPPanelCapture;
 import flavius.ledportal.structure.LPPanelFixture;
 import heronarts.lx.LX;
@@ -49,7 +50,6 @@ import heronarts.lx.app.media.VideoLibrary;
 import heronarts.lx.app.pattern.VideoFrame;
 import heronarts.lx.app.ui.UIAxes;
 import heronarts.lx.app.ui.UIPanelFixture;
-import heronarts.lx.app.ui.UIVideoFrame;
 import heronarts.lx.app.ui.UIWireFrame;
 import heronarts.lx.pattern.GraphicEqualizerPattern;
 import heronarts.lx.studio.LXStudio;
@@ -59,8 +59,9 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PMatrix3D;
-import processing.core.PVector;
 import processing.video.Movie;
+
+import java.lang.System;
 
 /**
  * This is an example top-level class to build and run an LX Studio application
@@ -105,6 +106,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   @Override
   public void settings() {
+    System.setProperty("jogl.disable.openglcore", "false");
     if (FULLSCREEN) {
       fullScreen(PApplet.P3D);
     } else {
@@ -143,13 +145,14 @@ public class LXStudioApp extends PApplet implements LXPlugin {
         if (movie != null) {
           if (movie.available())
             movie.read();
-          videoFrame.copy(movie, 0, 0, movie.width, movie.height, 0, 0,
-            movie.width, movie.height);
+          
+          setPixelsFrom(videoFrame, movie);
+
         } else if (screenCapRectangle != null) {
           PImage screenBuffer = new PImage(
             robot.createScreenCapture(screenCapRectangle));
-          videoFrame.copy(screenBuffer, 0, 0, screenBuffer.width,
-            screenBuffer.height, 0, 0, screenBuffer.width, screenBuffer.height);
+
+          setPixelsFrom(videoFrame, screenBuffer);
         }
       }
     };
@@ -172,6 +175,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelSolidState.class);
     lx.registry.addPattern(LPPanelHexLife.class);
     lx.registry.addPattern(LPPanelVideo.class);
+    lx.registry.addPattern(LPPanelScreenCapture.class);
     lx.registry.addPattern(LPPanelCapture.class);
     // lx.registry.addPattern(LPPanelShader.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
@@ -197,7 +201,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
         ;
       movie.read();
       if (videoFrame == null)
-        videoFrame = createImage(movie.width, movie.height, RGB);
+        videoFrame = createImage(movie.width, movie.height, ARGB);
     } else if (config.screenCapBounds != null) {
       activeScreen = GraphicsEnvironment.getLocalGraphicsEnvironment()
         .getDefaultScreenDevice();
@@ -371,6 +375,31 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     return this;
   }
 
+  public void setPixelsFrom(PImage dst, PImage src) {
+    
+    try {
+      // These doesn't work on linux
+      // dst.set(0, 0, src.get());
+      // dst.copy(src, 0, 0, src.width, src.height, 0, 0, dst.width, dst.height);
+      
+      // This works on Linux
+      int[] copyPixels = (int []) FieldUtils.readField(src, "copyPixels", true);
+      int numPixels = Math.min(copyPixels.length, src.width * src.height);
+      for( int i = 0; i < numPixels; i++) {
+        int pixel = copyPixels[i];
+        dst.pixels[i] = (
+          (((pixel >> 16) & 0xff) << 0) |
+          (pixel >> 0 & 0x00ff00) |
+          (((pixel >> 0) & 0xff) << 16) |
+          0xff000000
+        );
+      }
+      dst.updatePixels();
+    } catch (Exception e) {
+      logger.warning(e.toString());
+    }
+  }
+
   @Override
   public void draw() {
     // All handled by core LX engine, do not modify, method exists only so that
@@ -439,5 +468,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     } else {
       PApplet.main(LXStudioApp.class, args);
     }
+  }
+
+  public void movieEvent(Movie m) {
+    m.read();
   }
 }

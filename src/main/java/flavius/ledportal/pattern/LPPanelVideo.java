@@ -96,7 +96,7 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
       logger.warning("movie is null");
       return;
     }
-    if (movie.available())
+    if (movie.available()) 
       movie.read();
     int newWidth = movie.width;
     int newHeight = movie.height;
@@ -105,8 +105,7 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
       foreground = LXStudioApp.instance.createImage(newWidth, newHeight,
         PConstants.RGB);
     }
-    foreground.copy(movie, 0, 0, movie.width, movie.height, 0, 0,
-      foreground.width, foreground.height);
+    LXStudioApp.instance.setPixelsFrom(foreground, movie);
   }
 
   public void scheduleRefreshVideoOnce() {
