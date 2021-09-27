@@ -36,10 +36,11 @@ import flavius.ledportal.pattern.LPPanelBLM;
 import flavius.ledportal.pattern.LPPanelHexLife;
 import flavius.ledportal.pattern.LPPanelProjectedVideo;
 import flavius.ledportal.pattern.LPPanelShader;
+import flavius.ledportal.pattern.LPPanelShaderBlobby;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
-import flavius.ledportal.pattern.LPPanelScreenCapture;
+// import flavius.ledportal.pattern.LPPanelScreenCapture;
 import flavius.ledportal.pattern.LPPanelCapture;
 import flavius.ledportal.structure.LPPanelFixture;
 import heronarts.lx.LX;
@@ -176,9 +177,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelSolidState.class);
     lx.registry.addPattern(LPPanelHexLife.class);
     lx.registry.addPattern(LPPanelVideo.class);
-    lx.registry.addPattern(LPPanelScreenCapture.class);
+    // lx.registry.addPattern(LPPanelScreenCapture.class);
     lx.registry.addPattern(LPPanelCapture.class);
-    lx.registry.addPattern(LPPanelShader.class);
+    // lx.registry.addPattern(LPPanelShader.class);
+    lx.registry.addPattern(LPPanelShaderBlobby.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
     lx.registry.addPattern(LPPanelProjectedVideo.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
@@ -339,7 +341,9 @@ public class LXStudioApp extends PApplet implements LXPlugin {
    * @return this
    */
   public LXStudioApp scheduleDrawLoopTask(LXLoopTask drawLoopTask) {
-    drawLoopTasksToAdd.add(drawLoopTask);
+    synchronized (this) {
+      drawLoopTasksToAdd.add(drawLoopTask);
+    }
     return this;
   }
 
@@ -377,25 +381,30 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   }
 
   public void setPixelsFrom(PImage dst, PImage src) {
-    
+    if(dst == null) {
+      return;
+    }
     try {
-      // These doesn't work on linux
-      // dst.set(0, 0, src.get());
-      // dst.copy(src, 0, 0, src.width, src.height, 0, 0, dst.width, dst.height);
-      
-      // This works on Linux
-      int[] copyPixels = (int []) FieldUtils.readField(src, "copyPixels", true);
-      int numPixels = Math.min(copyPixels.length, src.width * src.height);
-      for( int i = 0; i < numPixels; i++) {
-        int pixel = copyPixels[i];
-        dst.pixels[i] = (
-          (((pixel >> 16) & 0xff) << 0) |
-          (pixel >> 0 & 0x00ff00) |
-          (((pixel >> 0) & 0xff) << 16) |
-          0xff000000
-        );
+      if(System.getProperty("os.name").contains("Linux")) {
+        // This works on Linux
+        int[] copyPixels = (int []) FieldUtils.readField(src, "copyPixels", true);
+        int numPixels = Math.min(copyPixels.length, src.width * src.height);
+        for( int i = 0; i < numPixels; i++) {
+          int pixel = copyPixels[i];
+          dst.pixels[i] = (
+            (((pixel >> 16) & 0xff) << 0) |
+            (pixel >> 0 & 0x00ff00) |
+            (((pixel >> 0) & 0xff) << 16) |
+            0xff000000
+          );
+        }
+        dst.updatePixels();
+      } else {
+        // These doesn't work on linux
+        dst.set(0, 0, src.get());
+        // dst.copy(src, 0, 0, src.width, src.height, 0, 0, dst.width, dst.height);
       }
-      dst.updatePixels();
+
     } catch (Exception e) {
       logger.warning(e.toString());
     }
@@ -405,17 +414,19 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public void draw() {
     // All handled by core LX engine, do not modify, method exists only so that
     // Processing will run a draw-loop.
-    for (LXLoopTask drawLoopTask : this.drawLoopTasksToAdd) {
-      addDrawLoopTask(drawLoopTask);
+    synchronized (this) {
+      for (LXLoopTask drawLoopTask : this.drawLoopTasksToAdd) {
+        addDrawLoopTask(drawLoopTask);
+      }
+      drawLoopTasksToAdd.clear();
+      for (LXLoopTask drawLoopTask : this.drawLoopTasks) {
+        drawLoopTask.loop(0.f);
+      }
+      for (LXLoopTask drawLoopTask : this.drawLoopTasksToRemove) {
+        removeDrawLoopTask(drawLoopTask);
+      }
+      drawLoopTasksToRemove.clear();
     }
-    drawLoopTasksToAdd.clear();
-    for (LXLoopTask drawLoopTask : this.drawLoopTasks) {
-      drawLoopTask.loop(0.f);
-    }
-    for (LXLoopTask drawLoopTask : this.drawLoopTasksToRemove) {
-      removeDrawLoopTask(drawLoopTask);
-    }
-    drawLoopTasksToRemove.clear();
   }
 
   /**
