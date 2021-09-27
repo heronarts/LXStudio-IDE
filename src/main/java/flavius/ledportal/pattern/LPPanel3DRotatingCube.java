@@ -82,8 +82,8 @@ public class LPPanel3DRotatingCube extends LPPanel3DGraphicsPattern {
     edges.add(new int[] { 7, 6 });
     edges.add(new int[] { 6, 4 });
     faces.add(new int[] { 3, 7, 5, 1 });
-    faces.add(new int[] { 0, 4, 5, 1 });
-    faces.add(new int[] { 2, 6, 4, 0 });
+    faces.add(new int[] { 1, 5, 4, 0 });
+    faces.add(new int[] { 0, 4, 6, 2 });
     faces.add(new int[] { 2, 6, 7, 3 });
     faces.add(new int[] { 2, 3, 1, 0 });
     faces.add(new int[] { 7, 6, 4, 5 });
