@@ -12,28 +12,31 @@ import processing.core.PGraphics;
  * 
  * Stolen from https://github.com/genekogan/Processing-Shader-Examples
  */
-public class LPPanelShaderBlobby extends LPPanelShaderDirect {
+public class LPPanelShaderMonjori extends LPPanelShaderDirect {
     long startTime;
 
-    public final CompoundParameter depth = new CompoundParameter("depth", 1.0,
-        0.0, 2.0).setDescription("Depth of blobbiness")
+    public final CompoundParameter graininess = new CompoundParameter(
+        "graininess", 50.0, 10.0, 100.0).setDescription("graininess")
             .setPolarity(LXParameter.Polarity.BIPOLAR);
-            
-    public final CompoundParameter rate = new CompoundParameter("rate", 1.0,
-        0.0, 2.0).setDescription("Rate of movement")
+    public final CompoundParameter pace = new CompoundParameter(
+        "pace", 30.0, 20.0, 80.0).setDescription("speed of movement")
+            .setPolarity(LXParameter.Polarity.BIPOLAR);
+    public final CompoundParameter twist = new CompoundParameter("twist", 10.0,
+        0.0, 100.0).setDescription("twistiness")
             .setPolarity(LXParameter.Polarity.BIPOLAR);
 
-    public LPPanelShaderBlobby(LX lx) {
+    public LPPanelShaderMonjori(LX lx) {
         super(lx);
 
         startTime = System.currentTimeMillis();
 
         String shaderPath = MediaLibrary.getCanonicalContentPath(lx, "shaders");
         this.shader = LXStudioApp.instance
-            .loadShader(shaderPath + "/blobby.glsl");
+            .loadShader(shaderPath + "/monjori.glsl");
 
-        addParameter("depth", this.depth);
-        addParameter("rate", this.rate);
+        addParameter("graininess", this.graininess);
+        addParameter("pace", this.pace);
+        addParameter("twist", this.twist);
     }
 
     @Override
@@ -43,7 +46,8 @@ public class LPPanelShaderBlobby extends LPPanelShaderDirect {
         shader.set("time",
             (float) ((System.currentTimeMillis() - startTime) / 1000.0));
         shader.set("resolution", (float) (pg.width), (float) (pg.height));
-        shader.set("depth", (float) (depth.getValuef()));
-        shader.set("rate", (float) (rate.getValuef()));
+        shader.set("graininess", (float) (graininess.getValuef()));
+        shader.set("pace", (float) (pace.getValuef()));
+        shader.set("twist", (float) (twist.getValuef()));
     }
 }

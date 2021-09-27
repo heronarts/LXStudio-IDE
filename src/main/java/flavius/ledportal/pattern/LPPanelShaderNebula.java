@@ -8,6 +8,10 @@ import heronarts.lx.parameter.CompoundParameter;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
+/**
+ * 
+ * Stolen from https://github.com/genekogan/Processing-Shader-Examples
+ */
 public class LPPanelShaderNebula extends LPPanelShaderDirect {
     long startTime;
             
