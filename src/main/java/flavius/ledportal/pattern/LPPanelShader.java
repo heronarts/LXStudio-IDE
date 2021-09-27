@@ -56,6 +56,11 @@ public class LPPanelShader extends LPPanel3DGraphicsPattern {
 
   @Override
   public void onDraw(final PGraphics pg) {
+
+    final float thicc = this.thicc.getValuef();
+    final float weight = (float) (Math.pow(10,
+      (double) (2 * (thicc - 1))));
+
     pg.pushMatrix();
     applyBackground();
     applyScale();
@@ -63,7 +68,7 @@ public class LPPanelShader extends LPPanel3DGraphicsPattern {
     pg.pointLight(200, 200, 200, 1, 1, 1);
     // pg.stroke(pg.color(0xff));
     pg.fill(0x77000000);
-    pg.strokeWeight(0.1f);
+    pg.strokeWeight(weight);
     applyShear();
     applyRotation();
     applyScale();
