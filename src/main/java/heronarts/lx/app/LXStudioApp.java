@@ -39,6 +39,7 @@ import flavius.ledportal.pattern.LPPanelShader;
 import flavius.ledportal.pattern.LPPanelShaderBlobby;
 import flavius.ledportal.pattern.LPPanelShaderMonjori;
 import flavius.ledportal.pattern.LPPanelShaderNebula;
+import flavius.ledportal.pattern.LPPanelShaderPartyBlob;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
@@ -183,6 +184,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelCapture.class);
     // lx.registry.addPattern(LPPanelShader.class);
     lx.registry.addPattern(LPPanelShaderBlobby.class);
+    lx.registry.addPattern(LPPanelShaderPartyBlob.class);
     lx.registry.addPattern(LPPanelShaderNebula.class);
     lx.registry.addPattern(LPPanelShaderMonjori.class);
     lx.registry.addPattern(GraphicEqualizerPattern.class);
