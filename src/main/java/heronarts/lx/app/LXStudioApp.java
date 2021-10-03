@@ -40,6 +40,7 @@ import flavius.ledportal.pattern.LPPanelShaderBlobby;
 import flavius.ledportal.pattern.LPPanelShaderMonjori;
 import flavius.ledportal.pattern.LPPanelShaderNebula;
 import flavius.ledportal.pattern.LPPanelShaderPartyBlob;
+import flavius.ledportal.pattern.LPPanelShaderSpiral;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
@@ -150,7 +151,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
         if (movie != null) {
           if (movie.available())
             movie.read();
-          
+
           setPixelsFrom(videoFrame, movie);
 
         } else if (screenCapRectangle != null) {
@@ -184,6 +185,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelCapture.class);
     // lx.registry.addPattern(LPPanelShader.class);
     lx.registry.addPattern(LPPanelShaderBlobby.class);
+    lx.registry.addPattern(LPPanelShaderSpiral.class);
     lx.registry.addPattern(LPPanelShaderPartyBlob.class);
     lx.registry.addPattern(LPPanelShaderNebula.class);
     lx.registry.addPattern(LPPanelShaderMonjori.class);
