@@ -131,6 +131,12 @@
       <version>3.10</version>
     </dependency>
 
+	<dependency>
+		<groupId>extrapixel</groupId>
+		<artifactId>gifAnimation</artifactId>
+		<version>3.0.0</version>
+    </dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

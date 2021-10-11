@@ -81,6 +81,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)
 
 - [Processing 3.5.4](https://processing.org/download/)
 - Processing Video library: **Sketch** → **Import Library** → **Add Library**
+- [Processing Gif-Animation Library](https://github.com/extrapixel/gif-animation/tree/3.0)
 
 ### Determine Processing Java Library locations
 
@@ -90,7 +91,6 @@ If you are not on macOS and Processing 3.5.4, you may need to adjust the locatio
 export PROCESSING_CORE="/Applications/Processing.app/Contents/Java"
 export PROCESSING_LIB="$HOME/Documents/Processing/libraries"
 ```
-
 
 ```bash
 export PROCESSING_CORE="$HOME/Downloads/processing-3.5.4/core/library"
@@ -105,6 +105,7 @@ export PROCESSING_LIB="$HOME/sketchbook/libraries",
 ### Installing Processing libraries
 
 These jars need to be installed into your local maven repository (e.g. `~/.m2/repository`) manually. The `groupId`, `artifactId` and `version` fields should match the output of  `unzip -q -c <jar path> META-INF/MANIFEST.MF`
+
 You can do this with the following commands (exact jar locations could change):
 
 ```bash
@@ -138,6 +139,12 @@ mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.2.0.jar -D
 mvn install:install-file -Dfile=${VIDEO_LIB}/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
 ```
 
+for gifs:
+
+```bash
+mvn install:install-file "-Dfile=${PROCESSING_LIB}/gifAnimation/library/gifAnimation.jar" "-DgroupId=extrapixel" "-DartifactId=gifAnimation" "-Dversion=3.0.0" "-Dpackaging=jar" 
+```
+
 ## Running with BYO Java
 
 ### BYO Java Prerequisites
@@ -146,7 +153,6 @@ This has only been tested on MacOS, if you're a Java wizard, you may be able to 
 
 - Java JDK 1.8.0_202
 - Maven (if not using IntelliJ / Eclipse)
-
 
 **on Windows with choco:**
 
