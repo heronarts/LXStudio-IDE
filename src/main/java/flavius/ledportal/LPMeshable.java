@@ -13,7 +13,7 @@ import processing.data.JSONArray;
 import processing.data.JSONObject;
 
 public abstract class LPMeshable {
-  private static final Logger logger = Logger
+  protected static final Logger logger = Logger
     .getLogger(LPMeshable.class.getName());
   public List<PVector> vertices = new ArrayList<PVector>();
   public List<int[]> edges = new ArrayList<int[]>();

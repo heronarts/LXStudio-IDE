@@ -18,7 +18,7 @@ import processing.core.PVector;
  */
 public class LPPanelModel extends LXModel {
 
-  private static final Logger logger = Logger
+  protected static final Logger logger = Logger
     .getLogger(LPPanelModel.class.getName());
 
   public static int[][] getIndexBounds(int[][] indices) {

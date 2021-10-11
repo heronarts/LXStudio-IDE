@@ -15,7 +15,7 @@ public abstract class MediaLibrary<T> {
   protected HashMap<String, T> media = new HashMap<String, T>();
   protected static final boolean PREPARE_MEDIA = false;
 
-  private static final Logger logger = Logger
+  protected static final Logger logger = Logger
     .getLogger(MediaLibrary.class.getName());
 
   public static String[] splitExt(String fileName) {

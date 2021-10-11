@@ -34,7 +34,7 @@ public class SerialDefinition {
   public static Map<String, Serial> ports = new HashMap<String, Serial>();
   public static Map<String, Boolean> status = new HashMap<String, Boolean>();
 
-  private static final Logger logger = Logger
+  protected static final Logger logger = Logger
     .getLogger(SerialDefinition.class.getName());
 
   public SerialDefinition(String portName, int baudRate, int dataBits,

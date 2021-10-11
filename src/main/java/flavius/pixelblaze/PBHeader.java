@@ -12,7 +12,7 @@ import flavius.pixelblaze.util.PBConstants;
  * @author <a href="https://dev.laserphile.com/">Derwent McElhinney</a>
  */
 public class PBHeader implements PBConstants {
-  // private static final Logger logger =
+  // protected static final Logger logger =
   // Logger.getLogger(PBHeader.class.getName());
   public int channel;
   public PBRecordType recordType;

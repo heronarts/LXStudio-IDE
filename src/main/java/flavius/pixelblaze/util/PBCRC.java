@@ -4,7 +4,7 @@ package flavius.pixelblaze.util;
  * PBCRC PixelBlaze implementation of CRC
  */
 public class PBCRC {
-  // private static final Logger logger = Logger.getLogger(PBCRC.class.getName());
+  // protected static final Logger logger = Logger.getLogger(PBCRC.class.getName());
 
   public static long[] table = new long[] { 0x00000000L, 0x77073096L,
     0xee0e612cL, 0x990951baL, 0x076dc419L, 0x706af48fL, 0xe963a535L,

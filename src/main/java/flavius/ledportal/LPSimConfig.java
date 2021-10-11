@@ -11,7 +11,7 @@ import processing.data.JSONArray;
 import processing.data.JSONObject;
 
 public class LPSimConfig {
-  private static final Logger logger = Logger
+  protected static final Logger logger = Logger
     .getLogger(LPSimConfig.class.getName());
   public List<LPPanelConfig> panels = new ArrayList<LPPanelConfig>();
   public List<LPDecoration> decorations = new ArrayList<LPDecoration>();

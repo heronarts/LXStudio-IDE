@@ -30,7 +30,7 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
   private static final int GRID_LABEL_WIDTH = 64;
   private static final int GRID_HEIGHT = 16;
 
-  private static final Logger logger = Logger
+  protected static final Logger logger = Logger
     .getLogger(UIPanelFixture.class.getName());
 
   public UI2dComponent[][] buildFixtureSection(UIFixture uiFixture,

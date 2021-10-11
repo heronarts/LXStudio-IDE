@@ -8,7 +8,7 @@ import processing.data.JSONArray;
 import processing.core.PVector;
 
 public class LPPanelConfig extends LPMeshable {
-  private static final Logger logger = Logger
+  protected static final Logger logger = Logger
     .getLogger(LPPanelConfig.class.getName());
   public int[][] leds;
 
