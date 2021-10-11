@@ -22,6 +22,11 @@ public class UIVideoFrame extends UI3dComponent {
     this.videoFrame = videoFrame;
   }
 
+  /**
+   * Last time a warning was emitted
+   */
+  long lastWarning = 0;
+
   @Override
   protected void onDraw(UI ui, PGraphics pg) {
     pg.pushStyle();
@@ -29,12 +34,20 @@ public class UIVideoFrame extends UI3dComponent {
     pg.beginShape();
     pg.tint(255, 126);
     if(videoFrame == null) {
-      logger.warning("videoFrame is null");
+      long now = System.currentTimeMillis();
+      if (lastWarning == 0 || now - lastWarning > 10000) {
+        logger.warning("videoFrame is null...");
+        lastWarning = now;
+      }
       return;
     }
     pg.texture(videoFrame);
     if(vertexUVPairs == null) {
-      logger.warning("vertexUVPairs is null");
+      long now = System.currentTimeMillis();
+      if (lastWarning == 0 || now - lastWarning > 10000) {
+        logger.warning("vertexUVPairs is null...");
+        lastWarning = now;
+      }
       return;
     }
     for (float[] vertexUVPair : vertexUVPairs) {

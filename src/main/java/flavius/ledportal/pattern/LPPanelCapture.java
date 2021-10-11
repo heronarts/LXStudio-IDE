@@ -23,6 +23,11 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
 
   public final ObjectParameter<String> captureName;
 
+  /**
+   * Last time a warning was emitted
+   */
+  long lastWarning = 0;
+  
   public LPPanelCapture(LX lx) {
     super(lx);
 
@@ -100,7 +105,11 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
 
   protected void _refreshForeground() {
     if (capture == null) {
-      logger.warning("capture is null");
+            long now = System.currentTimeMillis();
+      if (lastWarning == 0 || now - lastWarning > 10000) {
+        logger.warning("capture is null...");
+        lastWarning = now;
+      }
       return;
     }
     if (capture.available()) {

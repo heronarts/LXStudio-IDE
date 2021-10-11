@@ -48,6 +48,11 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
    */
   LXLoopTask renderTask;
 
+  /**
+   * Last time a warning was emitted
+   */
+  long lastWarning = 0;
+
   public final String renderer = PGraphics.P3D;
 
   protected static final Logger logger = Logger
@@ -275,11 +280,19 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
 
   public void applyForeground(PImage foreground) {
     if (foreground == null) {
-      logger.warning("foreground is null");
+      long now = System.currentTimeMillis();
+      if (lastWarning == 0 || now - lastWarning > 10000) {
+        logger.warning("foreground is null...");
+        lastWarning = now;
+      }
       return;
     }
-    if(foreground.width == 0 || foreground.height == 0) {
-      logger.warning("foreground is zero-sized");
+    if(foreground.width == 0 || foreground.height == 0) {      
+      long now = System.currentTimeMillis();
+      if (lastWarning == 0 || now - lastWarning > 10000) {
+        logger.warning("foreground is zero-sized...");
+        lastWarning = now;
+      }
       return;
     }
     int foreSize = Math.max(foreground.width, foreground.height);

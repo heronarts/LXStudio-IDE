@@ -110,6 +110,11 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public static LXStudio studio;
   public static LXStudioApp instance;
 
+  /**
+   * Last time a warning was emitted
+   */
+  long lastWarning = 0;
+  
   @Override
   public void settings() {
     System.setProperty("jogl.disable.openglcore", "false");
@@ -280,7 +285,11 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     if (videoFrame == null)
       initializeVideoFrame(lx);
     if (videoFrame == null) {
-      logger.warning("videoframe is null");
+      long now = System.currentTimeMillis();
+      if (lastWarning == 0 || now - lastWarning > 10000) {
+        logger.warning("videoframe is null");
+        lastWarning = now;
+      }
       return;
     }
 

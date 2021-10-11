@@ -32,6 +32,11 @@ public class LPPanelProjectedVideo extends LPPanelModelPattern {
     = new CompoundParameter("Vol", 0, 0, 1)
       .setDescription("The volume of the video");
 
+  /**
+   * Last time a warning was emitted
+   */
+  long lastWarning = 0;
+
   public LPPanelProjectedVideo(LX lx) {
     super(lx);
 
@@ -115,7 +120,11 @@ public class LPPanelProjectedVideo extends LPPanelModelPattern {
       logger.info(String.format("newMovie: %s", newMovie.toString()));
     }
     if (newMovie == null) {
-      logger.warning(String.format("newMovie %s is null", name));
+      long now = System.currentTimeMillis();
+      if (lastWarning == 0 || now - lastWarning > 10000) {
+        logger.warning(String.format("newMovie %s is null", name));
+        lastWarning = now;
+      }
       return;
     }
     movie = newMovie;
@@ -125,7 +134,11 @@ public class LPPanelProjectedVideo extends LPPanelModelPattern {
 
   protected void _refreshForeground() {
     if (movie == null) {
-      logger.warning("movie is null");
+      long now = System.currentTimeMillis();
+      if (lastWarning == 0 || now - lastWarning > 10000) {
+        logger.warning("movie is null");
+        lastWarning = now;
+      }
       return;
     }
     if (movie.available())
