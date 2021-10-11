@@ -40,9 +40,10 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
     String[] deviceNames = Capture.list();
     if (deviceNames.length == 0) {
       logger.warning("no capture devices available");
-      captureName = new ObjectParameter<String>("capture", new String[] {""});
+      captureName = new ObjectParameter<String>("capture", new String[] { "" });
     } else {
-      logger.info(String.format("capture devices available: %s", String.join(", ", deviceNames)));
+      logger.info(String.format("capture devices available: %s",
+        String.join(", ", deviceNames)));
       captureName = new ObjectParameter<String>("capture", deviceNames);
     }
 
@@ -77,8 +78,9 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
       return;
     }
     String captureDevice = "";
+    // TODO: this doesn't work on Windows?
     try {
-      if( capture != null) {
+      if (capture != null) {
         captureDevice = (String) FieldUtils.readField(capture, "device", true);
       }
     } catch (Exception e) {
@@ -89,11 +91,9 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
         capture.stop();
       }
       Capture newCapture = new Capture(LXStudioApp.instance, name);
-      // org.freedesktop.gstreamer.Pipeline pipeline = newCapture.pipeline;
-      // pipeline.play();
-      // pipeline.getState(100);
       newCapture.start();
-      logger.info(String.format("newCapture (%s) : %s", name, newCapture.toString()));
+      logger.info(
+        String.format("newCapture (%s) : %s", name, newCapture.toString()));
       capture = newCapture;
     }
   }
@@ -108,8 +108,10 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
     }
     int newWidth = capture.width;
     int newHeight = capture.height;
-    if (foreground == null || foreground.width != newWidth || foreground.height != newHeight ) {
-      foreground = LXStudioApp.instance.createImage(newWidth, newHeight, PConstants.RGB);
+    if (newWidth > 0 && newHeight > 0 && (foreground == null
+      || foreground.width != newWidth || foreground.height != newHeight)) {
+      foreground = LXStudioApp.instance.createImage(newWidth, newHeight,
+        PConstants.RGB);
     }
 
     LXStudioApp.instance.setPixelsFrom(foreground, capture);

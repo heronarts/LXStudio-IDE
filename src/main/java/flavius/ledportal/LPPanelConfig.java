@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Logger;
 import processing.data.JSONObject;
 import processing.data.JSONArray;
-import processing.core.PMatrix3D;
 import processing.core.PVector;
 
 public class LPPanelConfig extends LPMeshable {

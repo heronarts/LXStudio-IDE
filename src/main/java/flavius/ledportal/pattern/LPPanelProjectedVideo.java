@@ -14,10 +14,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.ObjectParameter;
 import processing.core.PConstants;
-import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.video.Movie;
-import processing.core.PMatrix3D;
 import processing.core.PVector;
 
 /**
