@@ -35,7 +35,7 @@ import flavius.ledportal.pattern.LPPanel3DRotatingCube;
 import flavius.ledportal.pattern.LPPanelBLM;
 import flavius.ledportal.pattern.LPPanelHexLife;
 import flavius.ledportal.pattern.LPPanelProjectedVideo;
-import flavius.ledportal.pattern.LPPanelShader;
+// import flavius.ledportal.pattern.LPPanelShader;
 import flavius.ledportal.pattern.LPPanelShaderBlobby;
 import flavius.ledportal.pattern.LPPanelShaderMonjori;
 import flavius.ledportal.pattern.LPPanelShaderNebula;
@@ -46,11 +46,13 @@ import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
 // import flavius.ledportal.pattern.LPPanelScreenCapture;
 import flavius.ledportal.pattern.LPPanelCapture;
+import flavius.ledportal.pattern.LPPanelGif;
 import flavius.ledportal.structure.LPPanelFixture;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.LXPlugin;
 import heronarts.lx.app.media.FontLibrary;
+import heronarts.lx.app.media.GifLibrary;
 import heronarts.lx.app.media.ImageLibrary;
 import heronarts.lx.app.media.VideoLibrary;
 import heronarts.lx.app.pattern.VideoFrame;
@@ -84,12 +86,13 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   private static boolean FULLSCREEN = false;
   // private static boolean FULLSCREEN = true;
 
-  private static final Logger logger = Logger
+  protected static final Logger logger = Logger
     .getLogger(LXStudioApp.class.getName());
 
   public ImageLibrary imageLibrary = new ImageLibrary();
   public VideoLibrary videoLibrary = new VideoLibrary();
   public FontLibrary fontLibrary = new FontLibrary();
+  public GifLibrary gifLibrary = new GifLibrary();
 
   // TODO: Move these to individual video patterns
   private Movie movie;
@@ -187,6 +190,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelHexLife.class);
     lx.registry.addPattern(LPPanelVideo.class);
     // lx.registry.addPattern(LPPanelScreenCapture.class);
+    lx.registry.addPattern(LPPanelGif.class);
     lx.registry.addPattern(LPPanelCapture.class);
     // lx.registry.addPattern(LPPanelShader.class);
     lx.registry.addPattern(LPPanelShaderBlobby.class);
@@ -203,6 +207,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     imageLibrary.init(lx);
     videoLibrary.init(lx);
     fontLibrary.init(lx);
+    gifLibrary.init(lx);
 
     if (videoFrame == null)
       initializeVideoFrame(lx);
