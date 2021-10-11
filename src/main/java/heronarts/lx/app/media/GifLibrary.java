@@ -24,7 +24,7 @@ public class GifLibrary extends MediaLibrary<Gif> {
       result = new Gif(LXStudioApp.instance, fullPath);
       result.loop();
       media.put(name, result);
-    } catch(ArrayIndexOutOfBoundsException e) {
+    } catch(Exception e) {
       logger.warning(e.toString());
     }
     return result;

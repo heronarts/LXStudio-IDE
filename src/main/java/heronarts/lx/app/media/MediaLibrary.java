@@ -5,6 +5,7 @@ import heronarts.lx.LX;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
@@ -70,6 +71,7 @@ public abstract class MediaLibrary<T> {
 
   public String[] getNames(Predicate<String> predicate) {
     String[] names = listing.keySet().stream().filter(predicate).toArray(String[]::new);
+    Arrays.sort(names);
     return names;
   }
 
