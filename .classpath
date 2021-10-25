@@ -35,13 +35,13 @@
 	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all.jar"/>
-	<classpathentry kind="lib" path="/Users/mcslee/Developer/ws2/LXStudio-IDE/lib/lxstudio-0.2.1.jar"/>
-	<classpathentry kind="lib" path="/Users/mcslee/Developer/ws2/LXStudio-IDE/lib/lx-0.2.1-jar-with-dependencies.jar" sourcepath="lib/lx-0.2.1-sources.jar">
+	<classpathentry kind="lib" path="lib/lx-0.2.1-jar-with-dependencies.jar" sourcepath="lib/lx-0.2.1-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/lx-0.2.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/mcslee/Developer/ws2/LXStudio-IDE/lib/p3lx-0.2.1.jar" sourcepath="lib/p3lx-0.2.1-sources.jar">
+	<classpathentry kind="lib" path="lib/lxstudio-0.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/p3lx-0.2.1.jar" sourcepath="lib/p3lx-0.2.1-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/p3lx-0.2.1-javadoc.jar!/"/>
 		</attributes>
