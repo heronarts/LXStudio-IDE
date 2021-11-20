@@ -363,7 +363,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
    * @return this
    */
   public LXStudioApp scheduleDrawLoopTask(LXLoopTask drawLoopTask) {
-    synchronized (this) {
+    synchronized (drawLoopTasks) {
       drawLoopTasksToAdd.add(drawLoopTask);
     }
     return this;
