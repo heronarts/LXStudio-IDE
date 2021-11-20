@@ -48,8 +48,8 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern {
     addParameter("xShear", this.xShear);
     addParameter("size", this.scale);
     addParameter("video", this.gifName);
-    // addParameter("fov", this.fov);
-    // addParameter("depth", this.depth);
+    addParameter("fov", this.fov);
+    addParameter("depth", this.depth);
 
     scheduleRefreshGifOnce();
     scheduleRefreshForeground();
