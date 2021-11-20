@@ -2,6 +2,7 @@ package flavius.ledportal.structure;
 
 import java.net.InetAddress;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import flavius.ledportal.LPMeshable;
@@ -34,9 +35,14 @@ import heronarts.lx.structure.GridFixture.PositionMode;
 import heronarts.lx.structure.GridFixture.Wiring;
 import heronarts.lx.structure.SerialProtocolFixture;
 import heronarts.lx.transform.LXMatrix;
+import processing.core.PMatrix2D;
 import processing.data.JSONArray;
+import java.lang.Math;
 
 public class LPPanelFixture extends SerialProtocolFixture {
+
+  protected static final Logger logger = Logger
+    .getLogger(LPPanelFixture.class.getName());
 
   public final EnumParameter<PositionMode> positionMode = new EnumParameter<PositionMode>(
     "Mode", PositionMode.CORNER).setDescription(
@@ -88,7 +94,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
    * been used to position the points.
    *
    */
-  int[][] gridTransform = new int[2][3];
+  PMatrix2D gridTransform = new PMatrix2D();
 
   /**
    * Array of (x,y) local grid coordinates from which this fixtures points in 3d
@@ -134,22 +140,23 @@ public class LPPanelFixture extends SerialProtocolFixture {
     addMetricsParameter("positionMode", this.positionMode);
   }
 
+  /**
+   * regenerate gridTransform. this creates a 2×3 transformation which applies
+   * the fixtures `globalGridMatrix` to a pixel's 2D (integer) coordinate, then
+   * translates it by it's `globalGridOrigin{X|Y}`
+   */
   public void regenerateGridTransform() {
-    this.gridTransform[0][2] = 0;
-    this.gridTransform[1][2] = 0;
     JSONArray parsed = JSONArray.parse(this.globalGridMatrix.getString());
-    for (int i = 0; i < parsed.size(); i++) {
-      int[] row = parsed.getJSONArray(i).getIntArray();
-      for (int j = 0; j < row.length; j++) {
-        this.gridTransform[i][j] = row[j];
-      }
-    }
-    this.gridTransform[0][2] = this.globalGridOriginX.getValuei();
-    this.gridTransform[1][2] = this.globalGridOriginY.getValuei();
+    float[] row0 = parsed.getJSONArray(0).getFloatArray();
+    float[] row1 = parsed.getJSONArray(1).getFloatArray();
+    this.gridTransform.set( //
+      row0[0], row0[1], this.globalGridOriginX.getValuei(), //
+      row1[0], row1[1], this.globalGridOriginY.getValuei());
   }
 
   /**
-   * regenerates the gridIndices
+   * regenerate `gridIndices` (local) and `worldGridIndices` by applying
+   * `gridTransform` to the fixture's `pointIndicesJson`
    */
   public void regenerateGridIndices() {
     regenerateGridTransform();
@@ -165,11 +172,14 @@ public class LPPanelFixture extends SerialProtocolFixture {
     }
     for (int i = 0; i < newSize; i++) {
       this.gridIndices[i] = parsed.getJSONArray(i).getIntArray();
-      for (int j = 0; j < 2; j++) {
-        this.worldGridIndices[i][j] = //
-          (this.gridIndices[i][0] * this.gridTransform[j][0])
-          + (this.gridIndices[i][1] * this.gridTransform[j][1]) + this.gridTransform[j][2];
-      }
+      this.worldGridIndices[i][0] = Math
+        .round(this.gridTransform.multX(gridIndices[i][0], gridIndices[i][1]));
+      this.worldGridIndices[i][1] = Math
+        .round(this.gridTransform.multY(gridIndices[i][0], gridIndices[i][1]));
+      // logger.info(String.format("%s, %d, %d, %d, %d, %d",
+      // this.label.getString(), i,
+      // this.gridIndices[i][0], this.gridIndices[i][1],
+      // this.worldGridIndices[i][0], this.worldGridIndices[i][1]));
     }
   }
 
@@ -209,7 +219,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
   protected LXModel constructModel(List<LXPoint> modelPoints,
     List<? extends LXModel> childModels, String[] modelKeys) {
     LPPanelModel model = new LPPanelModel(modelPoints.stream()
-      .map(point -> (Point)(point)).collect(Collectors.toList()));
+      .map(point -> (Point) (point)).collect(Collectors.toList()));
     return model;
   }
 
