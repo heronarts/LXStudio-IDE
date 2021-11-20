@@ -90,12 +90,10 @@ public class LPPanelModel extends LXModel {
     }
 
     public void localIndexTransform(LXMatrix matrix) {
-      this.x = matrix.m11 * this.xil + matrix.m12 * this.yil + matrix.m13 * 1
-        + matrix.m14;
-      this.y = matrix.m21 * this.xil + matrix.m22 * this.yil + matrix.m23 * 1
-        + matrix.m24;
-      this.z = matrix.m31 * this.xil + matrix.m32 * this.yil + matrix.m33 * 1
-        + matrix.m34;
+      // Note: matrix.m_3 is not included, because this.zil is effectively zero
+      this.x = matrix.m11 * this.xil + matrix.m12 * this.yil + matrix.m14;
+      this.y = matrix.m21 * this.xil + matrix.m22 * this.yil + matrix.m24;
+      this.z = matrix.m31 * this.xil + matrix.m32 * this.yil + matrix.m34;
     }
 
     public LXPoint set(Point that) {
