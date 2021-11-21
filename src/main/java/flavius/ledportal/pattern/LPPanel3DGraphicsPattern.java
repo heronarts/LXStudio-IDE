@@ -220,13 +220,19 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     LXStudioApp.instance.scheduleDrawLoopTaskOnce(resizeTask);
   }
 
+  /**
+   * When the model containing all our fixtures has been updated, ensure that
+   * our `pg` and `frame` are sized correctly.
+   * 
+   * making these square makes the camera math behave better.
+   */
   @Override
   public void beforeUpdateModel(LPPanelModel newModel) {
-    if (pg != null && pg.width == newModel.width + 1
-      && pg.height == newModel.height + 1) {
+    int modelSize = Math.max(newModel.width + 1, newModel.height + 1);
+    if (pg != null && pg.width == modelSize && pg.height == modelSize) {
       return;
     }
-    scheduleResize(newModel.width + 1, newModel.height + 1);
+    scheduleResize(modelSize, modelSize);
   }
 
   @Override
