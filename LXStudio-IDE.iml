@@ -18,9 +18,9 @@
     <libelement value="jar://$MODULE_DIR$/lib/processing-3.5.4/jogl-all-natives-windows-amd64.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/processing-3.5.4/jogl-all-natives-windows-i586.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/processing-3.5.4/jogl-all.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/lxstudio-0.2.2.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/lx-0.2.2-jar-with-dependencies.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/p3lx-0.2.2.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/lxstudio-0.2.3.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/lx-0.2.3-jar-with-dependencies.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/p3lx-0.2.3.jar!/" />
     <src_description expected_position="1">
       <src_folder value="file://$MODULE_DIR$/src/main/java" expected_position="0" />
       <src_folder value="file://$MODULE_DIR$/src/test/java" expected_position="2" />
@@ -188,39 +188,39 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="lxstudio-0.2.2.jar">
+      <library name="lxstudio-0.2.3.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/lxstudio-0.2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lxstudio-0.2.3.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$MODULE_DIR$/lib/lxstudio-0.2.2-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lxstudio-0.2.3-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="lx-0.2.2-jar-with-dependencies.jar">
+      <library name="lx-0.2.3-jar-with-dependencies.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/lx-0.2.2-jar-with-dependencies.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lx-0.2.3-jar-with-dependencies.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$MODULE_DIR$/lib/lx-0.2.2-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lx-0.2.3-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/lx-0.2.2-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lx-0.2.3-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="p3lx-0.2.2.jar">
+      <library name="p3lx-0.2.3.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/p3lx-0.2.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/p3lx-0.2.3.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$MODULE_DIR$/lib/p3lx-0.2.2-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/p3lx-0.2.3-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/p3lx-0.2.2-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/p3lx-0.2.3-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

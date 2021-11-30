@@ -6,7 +6,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/gluegen-rt-natives-macosx-universal.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/jogl-all-natives-linux-i586.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/jogl-all-natives-windows-amd64.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/lx-0.2.1-jar-with-dependencies.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/lx-0.2.3-jar-with-dependencies.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/gluegen-rt-natives-linux-amd64.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/gluegen-rt-natives-linux-i586.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/gluegen-rt-natives-linux-armv6hf.jar" path-in-jar="/" />
@@ -18,11 +18,11 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/jogl-all-natives-windows-i586.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/jogl-all.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/jogl-all-natives-linux-amd64.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/p3lx-0.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/p3lx-0.2.3.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/gluegen-rt-natives-linux-aarch64.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/gluegen-rt.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/processing-3.5.4/gluegen-rt-natives-windows-amd64.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/lxstudio-0.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/lxstudio-0.2.3.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
