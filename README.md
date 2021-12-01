@@ -13,7 +13,7 @@ Please note that LX Studio is not open-source software. The license grants permi
 
 ### Getting Started ###
 
-LX Studio runs using the Processing 3 framework. This version of the project directly embeds those dependencies and may be run from within a Java IDE,
+LX Studio runs using the Processing 4 framework. This version of the project directly embeds those dependencies and may be run from within a Java IDE,
 for larger projects in which the Processing IDE is insufficient. The example project here can be run either using the full Processing-based UI,
 or alternatively in a headless CLI-only mode.
 
