@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="EclipseModuleManager">
     <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/core.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-linux-aarch64.jar!/" />
@@ -26,13 +26,15 @@
       <src_folder value="file://$MODULE_DIR$/src/test/java" expected_position="2" />
     </src_description>
   </component>
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="JavaSE-1.8" jdkType="JavaSDK" />
+    <orderEntry type="jdk" jdkName="11" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="core.jar">
@@ -224,5 +226,13 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: com.heronarts:lx:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.9" level="project" />
+    <orderEntry type="library" name="Maven: uk.co.xfactory-librarians:coremidi4j:1.6" level="project" />
+    <orderEntry type="library" name="Maven: com.heronarts:p4lx:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.heronarts:lxstudio:0.4.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.processing:core:4.0b2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.jogl:jogl-all:2.4.0-rc-20210111" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.gluegen:gluegen-rt-main:2.4.0-rc-20210111" level="project" />
   </component>
 </module>
