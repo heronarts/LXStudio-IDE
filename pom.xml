@@ -5,12 +5,11 @@
 
 	<groupId>com.heronarts</groupId>
 	<artifactId>lxstudio-ide</artifactId>
-	<version>0.2.3</version>
+	<version>0.4.0</version>
 	<packaging>jar</packaging>
 
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.release>11</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
@@ -29,7 +28,7 @@
 
 		<dependency>
 			<groupId>com.heronarts</groupId>
-			<artifactId>p3lx</artifactId>
+			<artifactId>p4lx</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -42,21 +41,21 @@
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>core</artifactId>
-			<version>3.5.4</version>
+			<version>4.0b2</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-main</artifactId>
-			<version>2.3.2</version>
+			<artifactId>jogl-all</artifactId>
+			<version>2.4.0-rc-20210111</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-main</artifactId>
-			<version>2.3.2</version>
+			<version>2.4.0-rc-20210111</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

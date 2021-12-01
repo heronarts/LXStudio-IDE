@@ -92,7 +92,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   /**
    * Main interface into the program. Two modes are supported, if the --headless
    * flag is supplied then a raw CLI version of LX is used. If not, then we embed
-   * in a Processing 3 applet and run as such.
+   * in a Processing 4 applet and run as such.
    *
    * @param args Command-line arguments
    */
