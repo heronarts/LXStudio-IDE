@@ -39,6 +39,10 @@ import processing.core.PMatrix2D;
 import processing.data.JSONArray;
 import java.lang.Math;
 
+/**
+ * A fixture based around an `LPPanelModel`, with a grid layout and support for
+ * Serial-based protocols in addition to the usual network protocols.
+ */
 public class LPPanelFixture extends SerialProtocolFixture {
 
   protected static final Logger logger = Logger
@@ -65,14 +69,15 @@ public class LPPanelFixture extends SerialProtocolFixture {
       .setDescription("A JSON array of integer points that make up this panel");
 
   public final BoundedParameter rowSpacing = new BoundedParameter("Row Spacing",
-    10, 0, 1000000).setDescription("Spacing between rows in the grid");
+    1, 0, Integer.MAX_VALUE).setDescription("Spacing between rows in the grid");
 
   public final BoundedParameter columnSpacing = new BoundedParameter(
-    "Column Spacing", 10, 0, 1000000)
+    "Column Spacing", 1, 0, Integer.MAX_VALUE)
       .setDescription("Spacing between columns in the grid");
 
   public final BoundedParameter rowShear = new BoundedParameter("Row Shear", 0,
-    0, 1000000).setDescription("Offset to add to each additional row");
+    0, Integer.MAX_VALUE)
+      .setDescription("Offset to add to each additional row");
 
   public final DiscreteParameter globalGridOriginX = new DiscreteParameter(
     "Global Grid Origin X", 0, Integer.MIN_VALUE / 2, Integer.MAX_VALUE / 2)
@@ -86,7 +91,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
 
   public final StringParameter globalGridMatrix = new StringParameter(
     "Global Grid Matrix", "[[1,0],[0,1]]").setDescription(
-      "A JSON integer matrix which transforms local indices to global grid indices");
+      "A JSON matrix of floats which transforms local indices to global grid indices");
 
   /**
    * A transformation to apply to the local grid indices in this fixture to give
@@ -220,6 +225,11 @@ public class LPPanelFixture extends SerialProtocolFixture {
     List<? extends LXModel> childModels, String[] modelKeys) {
     LPPanelModel model = new LPPanelModel(modelPoints.stream()
       .map(point -> (Point) (point)).collect(Collectors.toList()));
+    logger
+      .info(String.format("constructed model for %s: %d x %d (%d) X(%d,%d), Y(%d,%d)",
+        label.getString(),
+        model.width, model.height, model.size, model.metrics.xiMin,
+        model.metrics.xiMax, model.metrics.yiMin, model.metrics.yiMax));
     return model;
   }
 

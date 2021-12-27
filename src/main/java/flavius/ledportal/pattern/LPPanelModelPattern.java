@@ -9,14 +9,18 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.pattern.LXModelPattern;
 
 /**
- * Templatized version of the LXPattern class, which strongly types a particular
- * fixture.
+ * An `LXModelPattern` which is designed to work with an `LPPanelModel`.
  *
- * @param <T> Type of LXModel class that is always expected
+ * There must be at least one LPPanelModel in `lx.structure` for this to work.
  */
-// public abstract class LPPanelStructurePattern extends LXPattern {
 public abstract class LPPanelModelPattern
   extends LXModelPattern<LPPanelModel> {
+
+  /**
+   * Keep track of the model returned by `lx.structure.getModel()` each time
+   * `this.getModel` is called to determine if things have changed since last
+   * time.
+   */
   protected LXModel structureModel;
 
   protected static final Logger logger = Logger
@@ -27,6 +31,9 @@ public abstract class LPPanelModelPattern
     getModel();
   }
 
+  /**
+   * Hook which is called before a model update occurs.
+   */
   public void beforeUpdateModel(LPPanelModel newModel) {
   }
 
@@ -34,6 +41,9 @@ public abstract class LPPanelModelPattern
     return LPPanelModel.class.isInstance(model);
   }
 
+  /**
+   * Assemble fixtures from `LXStructure` into an `LPPanelModel`
+   */
   @Override
   public LPPanelModel getModel() {
     LXModel newStructureModel = lx.structure.getModel();
@@ -53,6 +63,8 @@ public abstract class LPPanelModelPattern
     if (!(newModel.width > 0 && newModel.height > 0)) {
       throw new IllegalArgumentException(
         "model must have nonzero width and height");
+    } else {
+      logger.info(String.format("new model: %d x %d (%d). X(%d,%d), Y(%d,%d)", newModel.width, newModel.height, newModel.size, newModel.metrics.xiMin, newModel.metrics.xiMax, newModel.metrics.yiMin, newModel.metrics.yiMax));
     }
     if (newModel != this.model) {
       beforeUpdateModel(newModel);

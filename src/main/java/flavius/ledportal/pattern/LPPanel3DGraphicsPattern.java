@@ -16,8 +16,10 @@ import processing.core.PImage;
 import processing.core.PMatrix2D;
 
 /**
- * Draw a PGraphics.P3D-rendered pattern directly to a panel where pixels are
- * arranged in a fixed grid pattern
+ * Draw a `PGraphics.P3D`-rendered pattern to pixels in an LPPanel.
+ *
+ * Animations which extend this class are rendered using an off-screen PGraphics
+ * object, `pg` which is separate from the main PGrahpics object.
  */
 // TODO: rename LPPanelGraphicsPattern
 public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
@@ -204,10 +206,11 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
 
   protected void _resize(int width, int height) {
     if (pg != null)
-      pg.dispose();
+    pg.dispose();
     pg = LXStudioApp.instance.createGraphics(width, height, renderer);
     frame = new PImage(pg.width, pg.height);
     frameSize = Math.max(pg.width, pg.height);
+    logger.info(String.format("resized %d x %d, size=%d", width, height, frameSize));
   }
 
   public void scheduleResize(int width, int height) {
@@ -223,7 +226,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
   /**
    * When the model containing all our fixtures has been updated, ensure that
    * our `pg` and `frame` are sized correctly.
-   * 
+   *
    * making these square makes the camera math behave better.
    */
   @Override
@@ -254,19 +257,27 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
 
   public void applyShear() {
     final float xShear = this.xShear.getValuef();
-    pg.applyMatrix(new PMatrix2D( //
-      1.f, xShear, 0.f, //
-      0.f, 1.f, 0.f //
-    )); ///
+    if (Float.compare(xShear, 0f) != 0) {
+      pg.applyMatrix(new PMatrix2D( //
+        1.f, xShear, 0.f, //
+        0.f, 1.f, 0.f //
+      )); ///
+    }
   }
 
   public void applyRotation() {
     final float xRotate = this.xRotate.getValuef();
     final float yRotate = this.yRotate.getValuef();
     final float zRotate = this.zRotate.getValuef();
-    pg.rotateX((float) Math.PI * xRotate);
-    pg.rotateY((float) Math.PI * yRotate);
-    pg.rotateZ((float) Math.PI * zRotate);
+    if (Float.compare(xRotate, 0f) != 0) {
+      pg.rotateX((float) Math.PI * xRotate);
+    }
+    if (Float.compare(yRotate, 0f) != 0) {
+      pg.rotateY((float) Math.PI * yRotate);
+    }
+    if (Float.compare(zRotate, 0f) != 0) {
+      pg.rotateZ((float) Math.PI * zRotate);
+    }
   }
 
   public void applyTranslation() {
@@ -293,7 +304,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       }
       return;
     }
-    if(foreground.width == 0 || foreground.height == 0) {      
+    if(foreground.width == 0 || foreground.height == 0) {
       long now = System.currentTimeMillis();
       if (lastWarning == 0 || now - lastWarning > 10000) {
         logger.warning("foreground is zero-sized...");
@@ -318,6 +329,9 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     pg.endShape();
   }
 
+  /**
+   * Set the colours of each pixel in the model from `frame`.
+   */
   @Override
   public void run(double deltaMs) {
     totalMs += deltaMs;

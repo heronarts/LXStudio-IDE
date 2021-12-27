@@ -13,8 +13,38 @@ import heronarts.lx.transform.LXMatrix;
 import processing.core.PVector;
 
 /**
- * Basically {@link heronarts.lx.model.GridModel} but each row in the grid can
- * have a different length
+ * Basically {@link heronarts.lx.model.GridModel}, but not all positions in
+ * the grid need to be filled with pixels.
+ *
+ * A grid consists of multiple Points, each having a local x and y grid index.
+ * Points also have a separate global x and y grid index, which allows multiple
+ * `LPPanelModel`s to be stitched together to form a single "global" grid.
+ *
+ * Translating fixtures relative to each other can be done by:
+ * - applying a 3d transformation matrix to the 3d fixture location
+ * - applying a 2d transformation matrix to the 2d grid indices
+ *
+ * The only difference is that the 2d result needs to be quantized.
+ *
+ * This added complexity is a bit annoying, but it adds an extra layer of
+ * granularity that simply projecting everything into 2d after the 3d transform.
+ *
+ * An important thing we're trying to optimise for here is minimizing the grid
+ * distance between adjacent grid indices, and avoiding two leds mapping to the
+ * same grid index, as that will cause them to always be the same colour.
+ *
+ * We are optimizing this because each pixel in a panel is able to sample from
+ * a pixel in the frame that gets rendered by an internal 3d camera (separate
+ * from the main camera).
+ *
+ * The question then becomes: what resolution do you ask the camera to render?
+ *
+ * Too few pixels and you'll get multiple LEDs sampling the same internal pixel,
+ * too many and you're wasting resources.
+ *
+ * Animations can extend `LPPanelModelPatern` to easily keep track of changes to
+ * the model,
+ *
  */
 public class LPPanelModel extends LXModel {
 
