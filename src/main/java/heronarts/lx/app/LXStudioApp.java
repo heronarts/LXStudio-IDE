@@ -39,6 +39,11 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   private static int HEIGHT = 800;
   private static boolean FULLSCREEN = false;
 
+  private static int WINDOW_X = 0;
+  private static int WINDOW_Y = 0;
+
+  private static boolean HAS_WINDOW_POSITION = false;
+
   @Override
   public void settings() {
     if (FULLSCREEN) {
@@ -58,6 +63,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
     new LXStudio(this, flags);
     this.surface.setTitle(WINDOW_TITLE);
+    if (!FULLSCREEN && HAS_WINDOW_POSITION) {
+      this.surface.setLocation(WINDOW_X, WINDOW_Y);
+    }
+
   }
 
   @Override
@@ -117,6 +126,20 @@ public class LXStudioApp extends PApplet implements LXPlugin {
           HEIGHT = Integer.parseInt(args[++i]);
         } catch (Exception x ) {
           LX.error("Height command-line argument must be followed by integer");
+        }
+      } else if ("--windowx".equals(args[i]) || "-x".equals(args[i])) {
+        try {
+          WINDOW_X = Integer.parseInt(args[++i]);
+          HAS_WINDOW_POSITION = true;
+        } catch (Exception x ) {
+          LX.error("Window X command-line argument must be followed by integer");
+        }
+      } else if ("--windowy".equals(args[i]) || "-y".equals(args[i])) {
+        try {
+          WINDOW_Y = Integer.parseInt(args[++i]);
+          HAS_WINDOW_POSITION = true;
+        } catch (Exception x ) {
+          LX.error("Window Y command-line argument must be followed by integer");
         }
       } else if (args[i].endsWith(".lxp")) {
         try {
