@@ -110,7 +110,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     boolean headless = false;
     File projectFile = null;
     for (int i = 0; i < args.length; ++i) {
-      if ("--help".equals(args[i]) || "-h".equals(args[i])) {
+      if ("--help".equals(args[i])) {
       } else if ("--headless".equals(args[i])) {
         headless = true;
       } else if ("--fullscreen".equals(args[i]) || "-f".equals(args[i])) {
