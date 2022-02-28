@@ -25,6 +25,13 @@ There are two ways to do this, you can bring your own Java JDK or use the JDK bu
 - Maven (if not using IntelliJ / Eclipse)
 - Java JDK 11 preferably from [Adoptium](https://adoptium.net/)
 
+#### Adoptium Ubuntu Install
+
+```bash
+wget "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.14.1%2B1/OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz"
+sudo tar zxvf OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz -C /usr/lib/jvm
+```
+
 #### Set Java Home
 
 If you have multiple versions of Java installed, you will need to explicitly set the `JAVA_HOME` environment variable for any shell you use to build / run this project.
@@ -49,11 +56,11 @@ and set your JAVA_HOME to use JDK 11 with
 export JAVA_HOME="`/usr/libexec/java_home -v 11`"
 ```
 
-#### on Linux
+#### Setting Java Home on Ubuntu
 
 ```bash
-sudo update-alternatives --install "/usr/bin/java" "java" <your jdk path>
-sudo update-alternatives --set "java" <your jdk path>
+sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk-11.0.14.1+1/bin/java" 1
+sudo update-alternatives --set "java" "/usr/lib/jvm/jdk-11.0.14.1+1/bin/java"
 ```
 
 #### Validating
@@ -90,6 +97,12 @@ Use the libraries provided in `lib` before trying the libraries installed by pro
 
 ```bash
 brew install maven
+```
+
+### Maven Setup - Ubuntu
+
+```bash
+sudo apt install maven
 ```
 
 ### Maven Setup - Windows with Choco
@@ -232,13 +245,13 @@ This is provided as a VSCode build task in `.vscode/tasks.json`
 # you will need to update this if your libraries were sourced from somewhere else.
 # TODO: update to 4.0b2
 export CLASSPATH="$(echo \
-  target/lxstudio-ide-0.4.0-jar-with-dependencies.jar \
   lib/processing-4.0b2/core.jar \
   lib/processing-4.0b2/gluegen-rt.jar \
   lib/processing-4.0b2/jogl-all.jar \
   lib/video-1.0.1/video.jar \
   lib/video-1.0.1/gstreamer-java.jar \
   lib/video-1.0.1/jna.jar \
+  target/lxstudio-ide-0.4.0-jar-with-dependencies.jar \
   | sed 's/ /:/g'
 )"
 java heronarts.lx.app.LXStudioApp
