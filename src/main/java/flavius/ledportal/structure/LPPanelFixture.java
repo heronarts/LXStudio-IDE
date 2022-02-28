@@ -1,7 +1,6 @@
 package flavius.ledportal.structure;
 
 import java.net.InetAddress;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -84,16 +83,18 @@ public class LPPanelFixture extends LXProtocolFixture {
 
   public LPPanelFixture(LX lx) {
     super(lx, "Panel");
-    addOutputParameter("host", this.host);
     addOutputParameter("protocol", this.protocol);
+    addOutputParameter("byteOrder", this.byteOrder);
     addOutputParameter("transport", this.transport);
+    addOutputParameter("reverse", this.reverse);
+    addOutputParameter("host", this.host);
     addOutputParameter("port", this.port);
+    addOutputParameter("dmxChannel", this.dmxChannel);
     addOutputParameter("artNetUniverse", this.artNetUniverse);
     addOutputParameter("opcChannel", this.opcChannel);
+    addOutputParameter("opcOffset", this.opcOffset);
     addOutputParameter("ddpDataOffset", this.ddpDataOffset);
     addOutputParameter("kinetPort", this.kinetPort);
-
-    addMetricsParameter("reverse", this.reverse);
 
     addMetricsParameter("pointIndicesJSON", this.pointIndicesJSON);
     addMetricsParameter("globalGridOriginX", this.globalGridOriginX);

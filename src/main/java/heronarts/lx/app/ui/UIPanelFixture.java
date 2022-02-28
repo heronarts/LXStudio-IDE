@@ -52,6 +52,7 @@ public class UIPanelFixture implements UIFixtureControls<LPPanelFixture> {
   @Override
   public void buildFixtureControls(LXStudio.UI ui, UIFixture uiFixture,
     LPPanelFixture fixture) {
+    uiFixture.addTagSection();
     uiFixture.addGeometrySection();
     uiFixture.addSection("fixture",
       this.buildFixtureSection(uiFixture, fixture));
