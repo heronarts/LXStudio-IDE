@@ -1,5 +1,7 @@
 package flavius.ledportal.pattern;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -38,7 +40,7 @@ public abstract class LPPanelModelPattern
   }
 
   public boolean isLPPanelModel(LXModel model) {
-    return LPPanelModel.class.isInstance(model);
+    return model.meta("type") == "LPPanelModel";
   }
 
   /**
@@ -51,12 +53,24 @@ public abstract class LPPanelModelPattern
       return model;
     }
     LPPanelModel[] childModels = Arrays.stream(newStructureModel.children)
-      .filter(model -> LPPanelModel.class.isInstance(model))
-      .map(model -> (LPPanelModel) (model)).toArray(LPPanelModel[]::new);
+      .map(model -> {
+        if (!isLPPanelModel(model)) {
+          return null;
+        }
+        try {
+          return (LPPanelModel) model;
+        } catch (Exception e) {
+          logger.warning(e.toString());
+          return null;
+        }
+      })
+      .filter(model -> model != null)
+      .toArray(LPPanelModel[]::new);
     if (childModels.length == 0 && newStructureModel.children.length != 0) {
       logger.warning(String.format(
         "This pattern only works with LPPanelModels, none found in %s",
         newStructureModel.toString()));
+      return model;
     }
     structureModel = newStructureModel;
     LPPanelModel newModel = new LPPanelModel(childModels);
@@ -64,7 +78,13 @@ public abstract class LPPanelModelPattern
       throw new IllegalArgumentException(
         "model must have nonzero width and height");
     } else {
-      logger.info(String.format("new model: %d x %d (%d). X(%d,%d), Y(%d,%d)", newModel.width, newModel.height, newModel.size, newModel.metrics.xiMin, newModel.metrics.xiMax, newModel.metrics.yiMin, newModel.metrics.yiMax));
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
+      try {
+        newModel.debugPrint(new PrintStream(os));
+      } catch (Exception e) {
+        logger.warning(e.toString());
+      }
+      logger.info(String.format("new model: %d x %d (%d). X(%d,%d), Y(%d,%d) %s", newModel.width, newModel.height, newModel.size, newModel.metrics.xiMin, newModel.metrics.xiMax, newModel.metrics.yiMin, newModel.metrics.yiMax, os.toString()));
     }
     if (newModel != this.model) {
       beforeUpdateModel(newModel);

@@ -13,7 +13,6 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import processing.core.PGraphics;
 import processing.core.PImage;
-import processing.core.PMatrix2D;
 import processing.opengl.PShader;
 
 /**

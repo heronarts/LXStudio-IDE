@@ -125,7 +125,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   @Override
   public void settings() {
-    System.setProperty("jogl.disable.openglcore", "false");
+    System.setProperty("jogl.disable.openglcore", "true");
     if (FULLSCREEN) {
       fullScreen(PApplet.P3D);
     } else {
@@ -150,8 +150,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     LXStudio.Flags flags = new LXStudio.Flags(this);
     flags.resizable = true;
     flags.useGLPointCloud = false;
-    // flags.startMultiThreaded = false;
-    flags.startMultiThreaded = true;
+    flags.startMultiThreaded = false;
+    // flags.startMultiThreaded = true;
     flags.mediaPath = System.getProperty("user.dir");
     studio = new LXStudio(this, flags);
     this.surface.setTitle(WINDOW_TITLE);
@@ -416,26 +416,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       return;
     }
     try {
-      if(System.getProperty("os.name").contains("Linux")) {
-        // This works on Linux
-        int[] copyPixels = (int []) FieldUtils.readField(src, "copyPixels", true);
-        int numPixels = Math.min(copyPixels.length, src.width * src.height);
-        for( int i = 0; i < numPixels; i++) {
-          int pixel = copyPixels[i];
-          dst.pixels[i] = (
-            (((pixel >> 16) & 0xff) << 0) |
-            (pixel >> 0 & 0x00ff00) |
-            (((pixel >> 0) & 0xff) << 16) |
-            0xff000000
-          );
-        }
-        dst.updatePixels();
-      } else {
-        // These doesn't work on linux
-        dst.set(0, 0, src.get());
-        // dst.copy(src, 0, 0, src.width, src.height, 0, 0, dst.width, dst.height);
-      }
-
+      dst.set(0, 0, src.get());
     } catch (Exception e) {
       logger.warning(e.toString());
     }

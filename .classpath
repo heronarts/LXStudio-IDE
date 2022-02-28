@@ -31,6 +31,34 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/core.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-linux-aarch64.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-linux-aarch64.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-linux-armv6hf.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="lib/lx-0.4.0-jar-with-dependencies.jar" sourcepath="lib/lx-0.4.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/lx-0.4.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/lxstudio-0.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/p4lx-0.4.0.jar" sourcepath="lib/p4lx-0.4.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/p4lx-0.4.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
 		<attributes>
 			<attribute name="optional" value="true"/>

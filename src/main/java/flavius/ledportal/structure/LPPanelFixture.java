@@ -154,6 +154,7 @@ public class LPPanelFixture extends LXProtocolFixture {
    * @param localIndex Index of the point relative to this fixture
    * @return LXPoint cast from LPPanelModel.Point subclass
    */
+  @Override
   protected LXPoint constructPoint(int localIndex) {
     int[] local = this.gridIndices[localIndex];
     int[] world = this.worldGridIndices[localIndex];
@@ -166,6 +167,7 @@ public class LPPanelFixture extends LXProtocolFixture {
    * @param copy Point to make a copy of
    * @return LXPoint cast from LPPanelModel.Point subclass
    */
+  @Override
   protected LXPoint copyPoint(LXPoint copy) {
     if (!Point.class.isInstance(copy)) {
       return (LXPoint) new Point().set(copy);
@@ -181,15 +183,15 @@ public class LPPanelFixture extends LXProtocolFixture {
    * @param modelKeys   Model keys
    * @return LPPanelModel Instance
    */
-  protected LXModel constructModel(List<LXPoint> modelPoints,
-    List<? extends LXModel> childModels, String[] modelKeys) {
+  @Override
+  protected LXModel constructModel(List<LXPoint> modelPoints, List<? extends LXModel> childModels, List<String> tags) {
     LPPanelModel model = new LPPanelModel(modelPoints.stream()
       .map(point -> (Point) (point)).collect(Collectors.toList()));
     logger
-      .info(String.format("constructed model for %s: %d x %d (%d) X(%d,%d), Y(%d,%d)",
+      .info(String.format("constructed model for %s: %d x %d (%d) X(%d,%d), Y(%d,%d), type=%s",
         label.getString(),
         model.width, model.height, model.size, model.metrics.xiMin,
-        model.metrics.xiMax, model.metrics.yiMin, model.metrics.yiMax));
+        model.metrics.xiMax, model.metrics.yiMin, model.metrics.yiMax, model.meta("type")));
     return model;
   }
 
@@ -264,5 +266,22 @@ public class LPPanelFixture extends LXProtocolFixture {
   protected Segment buildSegment() {
     return new Segment(0, size(), 1, this.reverse.isOn(), this.byteOrder.getEnum());
   }
+
+  @Override
+  protected String[] getDefaultTags() {
+    return new String[] { "panel" };
+  }
+
+  // @Override
+  // public void addModelMetaData(Map<String, String> metaData) {
+  //   metaData.put("numPoints", String.valueOf(size()));
+  //   metaData.put("rowSpacing", String.valueOf(this.rowSpacing.getValue()));
+  //   metaData.put("columnSpacing", String.valueOf(this.columnSpacing.getValue()));
+  //   metaData.put("rowShear", String.valueOf(this.rowShear.getValue()));
+  //   metaData.put("globalGridOriginX", String.valueOf(this.globalGridOriginX.getValue()));
+  //   metaData.put("globalGridOriginY", String.valueOf(this.globalGridOriginY.getValue()));
+  //   metaData.put("globalGridMatrix", String.valueOf(this.globalGridMatrix.getValue()));
+  //   metaData.put("generatedBy", "LPPanelFixture");
+  // }
 
 }

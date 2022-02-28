@@ -8,7 +8,6 @@ import heronarts.lx.app.LXStudioApp;
 import heronarts.lx.app.media.MediaLibrary;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.color.LXColor;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;

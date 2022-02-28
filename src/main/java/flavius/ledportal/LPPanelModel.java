@@ -3,7 +3,9 @@ package flavius.ledportal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -319,13 +321,18 @@ public class LPPanelModel extends LXModel {
         .collect(Collectors.toList()));
   }
 
+  protected static Map<String, String> getDefaultMetadata() {
+    HashMap<String, String> result = new HashMap<String, String>();
+    result.put("type", "LPPanelModel");
+    return result;
+  }
+
   /**
    * Constructs a panel model with specified grid indices and transformation
    * matrix
    */
-
   public LPPanelModel(PanelMetrics metrics, LXMatrix transform) {
-    super(metrics.toPoints(transform), Tag.GRID);
+    super(metrics.toPoints(transform), getDefaultMetadata(), Tag.GRID);
     this.metrics = metrics;
     this.width = metrics.width;
     this.height = metrics.height;
@@ -342,8 +349,11 @@ public class LPPanelModel extends LXModel {
   }
 
   public LPPanelModel(PanelMetrics metrics, List<Point> points) {
-    super(points.stream().map(point -> (LXPoint) point)
-      .collect(Collectors.toList()), Tag.GRID);
+    super(
+      points.stream().map(point -> (LXPoint) point).collect(Collectors.toList()),
+      getDefaultMetadata(),
+      Tag.GRID
+    );
     this.metrics = metrics;
 
     this.width = metrics.width;
