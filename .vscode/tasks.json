@@ -11,10 +11,11 @@
     {
       "type": "shell",
       "label": "mvn compile assemble",
-      "command": "mvn",
+      "command": "bash",
       "args": [
-        "compiler:compile",
-        "assembly:single"
+        "-l",
+        "-c",
+        "mvn compiler:compile assembly:single"
       ],
     },
     {
@@ -31,9 +32,8 @@
       "command": "java",
       "args": [
         "-cp",
-        "target/lxstudio-ide-0.2.1-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar",
-        // "target/lxstudio-ide-0.2.1-jar-with-dependencies.jar:${PROCESSING_CORE}/core.jar:${PROCESSING_CORE}/core/library/gluegen-rt.jar:${PROCESSING_CORE}/core/library/jogl-all.jar:${PROCESSING_LIB}/video/library/video.jar:${PROCESSING_LIB}/video/library/gst1-java-core-1.2.0.jar:${PROCESSING_LIB}/video/library/jna.jar",
-        "heronarts.lx.app.LXStudioApp"
+        "lib/lxstudio-0.4.0.jar:lib/lx-0.4.0-jar-with-dependencies.jar:lib/p4lx-0.4.0.jar:lib/processing-4.0b2/core.jar:lib/processing-4.0b2/gluegen-rt.jar:lib/processing-4.0b2/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar",
+        "heronarts.lx.app.LXStudioApp",
       ],
       "dependsOn": [
         "mvn compile assemble"

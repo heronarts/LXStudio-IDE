@@ -1,36 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Processing Jars">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/Applications/Processing.app/Contents/Java"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/core.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/gluegen-rt-natives-linux-aarch64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/gluegen-rt-natives-linux-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/gluegen-rt-natives-linux-armv6hf.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/gluegen-rt-natives-linux-i586.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/gluegen-rt-natives-macosx-universal.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/gluegen-rt-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/gluegen-rt-natives-windows-i586.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-linux-aarch64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-linux-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-linux-armv6hf.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-linux-i586.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-macosx-universal.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all-natives-windows-i586.jar"/>
-	<classpathentry kind="lib" path="lib/processing-3.5.4/jogl-all.jar"/>
-	<classpathentry kind="lib" path="lib/lxstudio-0.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/lx-0.2.1-jar-with-dependencies.jar" sourcepath="lib/lx-0.2.1-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/lx-0.2.1-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/p3lx-0.2.1.jar" sourcepath="lib/p3lx-0.2.1-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/LXStudio-IDE/lib/p3lx-0.2.1-javadoc.jar!/"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
@@ -40,9 +12,9 @@
 	</classpathentry>
 	<classpathentry kind="src" path="target/generated-sources/annotations">
 		<attributes>
-			<attribute name="ignore_optional_problems" value="true"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="ignore_optional_problems" value="true"/>
 			<attribute name="m2e-apt" value="true"/>
 		</attributes>
 	</classpathentry>
@@ -54,14 +26,9 @@
 	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>
-			<attribute name="test" value="true"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">

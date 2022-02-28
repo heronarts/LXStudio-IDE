@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import flavius.ledportal.LPMeshable;
-import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI3dComponent;
+import heronarts.p4lx.ui.UI;
+import heronarts.p4lx.ui.UI3dComponent;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PVector;

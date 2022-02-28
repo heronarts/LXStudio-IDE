@@ -1,6 +1,7 @@
 package flavius.ledportal.structure;
 
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -8,32 +9,16 @@ import java.util.stream.Collectors;
 import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPPanelModel;
 import flavius.ledportal.LPPanelModel.Point;
-import flavius.pixelblaze.PBColorOrder;
-import flavius.pixelblaze.PBRecordType;
-import flavius.pixelblaze.output.PBExpanderDataMessage;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.output.ArtNetDatagram;
-import heronarts.lx.output.DDPDatagram;
-import heronarts.lx.output.KinetDatagram;
 import heronarts.lx.output.LXBufferOutput;
-import heronarts.lx.output.LXOutput;
-import heronarts.lx.output.OPCDatagram;
-import heronarts.lx.output.OPCOutput;
-import heronarts.lx.output.OPCSocket;
-import heronarts.lx.output.SerialDefinition;
-import heronarts.lx.output.SerialMessage;
-import heronarts.lx.output.StreamingACNDatagram;
-import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
-import heronarts.lx.structure.GridFixture.PositionMode;
-import heronarts.lx.structure.GridFixture.Wiring;
-import heronarts.lx.structure.SerialProtocolFixture;
+import heronarts.lx.structure.LXFixture;
+import heronarts.lx.structure.LXProtocolFixture;
 import heronarts.lx.transform.LXMatrix;
 import processing.core.PMatrix2D;
 import processing.data.JSONArray;
@@ -41,28 +26,12 @@ import java.lang.Math;
 
 /**
  * A fixture based around an `LPPanelModel`, with a grid layout and support for
- * Serial-based protocols in addition to the usual network protocols.
+ * network protocols.
  */
-public class LPPanelFixture extends SerialProtocolFixture {
+public class LPPanelFixture extends LXProtocolFixture {
 
   protected static final Logger logger = Logger
     .getLogger(LPPanelFixture.class.getName());
-
-  public final EnumParameter<PositionMode> positionMode = new EnumParameter<PositionMode>(
-    "Mode", PositionMode.CORNER).setDescription(
-      "Whether the arc is positioned by its starting point or center");
-
-  public final EnumParameter<Wiring> wiring = new EnumParameter<Wiring>(
-    "Wiring", Wiring.ROWS_L2R_B2T)
-      .setDescription("How the strips in the grid are sequentially wired");
-
-  public final BooleanParameter splitPacket = new BooleanParameter(
-    "Split Packet", false).setDescription(
-      "Whether to break a large grid into multiple packets on separate channels");
-
-  public final DiscreteParameter pointsPerPacket = new DiscreteParameter(
-    "Points Per Packet", 170, 1, 21845)
-      .setDescription("Number of LED points per packet");
 
   public final StringParameter pointIndicesJSON = new StringParameter(
     "Point Indices", "[[0,0]]")
@@ -123,16 +92,7 @@ public class LPPanelFixture extends SerialProtocolFixture {
     addOutputParameter("opcChannel", this.opcChannel);
     addOutputParameter("ddpDataOffset", this.ddpDataOffset);
     addOutputParameter("kinetPort", this.kinetPort);
-    addOutputParameter("splitPacket", this.splitPacket);
-    addOutputParameter("pointsPerPacket", this.pointsPerPacket);
 
-    addOutputParameter("serialPort", this.serialPort);
-    addOutputParameter("baudRate", this.baudRate);
-    addOutputParameter("unknownSerialPort", this.unknownSerialPort);
-    addOutputParameter("pixelBlazeChannel", this.pixelBlazeChannel);
-    addOutputParameter("serialProtocol", this.serialProtocol);
-
-    addMetricsParameter("wiring", this.wiring);
     addMetricsParameter("reverse", this.reverse);
 
     addMetricsParameter("pointIndicesJSON", this.pointIndicesJSON);
@@ -142,7 +102,6 @@ public class LPPanelFixture extends SerialProtocolFixture {
     addMetricsParameter("rowSpacing", this.rowSpacing);
     addMetricsParameter("columnSpacing", this.columnSpacing);
     addMetricsParameter("rowShear", this.rowShear);
-    addMetricsParameter("positionMode", this.positionMode);
   }
 
   /**
@@ -244,121 +203,31 @@ public class LPPanelFixture extends SerialProtocolFixture {
     regenerateGridIndices();
     return this.gridIndices.length;
   }
-
-  private void addOutput(SerialDefinition definition, int[] indexBuffer,
-    int channel) {
-    LXOutput output = null;
-    // TODO: implement PixelBlaze color order based off LXBufferOutput.ByteOrder
-    PBColorOrder order = PBColorOrder.RGB;
-    switch (this.serialProtocol.getEnum()) {
-    case PBX_WS281X:
-      output = new PBExpanderDataMessage(lx, indexBuffer,
-        PBRecordType.SET_CHANNEL_WS2812, order, channel);
-      break;
-    case PBX_APA102:
-      output = new PBExpanderDataMessage(lx, indexBuffer,
-        PBRecordType.SET_CHANNEL_APA102_DATA, order, channel);
-      break;
-    default:
-      LX.error("Undefined serial protocol in LPPanelFixture: "
-        + this.serialProtocol.getEnum());
-      break;
-    }
-    if (output != null) {
-      output.enabled.setValue(definition != null);
-      if (definition != null && output instanceof SerialMessage) {
-        ((SerialMessage) output).setDefinition(definition);
-      }
-      addOutput(output);
-    }
-  }
-
-  private void addOutput(InetAddress address, int[] indexBuffer, int channel) {
-    LXOutput output = null;
-    switch (this.protocol.getEnum()) {
-    case ARTNET:
-      output = new ArtNetDatagram(this.lx, indexBuffer, channel);
-      break;
-    case SACN:
-      output = new StreamingACNDatagram(this.lx, indexBuffer, channel);
-      break;
-    case OPC:
-      switch (this.transport.getEnum()) {
-      case TCP:
-        output = new OPCSocket(this.lx, indexBuffer, (byte) channel);
-        break;
-      default:
-      case UDP:
-        output = new OPCDatagram(this.lx, indexBuffer, (byte) channel);
-        break;
-      }
-      ((OPCOutput) output).setPort(this.port.getValuei());
-      break;
-    case DDP:
-      output = new DDPDatagram(this.lx, indexBuffer, channel);
-      break;
-    case KINET:
-      output = new KinetDatagram(this.lx, indexBuffer, channel);
-      break;
-    default:
-      LX.error(
-        "Undefined output protocol in GridFixture: " + this.protocol.getEnum());
-      break;
-    }
-    if (output != null) {
-      output.enabled.setValue(address != null);
-      if (address != null && (output instanceof LXOutput.InetOutput)) {
-        ((LXOutput.InetOutput) output).setAddress(address);
-      }
-      addOutput(output);
-    }
-  }
-
+  /**
+   * Overrides LXFixture.BuildOutputs to produce the necessary set of outputs
+   * for this fixture to be sent. calls {@link #addOutputDefinition(OutputDefinition)} or
+   * {@link #addOutputDirect(LXOutput)} for each output.
+   */
   @Override
   protected void buildOutputs() {
-
-    // Add LXDatagram outputs
-
     Protocol protocol = this.protocol.getEnum();
-    SerialProtocol serialProtocol = this.serialProtocol.getEnum();
-
-    if (protocol == Protocol.NONE && serialProtocol == SerialProtocol.NONE)
+    if (protocol == Protocol.NONE) {
       return;
-
-    int[] wiringIndexBuffer = getWiringIndexBuffer();
-    if (protocol != Protocol.NONE) {
-      InetAddress address = resolveHostAddress();
-      int pointsPerPacket = this.pointsPerPacket.getValuei();
-      if (this.splitPacket.isOn()
-        && (wiringIndexBuffer.length > pointsPerPacket)) {
-        int i = 0;
-        int channel = getProtocolChannel();
-        while (i < wiringIndexBuffer.length) {
-          int chunkSize = Math.min(pointsPerPacket,
-            wiringIndexBuffer.length - i);
-          int chunkIndexBuffer[] = new int[chunkSize];
-          System.arraycopy(wiringIndexBuffer, i, chunkIndexBuffer, 0,
-            chunkSize);
-          addOutput(address, chunkIndexBuffer, channel++);
-          i += chunkSize;
-        }
-      } else {
-        addOutput(address, wiringIndexBuffer, getProtocolChannel());
-      }
+    }
+    InetAddress address = resolveHostAddress();
+    if (address == null) {
+      return;
     }
 
-    if (serialProtocol != SerialProtocol.NONE) {
-      addOutput(getSerialDefinition(), wiringIndexBuffer,
-        getSerialProtocolChannel());
-    }
-  }
-
-  SerialDefinition getSerialDefinition() {
-    String portName = this.serialPort.getString();
-    if (portName == "") {
-      return null;
-    }
-    return new SerialDefinition(portName, (int) baudRate.getValue());
+    addOutputDefinition(new OutputDefinition(
+      protocol,
+      getProtocolTransport(),
+      address,
+      getProtocolPort(),
+      getProtocolUniverse(),
+      getProtocolChannel(),
+      (LXFixture.Segment) buildSegment()
+    ));
   }
 
   @Override
@@ -385,45 +254,14 @@ public class LPPanelFixture extends SerialProtocolFixture {
     }
   }
 
-  @Override
-  protected int[] toDynamicIndexBuffer() {
-    if (this.reverse.isOn()) {
-      return super.toDynamicIndexBuffer(size() - 1, size(), -1);
-    } else {
-      return super.toDynamicIndexBuffer();
+  protected class Segment extends LXFixture.Segment {
+    protected Segment(int start, int num, int stride, boolean reverse, LXBufferOutput.ByteOrder byteOrder) {
+      super(start, num, stride, reverse, byteOrder);
     }
   }
 
-  @Override
-  protected String getModelKey() {
-    return "panel";
-  }
-
-  private int[] getWiringIndexBuffer() {
-    int size = this.size();
-    int[] indexBuffer = new int[size];
-
-    if (this.reverse.isOn()) {
-      for (int i = 0; i < size; i++) {
-        indexBuffer[size - i - 1] = this.points.get(i).index;
-      }
-    } else {
-      for (int i = 0; i < size; i++) {
-        indexBuffer[i] = this.points.get(i).index;
-      }
-    }
-
-    return indexBuffer;
-  }
-
-  @Override
-  protected void reindexOutputs() {
-    int[] wiringIndexBuffer = getWiringIndexBuffer();
-    for (LXOutput output : this.outputs) {
-      if (output instanceof LXBufferOutput) {
-        ((LXBufferOutput) output).updateIndexBuffer(wiringIndexBuffer);
-      }
-    }
+  protected Segment buildSegment() {
+    return new Segment(0, size(), 1, this.reverse.isOn(), this.byteOrder.getEnum());
   }
 
 }

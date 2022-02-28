@@ -23,13 +23,7 @@ There are two ways to do this, you can bring your own Java JDK or use the JDK bu
 ### Prerequisites
 
 - Maven (if not using IntelliJ / Eclipse)
-- [Java JDK 1.8.0_202](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html) (or whatever your version of Processing uses)
-
-note: on linux, install Java with:
-
-```bash
-sudo tar zxvf ~/Downloads/jdk-8u202-linux-x64.tar.gz -C /usr/lib/jvm
-```
+- Java JDK 11 preferably from [Adoptium](https://adoptium.net/)
 
 #### Set Java Home
 
@@ -44,19 +38,22 @@ You can list possible Java homes with
 ```
 
 ```txt
-Matching Java Virtual Machines (4):
-    14.0.1, x86_64: "AdoptOpenJDK 14" /Library/Java/JavaVirtualMachines/adoptopenjdk-14.jdk/Contents/Home
-    12.0.1, x86_64: "OpenJDK 12.0.1" /Library/Java/JavaVirtualMachines/openjdk-12.0.1.jdk/Contents/Home
-    11.0.2, x86_64: "Java SE 11.0.2" /Library/Java/JavaVirtualMachines/jdk-11.0.2.jdk/Contents/Home
-    1.8.0_222, x86_64: "AdoptOpenJDK 8" /Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home
-    1.8.0_202, x86_64: "Java SE 8" /Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home
+...
+11.0.14.1, x86_64:  "Eclipse Temurin 11"    /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home
+...
+```
+
+and set your JAVA_HOME to use JDK 11 with
+
+```bash
+export JAVA_HOME="`/usr/libexec/java_home -v 11`"
 ```
 
 #### on Linux
 
 ```bash
-sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_202/bin/java" 1
-sudo update-alternatives --set "java" "/usr/lib/jvm/jdk1.8.0_202/bin/java"
+sudo update-alternatives --install "/usr/bin/java" "java" <your jdk path>
+sudo update-alternatives --set "java" <your jdk path>
 ```
 
 #### Validating
@@ -70,159 +67,181 @@ java -version
 you should see
 
 ```txt
-java version "1.8.0_202"
-Java(TM) SE Runtime Environment (build 1.8.0_202-b08)
-Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)
+openjdk 11.0.14.1 2022-02-08
+OpenJDK Runtime Environment Temurin-11.0.14.1+1 (build 11.0.14.1+1)
+OpenJDK 64-Bit Server VM Temurin-11.0.14.1+1 (build 11.0.14.1+1, mixed mode)
 ```
 
-## Running With Processing Java
+## Using IntelliJ / Eclipse
 
-### Processing Prerequisites
+The build config files have been provided for IntelliJ and Eclipse, so your IDE should will handle dependency resolution and building for you, however if you want to have the versatility of VSCode with maven, then you will need to see the next sections for how to install those dependencies
 
-- [Processing 3.5.4](https://processing.org/download/)
-- Processing Video library: **Sketch** → **Import Library** → **Add Library**
-- [Processing Gif-Animation Library](https://github.com/extrapixel/gif-animation/tree/3.0)
+## Using VSCode and Maven
 
-### Determine Processing Java Library locations
+Several jars need to be installed into your local maven repository (e.g. `~/.m2/repository`) manually.
 
-If you are not on macOS and Processing 3.5.4, you may need to adjust the locations of the following library paths in the shell used by your build commands:
+LEDPortal is based on LXStudio, which in turn is based on Processing. Additionally, some animations require external dependencies like video or gif libraries. There are several options for installing these. We recommend using those provided in this repository, however if the a library doesn't work or goes out of date, you can also try installing the library through the Processing library interface (**Sketch** → **Import Library** → **Add Library**), or downloading it manually, then test that it works by running one of the examples that the library provides.
+
+The `groupId`, `artifactId` and `version` fields are important. You will need to update `.classpath`, `pom.xml` or your IDE configuration if the version installed by processing does not match. If it's not clear what version a library is, one way to determine this is with `unzip -q -c <jar path> META-INF/MANIFEST.MF`.
+
+Use the libraries provided in `lib` before trying the libraries installed by processing.
+
+### Maven Setup - MacOS
 
 ```bash
-export PROCESSING_CORE="/Applications/Processing.app/Contents/Java"
-export PROCESSING_LIB="$HOME/Documents/Processing/libraries"
+brew install maven
 ```
 
-```bash
-export PROCESSING_CORE="$HOME/Downloads/processing-3.5.4/core/library"
-export PROCESSING_LIB="$HOME/sketchbook/libraries",
-```
-
-```bash
-export PROCESSING_CORE="$HOME/code/processing/core/library"
-export PROCESSING_LIB="$HOME/sketchbook/libraries",
-```
-
-### Installing Processing libraries
-
-These jars need to be installed into your local maven repository (e.g. `~/.m2/repository`) manually. The `groupId`, `artifactId` and `version` fields should match the output of  `unzip -q -c <jar path> META-INF/MANIFEST.MF`
-
-You can do this with the following commands (exact jar locations could change):
-
-```bash
-mvn install:install-file -Dfile=${PROCESSING_CORE}/core.jar -DgroupId=org.processing -DartifactId=core -Dversion=3.5.4 -Dpackaging=jar
-# mvn install:install-file -Dfile=${PROCESSING_CORE}/core/library/gluegen-rt.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt -Dversion=2.3.2 -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_CORE}/gluegen-rt-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt -Dversion=2.3.2 -Dpackaging=jar
-# mvn install:install-file -Dfile=${PROCESSING_CORE}/core/library/jogl-all.jar -DgroupId=com.jogamp -DartifactId=jogl-all -Dversion=2.3.2 -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_CORE}/jogl-all-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=jogl-all -Dversion=2.3.2 -Dpackaging=jar
-# mvn install:install-file -Dfile=${PROCESSING_LIB}/video/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
-# mvn install:install-file -Dfile=${PROCESSING_LIB}/video/library/gst1-java-core-1.2.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.2.0 -Dpackaging=jar
-# mvn install:install-file -Dfile=${PROCESSING_LIB}/video/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
-```
-
-```bash
-export VIDEO_LIB="$HOME/code/processing-video/"
-```
-
-```bash
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.4.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.4.0 -Dpackaging=jar
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_CORE}/gluegen-rt.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt -Dversion=2.3.2 -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_CORE}/jogl-all.jar -DgroupId=com.jogamp -DartifactId=jogl-all -Dversion=2.3.2 -Dpackaging=jar
-```
-
-or, on some systems with gstreamer-java 1.2.0
-
-```bash
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.2.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.2.0 -Dpackaging=jar
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
-```
-
-for gifs:
-
-```bash
-mvn install:install-file "-Dfile=${PROCESSING_LIB}/gifAnimation/library/gifAnimation.jar" "-DgroupId=extrapixel" "-DartifactId=gifAnimation" "-Dversion=3.0.0" "-Dpackaging=jar" 
-```
-
-## Running with BYO Java
-
-### BYO Java Prerequisites
-
-This has only been tested on MacOS, if you're a Java wizard, you may be able to get it working on other platforms
-
-- Java JDK 1.8.0_202
-- Maven (if not using IntelliJ / Eclipse)
-
-**on Windows with choco:**
+### Maven Setup - Windows with Choco
 
 ```powershell
-choco install adoptopenjdk8 -y
+# TODO: test the choco package for jdk 11
+choco install openjdk11 -y
 choco install maven Processing -y
 ```
 
 - Install `vscjava.vscode-java-pack` VSCode extension
 - Configure Java Runtime
 
-### Installing Provided libraries
+### Heronarts libraries
 
-**With IntelliJ / Eclipse:** build config files provided, your IDE will handle this for you.
-
-**With VScode / Maven**
-
-To build `pom.xml` with Maven, you will need to install the following 3rd party (not available on mvnrepository) libraries, whose jars are provided in `lib/`:
+These libraries have been provided in the `lib` folder
 
 - [heronarts.lx](https://github.com/heronarts/lx)
-- [heronarts.p3lx](https://github.com/heronarts/p3lx)
+- [heronarts.p4lx](https://github.com/heronarts/p4lx)
 - heronarts.lxstudio (private)
 
-These jars need to be installed into your local maven repository (e.g. `~/.m2/repository`) manually. The `groupId`, `artifactId` and `version` fields should match what's in `pom.xml`
-You can do this with the following commands (exact jar locations could change):
-
 ```bash
-export PROJ_VERSION="0.2.1"
+export PROJ_VERSION="0.4.0"
 mvn install:install-file "-Dfile=lib/lxstudio-${PROJ_VERSION}.jar" -DgroupId=heronarts -DartifactId=lxstudio "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
 mvn install:install-file "-Dfile=lib/lx-${PROJ_VERSION}-jar-with-dependencies.jar" -DgroupId=heronarts -DartifactId=lx "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/p3lx-${PROJ_VERSION}.jar" -DgroupId=heronarts -DartifactId=p3lx "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
-# mvn install:install-file -Dfile=lib/video-1.0.1/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=1.0.1 -Dpackaging=jar
-# mvn install:install-file -Dfile=lib/video-1.0.1/gstreamer-java.jar -DgroupId=org.gstreamer -DartifactId=gstreamer-java -Dversion=1.6.2 -Dpackaging=jar
-# mvn install:install-file -Dfile=lib/video-1.0.1/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=4.2.0 -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/p4lx-${PROJ_VERSION}.jar" -DgroupId=heronarts -DartifactId=p4lx "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
 ```
 
 You can also clone into the source code repositories (where available) and `mvn install` if you want to modify them.
 
+### Processing libraries
+
+lxstudio is based on [Processing 4.0b2](https://processing.org/download/). The necessary processing libraries are provided in `lib`
+
+```bash
+mvn install:install-file "-Dfile=lib/processing-4.0b2/core.jar" -DgroupId=org.processing -DartifactId=core "-Dversion=4.0b2" -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/processing-4.0b2/jogl-all.jar" -DgroupId=org.jogamp.jogl -DartifactId=jogl-all "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/processing-4.0b2/gluegen-rt.jar" -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt-main "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
+```
+
+Alternatively, you can install the libraries provided by processing. If you are not on macOS and Processing 4.0b2, you may need to adjust the locations of the following library paths
+
+```bash
+# one of the following
+export PROCESSING_CORE="/Applications/Processing.app/Contents/Java"
+export PROCESSING_CORE="$HOME/Downloads/Processing-4.0b2.app/core/library"
+export PROCESSING_CORE="$HOME/code/processing/core/library"
+```
+
+```bash
+# one of the following
+export PROCESSING_LIB="$HOME/Documents/Processing/libraries"
+export PROCESSING_LIB="$HOME/sketchbook/libraries",
+export PROCESSING_LIB="$HOME/sketchbook/libraries",
+```
+
+```bash
+mvn install:install-file -Dfile=${PROCESSING_CORE}/core.jar -DgroupId=org.processing -DartifactId=core "-Dversion=4.0b2" -Dpackaging=jar
+mvn install:install-file -Dfile=${PROCESSING_CORE}/gluegen-rt-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt-main "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
+mvn install:install-file -Dfile=${PROCESSING_CORE}/jogl-all-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=jogl-all "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
+```
+
 **On Windows:**
 
-You'll also need to install the processing core libraries.
-
 ```powershell
+# TODO: update to 4.0b2
 mvn install:install-file "-Dfile=C:\ProgramData\chocolatey\lib\Processing\tools\processing-3.5.4\core\library\core.jar" "-DgroupId=org.processing" "-DartifactId=core" "-Dversion=3.5.4" "-Dpackaging=jar"
 ```
 
-### Compiling
+### Video libraries
 
-**With IntelliJ / Eclipse:** build config files provided, your IDE will handle this for you.
+Some animations require the [Processing Video library](https://github.com/processing/processing-video). This is provided in `lib`:
 
-**With VScode / Maven:**
+<!-- TODO: install instructions for video-2.0 -->
+
+```bash
+mvn install:install-file "-Dfile=lib/video-1.0.1/video.jar" -DgroupId=org.processing -DartifactId=video -Dversion=1.0.1 -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/video-1.0.1/gstreamer-java.jar" -DgroupId=org.gstreamer -DartifactId=gstreamer-java -Dversion=1.6.2 -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/video-1.0.1/jna.jar" -DgroupId=com.sun -DartifactId=jna -Dversion=4.2.0 -Dpackaging=jar
+```
+
+```bash
+# export VIDEO_LIB="$HOME/code/processing-video/"
+export VIDEO_LIB="$PROCESSING_LIB/video"
+```
+
+video.jar:
+
+```bash
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
+```
+
+gstreamer: may require system install of gstreamer library
+
+```bash
+# one of the following
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.2.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.2.0 -Dpackaging=jar
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.4.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.4.0 -Dpackaging=jar
+```
+
+jna
+
+```bash
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
+```
+
+### gif library
+
+[Processing Gif-Animation Library](https://github.com/extrapixel/gif-animation/tree/3.0) is in `lib`
+
+```bash
+mvn install:install-file "-Dfile=lib/gifAnimation-3.0.0/gifAnimation.jar" -DgroupId=extrapixel -DartifactId=gifAnimation -Dversion=3.0.0 -Dpackaging=jar
+```
+
+or install externally with
+
+```bash
+export GIF_LIB="$PROCESSING_LIB/gifAnimation"
+```
+
+```bash
+mvn install:install-file "-Dfile=${GIF_LIB}/library/gifAnimation.jar" "-DgroupId=extrapixel" "-DartifactId=gifAnimation" "-Dversion=3.0.0" "-Dpackaging=jar"
+```
+
+## Maven Compile
 
 You can compile this repository with the following commands, you may need to adjust your java home
 
 ```bash
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+# set JAVA_HOME first!
 mvn compiler:compile assembly:single
 ```
 
 This is provided as a VSCode build task in `.vscode/tasks.json`
 
-### Usage
-
-**With IntelliJ / Eclipse:** Open this repo in your IDE and hit run.
-
-**With VScode / Maven:**
+## Run with BYO Java
 
 ```bash
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
-java -cp "target/lxstudio-ide-0.2.1-jar-with-dependencies.jar:lib/processing-3.5.4/core.jar:lib/processing-3.5.4/gluegen-rt.jar:lib/processing-3.5.4/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar" heronarts.lx.app.LXStudioApp
+# set JAVA_HOME first!
+# you will need to update this if your libraries were sourced from somewhere else.
+# TODO: update to 4.0b2
+export CLASSPATH="$(echo \
+  target/lxstudio-ide-0.4.0-jar-with-dependencies.jar \
+  lib/processing-4.0b2/core.jar \
+  lib/processing-4.0b2/gluegen-rt.jar \
+  lib/processing-4.0b2/jogl-all.jar \
+  lib/video-1.0.1/video.jar \
+  lib/video-1.0.1/gstreamer-java.jar \
+  lib/video-1.0.1/jna.jar \
+  | sed 's/ /:/g'
+)"
+java heronarts.lx.app.LXStudioApp
 ```
 
 This is provided as a VSCode build task in `.vscode/tasks.json`
@@ -252,7 +271,7 @@ void setup()  {
 
 #### Video not working on Ubuntu
 
-Open the Processing 3 IDE, and go **file -> examples -> video -> movile -> loop**. Run the sketch to test your gstreamer install
+Open the Processing IDE, and go **file -> examples -> video -> movile -> loop**. Run the sketch to test your gstreamer install
 
 If that doesn't work, ensure you have gstreamer libaries installed
 
@@ -271,7 +290,7 @@ sudo apt-get install ubuntu-restricted-extras ffmpeg vlc
 install processing from source
 
 ```bash
-git clone 
+git clone
 cd processing
 ```
 
@@ -289,7 +308,7 @@ Please note that LX Studio is not open-source software. The license grants permi
 
 ### Getting Started
 
-LX Studio runs using the Processing 3 framework. This version of the project directly embeds those dependencies and may be run from within a Java IDE,
+LX Studio runs using the Processing 4 framework. This version of the project directly embeds those dependencies and may be run from within a Java IDE,
 for larger projects in which the Processing IDE is insufficient. The example project here can be run either using the full Processing-based UI,
 or alternatively in a headless CLI-only mode.
 

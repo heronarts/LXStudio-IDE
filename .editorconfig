@@ -1,5 +1,12 @@
 root=true
 
+[*.{xml}]
+indent_style = tab
+indent_size = 4
+
+[*.{java}]
+indent_size = 2
+
 [*]
 indent_size = 2
 indent_style = space
@@ -7,10 +14,3 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
-
-[*.{xml}]
-indent_style = tab
-indent_size = 4
-
-[*.{java}]
-indent_size = 2

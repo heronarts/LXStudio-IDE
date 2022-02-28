@@ -61,7 +61,7 @@ import heronarts.lx.app.ui.UIPanelFixture;
 import heronarts.lx.app.ui.UIWireFrame;
 import heronarts.lx.pattern.GraphicEqualizerPattern;
 import heronarts.lx.studio.LXStudio;
-import heronarts.p3lx.ui.UI.CoordinateSystem;
+import heronarts.p4lx.ui.UI.CoordinateSystem;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import processing.core.PApplet;
@@ -117,7 +117,12 @@ public class LXStudioApp extends PApplet implements LXPlugin {
    * Last time a warning was emitted
    */
   long lastWarning = 0;
-  
+
+  private static int WINDOW_X = 0;
+  private static int WINDOW_Y = 0;
+
+  private static boolean HAS_WINDOW_POSITION = false;
+
   @Override
   public void settings() {
     System.setProperty("jogl.disable.openglcore", "false");
@@ -126,6 +131,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     } else {
       size(WIDTH, HEIGHT, PApplet.P3D);
     }
+    pixelDensity(displayDensity());
   }
 
   @Override
@@ -148,7 +154,10 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     flags.startMultiThreaded = true;
     flags.mediaPath = System.getProperty("user.dir");
     studio = new LXStudio(this, flags);
-    surface.setTitle(WINDOW_TITLE);
+    this.surface.setTitle(WINDOW_TITLE);
+    if (!FULLSCREEN && HAS_WINDOW_POSITION) {
+      this.surface.setLocation(WINDOW_X, WINDOW_Y);
+    }
     addVideoFrameDrawLoopTask();
   }
 
@@ -453,8 +462,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   /**
    * Main interface into the program. Two modes are supported, if the --headless
-   * flag is supplied then a raw CLI version of LX is used. If not, then we
-   * embed in a Processing 3 applet and run as such.
+   * flag is supplied then a raw CLI version of LX is used. If not, then we embed
+   * in a Processing 4 applet and run as such.
    *
    * @param args Command-line arguments
    */
@@ -463,7 +472,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     boolean headless = false;
     File projectFile = null;
     for (int i = 0; i < args.length; ++i) {
-      if ("--help".equals(args[i]) || "-h".equals(args[i])) {
+      if ("--help".equals(args[i])) {
       } else if ("--headless".equals(args[i])) {
         headless = true;
       } else if ("--fullscreen".equals(args[i]) || "-f".equals(args[i])) {
@@ -479,6 +488,20 @@ public class LXStudioApp extends PApplet implements LXPlugin {
           HEIGHT = Integer.parseInt(args[++i]);
         } catch (Exception x) {
           LX.error("Height command-line argument must be followed by integer");
+        }
+      } else if ("--windowx".equals(args[i]) || "-x".equals(args[i])) {
+        try {
+          WINDOW_X = Integer.parseInt(args[++i]);
+          HAS_WINDOW_POSITION = true;
+        } catch (Exception x ) {
+          LX.error("Window X command-line argument must be followed by integer");
+        }
+      } else if ("--windowy".equals(args[i]) || "-y".equals(args[i])) {
+        try {
+          WINDOW_Y = Integer.parseInt(args[++i]);
+          HAS_WINDOW_POSITION = true;
+        } catch (Exception x ) {
+          LX.error("Window Y command-line argument must be followed by integer");
         }
       } else if (args[i].endsWith(".lxp")) {
         try {

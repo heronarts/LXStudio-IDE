@@ -2,8 +2,8 @@ package heronarts.lx.app.ui;
 
 import flavius.ledportal.LPMeshable;
 import heronarts.lx.color.LXColor;
-import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI3dComponent;
+import heronarts.p4lx.ui.UI;
+import heronarts.p4lx.ui.UI3dComponent;
 import processing.core.PGraphics;
 import processing.core.PVector;
 

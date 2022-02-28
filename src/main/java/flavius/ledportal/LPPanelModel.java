@@ -42,7 +42,7 @@ import processing.core.PVector;
  * Too few pixels and you'll get multiple LEDs sampling the same internal pixel,
  * too many and you're wasting resources.
  *
- * Animations can extend `LPPanelModelPatern` to easily keep track of changes to
+ * Animations can extend `LPPanelModelPattern` to easily keep track of changes to
  * the model,
  *
  */
@@ -325,7 +325,7 @@ public class LPPanelModel extends LXModel {
    */
 
   public LPPanelModel(PanelMetrics metrics, LXMatrix transform) {
-    super(metrics.toPoints(transform), LXModel.Key.GRID);
+    super(metrics.toPoints(transform), Tag.GRID);
     this.metrics = metrics;
     this.width = metrics.width;
     this.height = metrics.height;
@@ -343,7 +343,7 @@ public class LPPanelModel extends LXModel {
 
   public LPPanelModel(PanelMetrics metrics, List<Point> points) {
     super(points.stream().map(point -> (LXPoint) point)
-      .collect(Collectors.toList()), LXModel.Key.GRID);
+      .collect(Collectors.toList()), Tag.GRID);
     this.metrics = metrics;
 
     this.width = metrics.width;

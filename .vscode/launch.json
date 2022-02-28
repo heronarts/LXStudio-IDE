@@ -18,7 +18,6 @@
       "projectName": "lxstudio-ide",
       "preLaunchTask": "mvn compile assemble",
       "env": {
-        // "JAVA_HOME": "/usr/lib/jvm/java-1.8.0-openjdk-amd64",
         "_JAVA_OPTIONS": "-Djogl.disable.openglcore=false"
       }
     }
