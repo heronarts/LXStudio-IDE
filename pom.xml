@@ -23,51 +23,51 @@
 			<groupId>com.heronarts</groupId>
 			<artifactId>lx</artifactId>
 			<version>${project.version}</version>
-			<!-- <scope>system</scope>
-			<systemPath>${basedir}/lib/lx-${project.version}-jar-with-dependencies.jar</systemPath> -->
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/lx-${project.version}-jar-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>com.heronarts</groupId>
 			<artifactId>p4lx</artifactId>
 			<version>${project.version}</version>
-			<!-- <scope>system</scope>
-			<systemPath>${basedir}/lib/p4lx-${project.version}.jar</systemPath> -->
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/p4lx-${project.version}.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>com.heronarts</groupId>
 			<artifactId>lxstudio</artifactId>
 			<version>${project.version}</version>
-			<!-- <scope>system</scope>
-			<systemPath>${basedir}/lib/lxstudio-${project.version}.jar</systemPath> -->
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/lxstudio-${project.version}.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>core</artifactId>
 			<version>4.0b2</version>
-			<scope>provided</scope>
-			<!-- <scope>system</scope>
-			<systemPath>${basedir}/lib/processing-4.0b2/core.jar</systemPath> -->
+			<!-- <scope>provided</scope> -->
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/processing-4.0b2/core.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all</artifactId>
 			<version>2.4.0-rc-20210111</version>
-			<scope>provided</scope>
-			<!-- <scope>system</scope>
-			<systemPath>${basedir}/lib/processing-4.0b2/jogl-all.jar</systemPath> -->
+			<!-- <scope>provided</scope> -->
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/processing-4.0b2/jogl-all.jar</systemPath>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-main</artifactId>
 			<version>2.4.0-rc-20210111</version>
-			<scope>provided</scope>
-			<!-- <scope>system</scope>
-			<systemPath>${basedir}/lib/processing-4.0b2/gluegen-rt.jar</systemPath> -->
+			<!-- <scope>provided</scope> -->
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/processing-4.0b2/gluegen-rt.jar</systemPath>
 		</dependency>
 
 		<!-- video. TODO: update to 2.0 -->
@@ -115,8 +115,8 @@
 			<groupId>extrapixel</groupId>
 			<artifactId>gifAnimation</artifactId>
 			<version>3.0.0</version>
-      <!-- <scope>system</scope>
-      <systemPath>${basedir}/lib/gifAnimation-3.0.0/gifAnimation.jar</systemPath> -->
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/gifAnimation-3.0.0/gifAnimation.jar</systemPath>
 		</dependency>
 
 	</dependencies>

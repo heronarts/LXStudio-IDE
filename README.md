@@ -251,10 +251,15 @@ export CLASSPATH="$(echo \
   lib/video-1.0.1/video.jar \
   lib/video-1.0.1/gstreamer-java.jar \
   lib/video-1.0.1/jna.jar \
+  lib/gifAnimation-3.0.0/gifAnimation.jar \
   target/lxstudio-ide-0.4.0-jar-with-dependencies.jar \
   | sed 's/ /:/g'
 )"
 java heronarts.lx.app.LXStudioApp
+```
+
+```
+lib/processing-4.0b2/core.jar:lib/processing-4.0b2/gluegen-rt.jar:lib/processing-4.0b2/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar
 ```
 
 This is provided as a VSCode build task in `.vscode/tasks.json`
