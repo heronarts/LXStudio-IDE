@@ -176,12 +176,10 @@ mvn install:install-file "-Dfile=C:\ProgramData\chocolatey\lib\Processing\tools\
 
 Some animations require the [Processing Video library](https://github.com/processing/processing-video). This is provided in `lib`:
 
-<!-- TODO: install instructions for video-2.0 -->
-
 ```bash
-mvn install:install-file "-Dfile=lib/video-1.0.1/video.jar" -DgroupId=org.processing -DartifactId=video -Dversion=1.0.1 -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/video-1.0.1/gstreamer-java.jar" -DgroupId=org.gstreamer -DartifactId=gstreamer-java -Dversion=1.6.2 -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/video-1.0.1/jna.jar" -DgroupId=com.sun -DartifactId=jna -Dversion=4.2.0 -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/video-2.0/video.jar" -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/video-2.0/gst1-java-core-1.2.0.jar" -DgroupId=org.gstreamer -DartifactId=gstreamer-java -Dversion=1.2.0 -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/video-2.0/jna.jar" -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
 ```
 
 ```bash
@@ -243,23 +241,26 @@ This is provided as a VSCode build task in `.vscode/tasks.json`
 ```bash
 # set JAVA_HOME first!
 # you will need to update this if your libraries were sourced from somewhere else.
-# TODO: update to 4.0b2
 export CLASSPATH="$(echo \
   lib/processing-4.0b2/core.jar \
   lib/processing-4.0b2/gluegen-rt.jar \
   lib/processing-4.0b2/jogl-all.jar \
-  lib/video-1.0.1/video.jar \
-  lib/video-1.0.1/gstreamer-java.jar \
-  lib/video-1.0.1/jna.jar \
+  lib/video-2.0/video.jar \
+  lib/video-2.0/gst1-java-core-1.2.0.jar \
+  lib/video-2.0/jna.jar \
   lib/gifAnimation-3.0.0/gifAnimation.jar \
+  lib/lx-0.4.0-jar-with-dependencies.jar \
+  lib/p4lx-0.4.0.jar \
+  lib/lxstudio-0.4.0.jar \
   target/lxstudio-ide-0.4.0-jar-with-dependencies.jar \
   | sed 's/ /:/g'
 )"
+echo $CLASSPATH
 java heronarts.lx.app.LXStudioApp
 ```
 
 ```
-lib/processing-4.0b2/core.jar:lib/processing-4.0b2/gluegen-rt.jar:lib/processing-4.0b2/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar
+lib/processing-4.0b2/core.jar:lib/processing-4.0b2/gluegen-rt.jar:lib/processing-4.0b2/jogl-all.jar:lib/video-2.0/video.jar:lib/video-2.0/gst1-java-core-1.2.0.jar:lib/video-2.0/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar
 ```
 
 This is provided as a VSCode build task in `.vscode/tasks.json`

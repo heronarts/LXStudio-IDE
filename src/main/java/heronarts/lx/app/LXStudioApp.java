@@ -412,11 +412,29 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   }
 
   public void setPixelsFrom(PImage dst, PImage src) {
-    if(dst == null) {
+    if(dst == null || src == null) {
       return;
     }
     try {
-      dst.set(0, 0, src.get());
+      if(System.getProperty("os.name").contains("Linux")) {
+        // This works on Linux
+        int[] copyPixels = (int []) FieldUtils.readField(src, "copyPixels", true);
+        int numPixels = Math.min(copyPixels.length, src.width * src.height);
+        for( int i = 0; i < numPixels; i++) {
+          int pixel = copyPixels[i];
+          dst.pixels[i] = (
+            (((pixel >> 16) & 0xff) << 0) |
+            (pixel >> 0 & 0x00ff00) |
+            (((pixel >> 0) & 0xff) << 16) |
+            0xff000000
+          );
+        }
+        dst.updatePixels();
+      } else {
+        // These doesn't work on linux
+        dst.set(0, 0, src.get());
+        // dst.copy(src, 0, 0, src.width, src.height, 0, 0, dst.width, dst.height);
+      }
     } catch (Exception e) {
       logger.warning(e.toString());
     }
@@ -426,18 +444,23 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public void draw() {
     // All handled by core LX engine, do not modify, method exists only so that
     // Processing will run a draw-loop.
-    synchronized (this) {
-      for (LXLoopTask drawLoopTask : this.drawLoopTasksToAdd) {
-        addDrawLoopTask(drawLoopTask);
+    // return;
+    synchronized (drawLoopTasks) {
+      synchronized (drawLoopTasksToAdd) {
+        for (LXLoopTask drawLoopTask : this.drawLoopTasksToAdd) {
+          addDrawLoopTask(drawLoopTask);
+        }
+        drawLoopTasksToAdd.clear();
       }
-      drawLoopTasksToAdd.clear();
       for (LXLoopTask drawLoopTask : this.drawLoopTasks) {
         drawLoopTask.loop(0.f);
       }
-      for (LXLoopTask drawLoopTask : this.drawLoopTasksToRemove) {
-        removeDrawLoopTask(drawLoopTask);
+      synchronized (drawLoopTasksToRemove) {
+        for (LXLoopTask drawLoopTask : this.drawLoopTasksToRemove) {
+          removeDrawLoopTask(drawLoopTask);
+        }
+        drawLoopTasksToRemove.clear();
       }
-      drawLoopTasksToRemove.clear();
     }
   }
 

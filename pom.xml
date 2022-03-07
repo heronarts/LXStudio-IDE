@@ -70,34 +70,30 @@
 			<systemPath>${basedir}/lib/processing-4.0b2/gluegen-rt.jar</systemPath>
 		</dependency>
 
-		<!-- video. TODO: update to 2.0 -->
+		<!-- video -->
 
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>video</artifactId>
-			<version>1.0.1</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/video-1.0.1/video.jar</systemPath>
+			<version>2.0</version>
+			<!-- <scope>system</scope>
+			<systemPath>${basedir}/lib/video-2.0/video.jar</systemPath> -->
 		</dependency>
 
 		<dependency>
 			<groupId>org.gstreamer</groupId>
 			<artifactId>gstreamer-java</artifactId>
-			<version>1.6.2</version>
-      <!-- <artifactId>gst1-java-core</artifactId> -->
-			<!-- <version>1.2.0</version> -->
-			<!-- <version>1.4.0</version> -->
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/video-1.0.1/gstreamer-java.jar</systemPath>
+			<version>1.2.0</version>
+			<!-- <scope>system</scope>
+			<systemPath>${basedir}/lib/video-2.0/gst1-java-core-1.2.0.jar</systemPath> -->
 		</dependency>
 
 		<dependency>
 			<groupId>com.sun</groupId>
 			<artifactId>jna</artifactId>
-			<version>4.2.0</version>
-			<!-- <version>5.4.0</version> -->
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/video-1.0.1/jna.jar</systemPath>
+			<version>5.4.0</version>
+			<!-- <scope>system</scope>
+			<systemPath>${basedir}/lib/video-2.0/jna.jar</systemPath> -->
 		</dependency>
 
 		<!-- reflection -->
@@ -109,7 +105,7 @@
 			<version>3.10</version>
 		</dependency>
 
-		<!-- gifs. TODO: bundle -->
+		<!-- gifs -->
 
 		<dependency>
 			<groupId>extrapixel</groupId>

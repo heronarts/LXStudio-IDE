@@ -27,7 +27,7 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
    * Last time a warning was emitted
    */
   long lastWarning = 0;
-  
+
   public LPPanelCapture(LX lx) {
     super(lx);
 
@@ -42,7 +42,12 @@ public class LPPanelCapture extends LPPanel3DGraphicsPattern {
     addParameter("fov", this.fov);
     addParameter("depth", this.depth);
 
-    String[] deviceNames = Capture.list();
+    String[] deviceNames = null;
+    try {
+      deviceNames = Capture.list();
+    } catch (Exception e) {
+      logger.warning(e.toString());
+    }
     if (deviceNames.length == 0) {
       logger.warning("no capture devices available");
       captureName = new ObjectParameter<String>("capture", new String[] { "" });
