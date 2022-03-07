@@ -109,7 +109,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public static PMatrix3D unflattener;
   public static float[][] flatBounds;
   public static float[][] modelBounds;
-  // TODO: move these metrics out of LXStudioApp
   public static LXStudio studio;
   public static LXStudioApp instance;
 
@@ -126,11 +125,14 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   @Override
   public void settings() {
     System.setProperty("jogl.disable.openglcore", "true");
+    // System.setProperty("jogl.disable.openglcore", "false");
     if (FULLSCREEN) {
       fullScreen(PApplet.P3D);
     } else {
       size(WIDTH, HEIGHT, PApplet.P3D);
     }
+    int density = displayDensity();
+    logger.info(String.format("density: %d", density));
     pixelDensity(displayDensity());
   }
 
@@ -372,7 +374,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
    * @return this
    */
   public LXStudioApp scheduleDrawLoopTask(LXLoopTask drawLoopTask) {
-    synchronized (drawLoopTasks) {
+    synchronized (drawLoopTasksToAdd) {
       drawLoopTasksToAdd.add(drawLoopTask);
     }
     return this;
@@ -416,8 +418,8 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       return;
     }
     try {
-      if(System.getProperty("os.name").contains("Linux")) {
-        // This works on Linux
+      String srcClass = src.getClass().getName();
+      if(srcClass == "processing.video.Capture") {
         int[] copyPixels = (int []) FieldUtils.readField(src, "copyPixels", true);
         int numPixels = Math.min(copyPixels.length, src.width * src.height);
         for( int i = 0; i < numPixels; i++) {
@@ -431,7 +433,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
         }
         dst.updatePixels();
       } else {
-        // These doesn't work on linux
         dst.set(0, 0, src.get());
         // dst.copy(src, 0, 0, src.width, src.height, 0, 0, dst.width, dst.height);
       }
