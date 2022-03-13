@@ -69,17 +69,17 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       .setDescription("The camera depth");
 
   public final CompoundParameter xOffset //
-    = new CompoundParameter("X-Off", 0, -2, 2)
+    = new CompoundParameter("X-Off", 0, -4, 4)
       .setDescription("The foreground placement in the X axis")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter yOffset //
-    = new CompoundParameter("Y-Off", 0, -2, 2)
+    = new CompoundParameter("Y-Off", 0, -4, 4)
       .setDescription("The foreground placement in the Y axis")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter zOffset //
-    = new CompoundParameter("Z-Off", 0, -2, 2)
+    = new CompoundParameter("Z-Off", 0, -4, 4)
       .setDescription("The foreground placement in the Z axis")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
@@ -122,7 +122,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter xShear //
-    = new CompoundParameter("X-Shear", 0.5, -2, 2)
+    = new CompoundParameter("X-Shear", 0, -2, 2)
       .setDescription("The shear of the foreground X axis with increasing Y")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
@@ -285,8 +285,8 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     final float yOffset = this.yOffset.getValuef();
     final float zOffset = this.zOffset.getValuef();
     pg.translate( //
-      xOffset * model.width, //
-      yOffset * model.height, //
+      (float)((xOffset - 0.5) * model.width), //
+      (float)((yOffset - 0.5) * model.height), //
       zOffset * Math.max(model.width, model.height));
   }
 

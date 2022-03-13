@@ -32,12 +32,12 @@
       "command": "java",
       "args": [
         "-cp",
-        "lib/processing-4.0b2/core.jar:lib/processing-4.0b2/gluegen-rt.jar:lib/processing-4.0b2/jogl-all.jar:lib/video-2.0/video.jar:lib/video-2.0/gst1-java-core-1.2.0.jar:lib/video-2.0/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:lib/lx-0.4.0-jar-with-dependencies.jar:lib/p4lx-0.4.0.jar:lib/lxstudio-0.4.0.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar",
+        "lib/processing-4.0b2/core.jar:lib/processing-4.0b2/gluegen-rt.jar:lib/processing-4.0b2/jogl-all.jar:lib/video-2.1/video.jar:lib/video-2.1/gst1-java-core-1.4.0:lib/video-2.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar",
         "heronarts.lx.app.LXStudioApp",
       ],
-      "dependsOn": [
-        "mvn compile assemble"
-      ],
+      // "dependsOn": [
+      //   "mvn compile assemble"
+      // ],
       "problemMatcher": [],
       "group": {
         "kind": "build",

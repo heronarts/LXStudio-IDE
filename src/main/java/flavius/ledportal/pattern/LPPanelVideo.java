@@ -50,12 +50,12 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
     addParameter("xRotate", this.xRotate);
     addParameter("yRotate", this.yRotate);
     addParameter("zRotate", this.zRotate);
-    // addParameter("xShear", this.xShear);
+    addParameter("xShear", this.xShear);
     addParameter("size", this.scale);
     addParameter("video", this.video);
     addParameter("volume", this.volume);
-    // addParameter("fov", this.fov);
-    // addParameter("depth", this.depth);
+    addParameter("fov", this.fov);
+    addParameter("depth", this.depth);
 
     scheduleRefreshVideoOnce();
     scheduleRefreshForeground();
@@ -109,7 +109,7 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
       }
       return;
     }
-    if (movie.available()) 
+    if (movie.available())
       movie.read();
     int newWidth = movie.width;
     int newHeight = movie.height;

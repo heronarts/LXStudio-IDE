@@ -419,7 +419,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     }
     try {
       String srcClass = src.getClass().getName();
-      if(srcClass == "processing.video.Capture") {
+      if(srcClass == "processing.video.Capture" || srcClass == "processing.video.Movie") {
         int[] copyPixels = (int []) FieldUtils.readField(src, "copyPixels", true);
         int numPixels = Math.min(copyPixels.length, src.width * src.height);
         for( int i = 0; i < numPixels; i++) {
