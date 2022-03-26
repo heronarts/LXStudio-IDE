@@ -2,6 +2,8 @@
 
 This is a fork of the excellent [LX Studio](http://lx.studio/) by Heronarts, Please read the [copyright and licensing notices](#lx-studio-notices) at the bottom of this readme.
 
+[![Telecortex-FractalShark](img/Telecortex-FractalShark.gif)](https://www.instagram.com/p/CbS3AbflKWw)
+
 [![LedPortal Want It](img/ledportal_want_it.gif)](https://www.instagram.com/p/CJTP5TdHwyo)
 
 [![LEDJing at SolidState](img/Solid%20State%20LeapMotion.gif)](https://www.youtube.com/watch?v=Ui-maztzuMk)
