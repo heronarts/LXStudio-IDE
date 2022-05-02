@@ -24,6 +24,24 @@ Documentation is available on the [LX Studio Wiki &rarr;](https://github.com/her
 
 Consult the [LX Studio API reference &rarr;](http://lx.studio/api/)
 
+### Configure Your Runtime ###
+
+Processing 4.0 beta 8 runs on [Eclipse Temurin 17 (17.0.2+8)](https://adoptium.net/). It is highly recommend to use this JDK for consistency.
+
+Running the project requires passing `-Djava.library.path=lib/processing-4.0b8/native` explicitly to the `java` command. Note that `native` is a symlink within the `processing-4.0b8` folder which should be pointed at the appropriate target platform folder.
+
+This is pre-configured in the Eclipse launch configuration `LXStudioApp.launch`
+
+If you change platforms, update the symlink using one of the following:
+```
+$ ln -hsf lib/processing-4.0b8/linux-aarch64 lib/processing-4.0b8/native
+$ ln -hsf lib/processing-4.0b8/linux-amd64 lib/processing-4.0b8/native
+$ ln -hsf lib/processing-4.0b8/linux-arm lib/processing-4.0b8/native
+$ ln -hsf lib/processing-4.0b8/macos-aarch64 lib/processing-4.0b8/native
+$ ln -hsf lib/processing-4.0b8/macos-x86_64 lib/processing-4.0b8/native
+$ ln -hsf lib/processing-4.0b8/windows-amd64 lib/processing-4.0b8/native
+```
+
 ### Contact and Collaboration ###
 
 Building a big cool project? I'm probably interested in hearing about it! Want to solicit some help, request new framework features, or just ask a random question? Open an issue on the project or drop me a line: mark@heronarts.com
