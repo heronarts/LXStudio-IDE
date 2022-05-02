@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
