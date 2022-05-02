@@ -13,8 +13,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
 		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
+		<attributes>
+			<attribute name="module" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
@@ -23,27 +29,8 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/core.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-linux-aarch64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-linux-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-linux-armv6hf.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-linux-i586.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-macosx-universal.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/gluegen-rt-natives-windows-i586.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-linux-aarch64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-linux-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-linux-armv6hf.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-linux-i586.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-macosx-universal.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b2/jogl-all-natives-windows-i586.jar"/>
-	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/processing-4.0b8/core-4.0b8.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b8/gluegen-rt-4.0b8.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0b8/jogl-all-4.0b8.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

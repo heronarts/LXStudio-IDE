@@ -41,21 +41,21 @@
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>core</artifactId>
-			<version>4.0b2</version>
+			<version>4.0b8</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all</artifactId>
-			<version>2.4.0-rc-20210111</version>
+			<version>4.0b8</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-main</artifactId>
-			<version>2.4.0-rc-20210111</version>
+			<version>4.0b8</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
