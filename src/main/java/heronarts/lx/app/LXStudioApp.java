@@ -33,9 +33,10 @@ import flavius.ledportal.LPMeshable;
 import flavius.ledportal.LPSimConfig;
 import flavius.ledportal.pattern.LPPanel3DRotatingCube;
 import flavius.ledportal.pattern.LPPanelBLM;
+import flavius.ledportal.pattern.LPPanelCapture;
+import flavius.ledportal.pattern.LPPanelGif;
 import flavius.ledportal.pattern.LPPanelHexLife;
 import flavius.ledportal.pattern.LPPanelProjectedVideo;
-// import flavius.ledportal.pattern.LPPanelShader;
 import flavius.ledportal.pattern.LPPanelShaderBlobby;
 import flavius.ledportal.pattern.LPPanelShaderMonjori;
 import flavius.ledportal.pattern.LPPanelShaderNebula;
@@ -44,13 +45,7 @@ import flavius.ledportal.pattern.LPPanelShaderSpiral;
 import flavius.ledportal.pattern.LPPanelSolidState;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
-// import flavius.ledportal.pattern.LPPanelScreenCapture;
-import flavius.ledportal.pattern.LPPanelCapture;
-import flavius.ledportal.pattern.LPPanelGif;
 import flavius.ledportal.structure.LPPanelFixture;
-import heronarts.lx.LX;
-import heronarts.lx.LXLoopTask;
-import heronarts.lx.LXPlugin;
 import heronarts.lx.app.media.FontLibrary;
 import heronarts.lx.app.media.GifLibrary;
 import heronarts.lx.app.media.ImageLibrary;
@@ -59,8 +54,19 @@ import heronarts.lx.app.pattern.VideoFrame;
 import heronarts.lx.app.ui.UIAxes;
 import heronarts.lx.app.ui.UIPanelFixture;
 import heronarts.lx.app.ui.UIWireFrame;
+import heronarts.lx.LX;
+import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
+import heronarts.lx.LXLoopTask;
+import heronarts.lx.LXPlugin;
+import heronarts.lx.LXPlugin;
+import heronarts.lx.osc.LXOscComponent;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.pattern.GraphicEqualizerPattern;
 import heronarts.lx.studio.LXStudio;
+import heronarts.lx.studio.LXStudio;
+import heronarts.p4lx.ui.component.UICollapsibleSection;
+import heronarts.p4lx.ui.component.UIKnob;
 import heronarts.p4lx.ui.UI.CoordinateSystem;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -182,6 +188,26 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     this.addDrawLoopTask(videoFrameTask);
   }
 
+  public static class MyComponent extends LXComponent implements LXOscComponent {
+
+    public final BoundedParameter param1 =
+      new BoundedParameter("p1", 0)
+      .setDescription("A global parameter that does something");
+
+    public final BoundedParameter param2 =
+      new BoundedParameter("p2", 0)
+      .setDescription("A global parameter that does something else");
+
+    public MyComponent(LX lx) {
+      super(lx);
+      addParameter("param1", this.param1);
+      addParameter("param2", this.param2);
+    }
+  }
+
+  // A global component for additional project-specific parameters, if desired
+  public MyComponent myComponent;
+
   @Override
   public void initialize(LX lx) {
     // Here is where you should register any custom components or make
@@ -210,6 +236,15 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(GraphicEqualizerPattern.class);
     lx.registry.addPattern(LPPanelProjectedVideo.class);
     // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
+    // lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
+    // lx.registry.addPattern(heronarts.lx.app.pattern.AppPatternWithUI.class);
+    // lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
+
+
+    // // Create an instance of your global component and register it with the LX engine
+    // // so that it can be saved and loaded in project files
+    // this.myComponent = new MyComponent(lx);
+    // lx.engine.registerComponent("myComponent", this.myComponent);
 
     lx.registry.addFixture(LPPanelFixture.class);
 
@@ -257,6 +292,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     if (videoFrame != null)
       logger.info(String.format("videoFrame: %d x %d", videoFrame.width,
         videoFrame.height));
+
   }
 
   public void initializeUI(LXStudio lx, LXStudio.UI ui) {
@@ -279,9 +315,21 @@ public class LXStudioApp extends PApplet implements LXPlugin {
 
   }
 
+  public static class UIMyComponent extends UICollapsibleSection {
+    public UIMyComponent(LXStudio.UI ui, MyComponent myComponent) {
+      super(ui, 0, 0, ui.leftPane.global.getContentWidth(), 80);
+      setTitle("MY COMPONENT");
+
+      new UIKnob(0, 0, myComponent.param1).addToContainer(this);
+      new UIKnob(40, 0, myComponent.param2).addToContainer(this);
+    }
+  }
+
   public void onUIReady(LXStudio lx, LXStudio.UI ui) {
-    // At this point, the LX Studio application UI has been built. You may now
-    // add additional views and components to the Ui hierarchy.
+    // At this point, the LX Studio application UI has been built. You may now add
+    // additional views and components to the UI hierarchy.
+    // new UIMyComponent(ui, this.myComponent)
+    // .addToContainer(ui.leftPane.global);
 
     for (LPDecoration decoration : config.decorations) {
       ui.preview.addComponent(new UIWireFrame(decoration));

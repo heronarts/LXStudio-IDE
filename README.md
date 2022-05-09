@@ -25,7 +25,7 @@ There are two ways to do this, you can bring your own Java JDK or use the JDK bu
 ### Prerequisites
 
 - Maven (if not using IntelliJ / Eclipse)
-- Java JDK 11 preferably from [Adoptium](https://adoptium.net/)
+- Java JDK 17 preferably from [Adoptium](https://adoptium.net/)
 
 #### Adoptium Ubuntu Install
 
@@ -137,20 +137,20 @@ You can also clone into the source code repositories (where available) and `mvn 
 
 ### Processing libraries
 
-lxstudio is based on [Processing 4.0b2](https://processing.org/download/). The necessary processing libraries are provided in `lib`
+lxstudio is based on [Processing 4.0b8](https://processing.org/download/). The necessary processing libraries are provided in `lib`
 
 ```bash
-mvn install:install-file "-Dfile=lib/processing-4.0b2/core.jar" -DgroupId=org.processing -DartifactId=core "-Dversion=4.0b2" -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/processing-4.0b2/jogl-all.jar" -DgroupId=org.jogamp.jogl -DartifactId=jogl-all "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/processing-4.0b2/gluegen-rt.jar" -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt-main "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/processing-4.0b8/core-4.0b8.jar" -DgroupId=org.processing -DartifactId=core "-Dversion=4.0b8" -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/processing-4.0b8/jogl-all-4.0b8.jar" -DgroupId=org.jogamp.jogl -DartifactId=jogl-all "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/processing-4.0b8/gluegen-rt-4.0b8.jar" -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt-main "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
 ```
 
-Alternatively, you can install the libraries provided by processing. If you are not on macOS and Processing 4.0b2, you may need to adjust the locations of the following library paths
+Alternatively, you can install the libraries provided by processing. If you are not on macOS and Processing 4.0b8, you may need to adjust the locations of the following library paths
 
 ```bash
 # one of the following
 export PROCESSING_CORE="/Applications/Processing.app/Contents/Java"
-export PROCESSING_CORE="$HOME/Downloads/Processing-4.0b2.app/core/library"
+export PROCESSING_CORE="$HOME/Downloads/Processing-4.0b8.app/core/library"
 export PROCESSING_CORE="$HOME/code/processing/core/library"
 ```
 
@@ -162,7 +162,7 @@ export PROCESSING_LIB="$HOME/sketchbook/libraries",
 ```
 
 ```bash
-mvn install:install-file -Dfile=${PROCESSING_CORE}/core.jar -DgroupId=org.processing -DartifactId=core "-Dversion=4.0b2" -Dpackaging=jar
+mvn install:install-file -Dfile=${PROCESSING_CORE}/core.jar -DgroupId=org.processing -DartifactId=core "-Dversion=4.0b8" -Dpackaging=jar
 mvn install:install-file -Dfile=${PROCESSING_CORE}/gluegen-rt-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt-main "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
 mvn install:install-file -Dfile=${PROCESSING_CORE}/jogl-all-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=jogl-all "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
 ```
@@ -170,7 +170,7 @@ mvn install:install-file -Dfile=${PROCESSING_CORE}/jogl-all-natives-linux-amd64.
 **On Windows:**
 
 ```powershell
-# TODO: update to 4.0b2
+# TODO: update to 4.0b8
 mvn install:install-file "-Dfile=C:\ProgramData\chocolatey\lib\Processing\tools\processing-3.5.4\core\library\core.jar" "-DgroupId=org.processing" "-DartifactId=core" "-Dversion=3.5.4" "-Dpackaging=jar"
 ```
 
@@ -245,11 +245,11 @@ This is provided as a VSCode build task in `.vscode/tasks.json`
 ```bash
 # set JAVA_HOME first!
 # you will need to update this if your libraries were sourced from somewhere else.
-# TODO: update to 4.0b2
+# TODO: update to 4.0b8
 export CLASSPATH="$(echo \
-  lib/processing-4.0b2/core.jar \
-  lib/processing-4.0b2/gluegen-rt.jar \
-  lib/processing-4.0b2/jogl-all.jar \
+  lib/processing-4.0b8/core-4.0b8.jar \
+  lib/processing-4.0b8/gluegen-rt-4.0b8.jar \
+  lib/processing-4.0b8/jogl-all-4.0b8.jar \
   lib/video-1.0.1/video.jar \
   lib/video-1.0.1/gstreamer-java.jar \
   lib/video-1.0.1/jna.jar \
@@ -261,7 +261,7 @@ java heronarts.lx.app.LXStudioApp
 ```
 
 ```
-lib/processing-4.0b2/core.jar:lib/processing-4.0b2/gluegen-rt.jar:lib/processing-4.0b2/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar
+lib/processing-4.0b8/core-4.0b8.jar:lib/processing-4.0b8/gluegen-rt-4.0b8.jar:lib/processing-4.0b8/jogl-all-4.0b8.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar
 ```
 
 This is provided as a VSCode build task in `.vscode/tasks.json`
@@ -338,6 +338,25 @@ available in the repository.
 Documentation is available on the [LX Studio Wiki &rarr;](https://github.com/heronarts/LXStudio/wiki)
 
 Consult the [LX Studio API reference &rarr;](http://lx.studio/api/)
+
+### Configure Your Runtime
+
+Processing 4.0 beta 8 runs on [Eclipse Temurin 17 (17.0.2+8)](https://adoptium.net/). It is highly recommend to use this JDK for consistency.
+
+Running the project requires passing `-Djava.library.path=lib/processing-4.0b8/native` explicitly to the `java` command. Note that `native` is a symlink within the `processing-4.0b8` folder which should be pointed at the appropriate target platform folder.
+
+This is pre-configured in the Eclipse launch configuration `LXStudioApp.launch`
+
+If you change platforms, update the symlink using one of the following:
+
+```bash
+ln -hsf lib/processing-4.0b8/linux-aarch64 lib/processing-4.0b8/native
+ln -hsf lib/processing-4.0b8/linux-amd64 lib/processing-4.0b8/native
+ln -hsf lib/processing-4.0b8/linux-arm lib/processing-4.0b8/native
+ln -hsf lib/processing-4.0b8/macos-aarch64 lib/processing-4.0b8/native
+ln -hsf lib/processing-4.0b8/macos-x86_64 lib/processing-4.0b8/native
+ln -hsf lib/processing-4.0b8/windows-amd64 lib/processing-4.0b8/native
+```
 
 ### Contact and Collaboration
 

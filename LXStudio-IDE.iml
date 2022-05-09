@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="EclipseModuleManager">
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/core.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-linux-aarch64.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-linux-amd64.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-linux-armv6hf.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-linux-i586.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-macosx-universal.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-windows-amd64.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-windows-i586.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-linux-aarch64.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-linux-amd64.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-linux-armv6hf.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-linux-i586.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-macosx-universal.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-windows-amd64.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-windows-i586.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b8/core-4.0b8.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b8/gluegen-rt-4.0b8.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b8/jogl-all-4.0b8.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/lxstudio-0.4.0.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/lx-0.4.0-jar-with-dependencies.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/p4lx-0.4.0.jar!/" />
@@ -26,7 +12,7 @@
       <src_folder value="file://$MODULE_DIR$/src/test/java" expected_position="2" />
     </src_description>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -34,156 +20,30 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="jdk" jdkName="11" jdkType="JavaSDK" />
+    <orderEntry type="jdk" jdkName="temurin-17" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
-      <library name="core.jar">
+      <library name="core-4.0b8.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/core.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/processing-4.0b8/core-4.0b8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="gluegen-rt-natives-linux-aarch64.jar">
+      <library name="gluegen-rt-4.0b8.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-linux-aarch64.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/processing-4.0b8/gluegen-rt-4.0b8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="gluegen-rt-natives-linux-amd64.jar">
+      <library name="jogl-all-4.0b8.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-linux-amd64.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="gluegen-rt-natives-linux-armv6hf.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-linux-armv6hf.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="gluegen-rt-natives-linux-i586.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-linux-i586.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="gluegen-rt-natives-macosx-universal.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-macosx-universal.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="gluegen-rt-natives-windows-amd64.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-windows-amd64.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="gluegen-rt-natives-windows-i586.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt-natives-windows-i586.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="gluegen-rt.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/gluegen-rt.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="jogl-all-natives-linux-aarch64.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-linux-aarch64.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="jogl-all-natives-linux-amd64.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-linux-amd64.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="jogl-all-natives-linux-armv6hf.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-linux-armv6hf.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="jogl-all-natives-linux-i586.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-linux-i586.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="jogl-all-natives-macosx-universal.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-macosx-universal.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="jogl-all-natives-windows-amd64.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-windows-amd64.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="jogl-all-natives-windows-i586.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all-natives-windows-i586.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="jogl-all.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b2/jogl-all.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/processing-4.0b8/jogl-all-4.0b8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -231,8 +91,8 @@
     <orderEntry type="library" name="Maven: uk.co.xfactory-librarians:coremidi4j:1.6" level="project" />
     <orderEntry type="library" name="Maven: com.heronarts:p4lx:0.4.0" level="project" />
     <orderEntry type="library" name="Maven: com.heronarts:lxstudio:0.4.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.processing:core:4.0b2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.jogl:jogl-all:2.4.0-rc-20210111" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.gluegen:gluegen-rt-main:2.4.0-rc-20210111" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.processing:core:4.0b8" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.jogl:jogl-all:4.0b8" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.gluegen:gluegen-rt-main:4.0b8" level="project" />
   </component>
 </module>

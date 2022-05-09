@@ -18,8 +18,8 @@
       "projectName": "lxstudio-ide",
       "preLaunchTask": "mvn compile assemble",
       "env": {
-        "_JAVA_OPTIONS": "-Djogl.disable.openglcore=false",
-        "CLASSPATH": "lib/processing-4.0b2/core.jar:lib/processing-4.0b2/gluegen-rt.jar:lib/processing-4.0b2/jogl-all.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar"
+        "_JAVA_OPTIONS": "-Djogl.disable.openglcore=false -Djava.library.path=lib/processing-4.0b8/native",
+        "CLASSPATH": "lib/processing-4.0b8/core-4.0b8.jar:lib/processing-4.0b8/gluegen-rt-4.0b8.jar:lib/processing-4.0b8/jogl-all-4.0b8.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar"
       }
     }
   ]
