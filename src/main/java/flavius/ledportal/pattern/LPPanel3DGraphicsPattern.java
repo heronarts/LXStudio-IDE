@@ -122,7 +122,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter xShear //
-    = new CompoundParameter("X-Shear", 0.5, -2, 2)
+    = new CompoundParameter("X-Shear", 0, -2, 2)
       .setDescription("The shear of the foreground X axis with increasing Y")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
