@@ -32,7 +32,11 @@ public abstract class MediaLibrary<T> {
     return new FileFilter() {
       @Override
       public boolean accept(File file) {
-        return extensions.contains(splitExt(file.getName())[1]);
+        String[] components = splitExt(file.getName());
+        if (components.length > 1) {
+          return extensions.contains(components[1]);
+        }
+        return false;
       }
     };
   }
@@ -56,6 +60,7 @@ public abstract class MediaLibrary<T> {
     listing.clear();
     String contentPath = getCanonicalContentPath(lx, mediaFolder);
     File dir = new File(contentPath);
+    logger.info(String.format("contentPath for %s: %s", mediaFolder, contentPath));
     File[] directoryListing = dir.listFiles(filter);
     if (directoryListing != null) {
       for (File child : directoryListing) {
