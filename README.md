@@ -48,14 +48,14 @@ You can list possible Java homes with
 
 ```txt
 ...
-11.0.14.1, x86_64:  "Eclipse Temurin 11"    /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home
+17.0.3, x86_64:     "OpenJDK 17.0.3"        /Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
 ...
 ```
 
 and set your JAVA_HOME to use JDK 11 with
 
 ```bash
-export JAVA_HOME="`/usr/libexec/java_home -v 11`"
+export JAVA_HOME="`/usr/libexec/java_home -v 17`"
 ```
 
 #### Setting Java Home on Ubuntu
@@ -76,200 +76,27 @@ java -version
 you should see
 
 ```txt
-openjdk 11.0.14.1 2022-02-08
-OpenJDK Runtime Environment Temurin-11.0.14.1+1 (build 11.0.14.1+1)
-OpenJDK 64-Bit Server VM Temurin-11.0.14.1+1 (build 11.0.14.1+1, mixed mode)
+openjdk version "17.0.3" 2022-04-19
+OpenJDK Runtime Environment Temurin-17.0.3+7 (build 17.0.3+7)
+OpenJDK 64-Bit Server VM Temurin-17.0.3+7 (build 17.0.3+7, mixed mode, sharing)
 ```
 
 ## Using IntelliJ / Eclipse
 
 The build config files have been provided for IntelliJ and Eclipse, so your IDE should will handle dependency resolution and building for you, however if you want to have the versatility of VSCode with maven, then you will need to see the next sections for how to install those dependencies
 
-## Using VSCode and Maven
+## Using VSCode
 
-Several jars need to be installed into your local maven repository (e.g. `~/.m2/repository`) manually.
+LEDPortal is based on LXStudio, which in turn is based on Processing. Additionally, some animations require external dependencies like video or gif libraries. The configurations provided in `.settings/` and `LXStudioApp.launch` should allow you to build and run LEDPortal using the libraries provided in this repository under `lib/`.
+## Debugging
 
-LEDPortal is based on LXStudio, which in turn is based on Processing. Additionally, some animations require external dependencies like video or gif libraries. There are several options for installing these. We recommend using those provided in this repository, however if the a library doesn't work or goes out of date, you can also try installing the library through the Processing library interface (**Sketch** → **Import Library** → **Add Library**), or downloading it manually, then test that it works by running one of the examples that the library provides.
+### Vanilla LXStudio
 
-The `groupId`, `artifactId` and `version` fields are important. You will need to update `.classpath`, `pom.xml` or your IDE configuration if the version installed by processing does not match. If it's not clear what version a library is, one way to determine this is with `unzip -q -c <jar path> META-INF/MANIFEST.MF`.
+if you're having issues with LEDPortal-IDE, it may be an upstream issue. Try getting LXStudio-IDE working first.
+### Processing Libraries
 
-Use the libraries provided in `lib` before trying the libraries installed by processing.
-
-### Maven Setup - MacOS
-
-```bash
-brew install maven
-```
-
-### Maven Setup - Ubuntu
-
-```bash
-sudo apt install maven
-```
-
-### Maven Setup - Windows with Choco
-
-```powershell
-# TODO: test the choco package for jdk 11
-choco install openjdk11 -y
-choco install maven Processing -y
-```
-
-- Install `vscjava.vscode-java-pack` VSCode extension
-- Configure Java Runtime
-
-### Heronarts libraries
-
-These libraries have been provided in the `lib` folder
-
-- [heronarts.lx](https://github.com/heronarts/lx)
-- [heronarts.p4lx](https://github.com/heronarts/p4lx)
-- heronarts.lxstudio (private)
-
-```bash
-export PROJ_VERSION="0.4.0"
-mvn install:install-file "-Dfile=lib/lxstudio-${PROJ_VERSION}.jar" -DgroupId=heronarts -DartifactId=lxstudio "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/lx-${PROJ_VERSION}-jar-with-dependencies.jar" -DgroupId=heronarts -DartifactId=lx "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/p4lx-${PROJ_VERSION}.jar" -DgroupId=heronarts -DartifactId=p4lx "-Dversion=${PROJ_VERSION}" -Dpackaging=jar
-```
-
-You can also clone into the source code repositories (where available) and `mvn install` if you want to modify them.
-
-### Processing libraries
-
-lxstudio is based on [Processing 4.0b8](https://processing.org/download/). The necessary processing libraries are provided in `lib`
-
-```bash
-mvn install:install-file "-Dfile=lib/processing-4.0b8/core-4.0b8.jar" -DgroupId=org.processing -DartifactId=core "-Dversion=4.0b8" -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/processing-4.0b8/jogl-all-4.0b8.jar" -DgroupId=org.jogamp.jogl -DartifactId=jogl-all "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/processing-4.0b8/gluegen-rt-4.0b8.jar" -DgroupId=org.jogamp.gluegen -DartifactId=gluegen-rt-main "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
-```
-
-Alternatively, you can install the libraries provided by processing. If you are not on macOS and Processing 4.0b8, you may need to adjust the locations of the following library paths
-
-```bash
-# one of the following
-export PROCESSING_CORE="/Applications/Processing.app/Contents/Java"
-export PROCESSING_CORE="$HOME/Downloads/Processing-4.0b8.app/core/library"
-export PROCESSING_CORE="$HOME/code/processing/core/library"
-```
-
-```bash
-# one of the following
-export PROCESSING_LIB="$HOME/Documents/Processing/libraries"
-export PROCESSING_LIB="$HOME/sketchbook/libraries",
-export PROCESSING_LIB="$HOME/sketchbook/libraries",
-```
-
-```bash
-mvn install:install-file -Dfile=${PROCESSING_CORE}/core.jar -DgroupId=org.processing -DartifactId=core "-Dversion=4.0b8" -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_CORE}/gluegen-rt-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=gluegen-rt-main "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
-mvn install:install-file -Dfile=${PROCESSING_CORE}/jogl-all-natives-linux-amd64.jar -DgroupId=com.jogamp -DartifactId=jogl-all "-Dversion=2.4.0-rc-20210111" -Dpackaging=jar
-```
-
-**On Windows:**
-
-```powershell
-# TODO: update to 4.0b8
-mvn install:install-file "-Dfile=C:\ProgramData\chocolatey\lib\Processing\tools\processing-3.5.4\core\library\core.jar" "-DgroupId=org.processing" "-DartifactId=core" "-Dversion=3.5.4" "-Dpackaging=jar"
-```
-
-### Video libraries
-
-Some animations require the [Processing Video library](https://github.com/processing/processing-video). This is provided in `lib`:
-
-```bash
-mvn install:install-file "-Dfile=lib/video-2.1/video.jar" "-DgroupId=org.processing" "-DartifactId=video" "-Dversion=2.1" "-Dpackaging=jar"
-mvn install:install-file "-Dfile=lib/video-2.1/gst1-java-core-1.4.0.jar" "-DgroupId=org.gstreamer" "-DartifactId=gstreamer-java" "-Dversion=1.4.0" "-Dpackaging=jar"
-mvn install:install-file "-Dfile=lib/video-2.1/jna.jar" "-DgroupId=com.sun" "-DartifactId=jna" "-Dversion=5.4.0" "-Dpackaging=jar"
-```
-
-```bash
-# export VIDEO_LIB="$HOME/code/processing-video/"
-export VIDEO_LIB="$PROCESSING_LIB/video"
-```
-
-video.jar:
-
-```bash
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.1 -Dpackaging=jar
-```
-
-gstreamer: may require system install of gstreamer library
-
-```bash
-# one of the following
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.2.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.2.0 -Dpackaging=jar
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/gst1-java-core-1.4.0.jar -DgroupId=org.gstreamer -DartifactId=gst1-java-core -Dversion=1.4.0 -Dpackaging=jar
-```
-
-jna
-
-```bash
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/jna.jar -DgroupId=com.sun -DartifactId=jna -Dversion=5.4.0 -Dpackaging=jar
-```
-
-### gif library
-
-[Processing Gif-Animation Library](https://github.com/extrapixel/gif-animation/tree/3.0) is in `lib`
-
-```bash
-mvn install:install-file "-Dfile=lib/gifAnimation-3.0.0/gifAnimation.jar" -DgroupId=extrapixel -DartifactId=gifAnimation -Dversion=3.0.0 -Dpackaging=jar
-```
-
-or install externally with
-
-```bash
-export GIF_LIB="$PROCESSING_LIB/gifAnimation"
-```
-
-```bash
-mvn install:install-file "-Dfile=${GIF_LIB}/library/gifAnimation.jar" "-DgroupId=extrapixel" "-DartifactId=gifAnimation" "-Dversion=3.0.0" "-Dpackaging=jar"
-```
-
-## Maven Compile
-
-You can compile this repository with the following commands, you may need to adjust your java home
-
-```bash
-# set JAVA_HOME first!
-mvn compiler:compile assembly:single
-```
-
-This is provided as a VSCode build task in `.vscode/tasks.json`
-
-## Run with BYO Java
-
-```bash
-# set JAVA_HOME first!
-# you will need to update this if your libraries were sourced from somewhere else.
-export CLASSPATH="$(echo \
-  lib/processing-4.0b8/core-4.0b8.jar \
-  lib/processing-4.0b8/gluegen-rt-4.0b8.jar \
-  lib/processing-4.0b8/jogl-all-4.0b8.jar \
-  lib/video-2.1/video.jar \
-  lib/video-2.1/gst1-java-core-1.4.0.jar \
-  lib/video-2.1/jna.jar \
-  lib/gifAnimation-3.0.0/gifAnimation.jar \
-  lib/lx-0.4.0-jar-with-dependencies.jar \
-  lib/p4lx-0.4.0.jar \
-  lib/lxstudio-0.4.0.jar \
-  target/lxstudio-ide-0.4.0-jar-with-dependencies.jar \
-  | sed 's/ /:/g'
-)"
-echo $CLASSPATH
-java heronarts.lx.app.LXStudioApp
-```
-
-```
-lib/processing-4.0b8/core-4.0b8.jar:lib/processing-4.0b8/gluegen-rt-4.0b8.jar:lib/processing-4.0b8/jogl-all-4.0b8.jar:lib/video-2.1/video.jar:lib/video-2.1/gst1-java-core-1.4.0.jar:lib/video-2.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:lib/lx-0.4.0-jar-with-dependencies.jar:lib/p4lx-0.4.0.jar:lib/lxstudio-0.4.0.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar
-```
-
-This is provided as a VSCode build task in `.vscode/tasks.json`
-
-### Debugging
-
-#### Serial ports not working on Ubuntu
+If a library doesn't work or goes out of date, you can also try installing the library through the Processing library interface (**Sketch** → **Import Library** → **Add Library**), or downloading it manually, then test that it works by running one of the examples that the library provides.
+### Serial ports not working on Ubuntu
 
 Try adding the user to the `tty` and `dialout` groups
 
@@ -367,6 +194,16 @@ ln -hsf lib/processing-4.0b8/linux-arm lib/processing-4.0b8/native
 ln -hsf lib/processing-4.0b8/macos-aarch64 lib/processing-4.0b8/native
 ln -hsf lib/processing-4.0b8/macos-x86_64 lib/processing-4.0b8/native
 ln -hsf lib/processing-4.0b8/windows-amd64 lib/processing-4.0b8/native
+```
+
+or the equivalent `mklnk` command in cmd.exe on Windows
+
+or for some versions of macos:
+
+```bash
+mkdir natives
+cd natives
+ln -s ../lib/processing-4.0b8/macos-x86_64 macosx-universal
 ```
 
 ### Contact and Collaboration
