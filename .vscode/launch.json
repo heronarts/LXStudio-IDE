@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch LXStudioApp",
+      "request": "launch",
+      "mainClass": "heronarts.lx.app.LXStudioApp",
+      "projectName": "ledportal-ide"
+    },
+    {
+      "type": "java",
       "name": "Debug (Launch) - Current File",
       "request": "launch",
       "mainClass": "${file}"
