@@ -88,14 +88,17 @@ The build config files have been provided for IntelliJ and Eclipse, so your IDE 
 ## Using VSCode
 
 LEDPortal is based on LXStudio, which in turn is based on Processing. Additionally, some animations require external dependencies like video or gif libraries. The configurations provided in `.settings/` and `LXStudioApp.launch` should allow you to build and run LEDPortal using the libraries provided in this repository under `lib/`.
+
 ## Debugging
 
 ### Vanilla LXStudio
 
 if you're having issues with LEDPortal-IDE, it may be an upstream issue. Try getting LXStudio-IDE working first.
+
 ### Processing Libraries
 
 If a library doesn't work or goes out of date, you can also try installing the library through the Processing library interface (**Sketch** → **Import Library** → **Add Library**), or downloading it manually, then test that it works by running one of the examples that the library provides.
+
 ### Serial ports not working on Ubuntu
 
 Try adding the user to the `tty` and `dialout` groups
@@ -196,7 +199,14 @@ ln -hsf lib/processing-4.0b8/macos-x86_64 lib/processing-4.0b8/native
 ln -hsf lib/processing-4.0b8/windows-amd64 lib/processing-4.0b8/native
 ```
 
-or the equivalent `mklnk` command in cmd.exe on Windows
+or the equivalent `mklnk` command in cmd.exe on Windows:
+
+```powershell
+mkdir natives
+cd natives
+cmd
+  mklink windows-amd64 ..\lib\processing-4.0b8\windows-amd64
+```
 
 or for some versions of macos:
 
