@@ -30,8 +30,8 @@ There are two ways to do this, you can bring your own Java JDK or use the JDK bu
 #### Adoptium Ubuntu Install
 
 ```bash
-wget "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.14.1%2B1/OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz"
-sudo tar zxvf OpenJDK11U-jdk_x64_linux_hotspot_11.0.14.1_1.tar.gz -C /usr/lib/jvm
+wget "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.3_7.tar.gz"
+sudo tar zxvf OpenJDK17U-jdk_x64_linux_hotspot_17.0.3_7.tar.gz -C /usr/lib/jvm
 ```
 
 #### Set Java Home
@@ -61,8 +61,8 @@ export JAVA_HOME="`/usr/libexec/java_home -v 17`"
 #### Setting Java Home on Ubuntu
 
 ```bash
-sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk-11.0.14.1+1/bin/java" 1
-sudo update-alternatives --set "java" "/usr/lib/jvm/jdk-11.0.14.1+1/bin/java"
+sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk-17.0.3+7/bin/java" 1
+sudo update-alternatives --set "java" "/usr/lib/jvm/jdk-17.0.3+7/bin/java"
 ```
 
 #### Validating
@@ -197,6 +197,14 @@ ln -hsf lib/processing-4.0b8/linux-arm lib/processing-4.0b8/native
 ln -hsf lib/processing-4.0b8/macos-aarch64 lib/processing-4.0b8/native
 ln -hsf lib/processing-4.0b8/macos-x86_64 lib/processing-4.0b8/native
 ln -hsf lib/processing-4.0b8/windows-amd64 lib/processing-4.0b8/native
+```
+
+or on linux:
+
+```bash
+mkdir natives
+cd natives
+ln -s ../lib/processing-4.0b8/linux-amd64 linux-amd64
 ```
 
 or the equivalent `mklnk` command in cmd.exe on Windows:
