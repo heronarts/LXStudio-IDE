@@ -26,7 +26,7 @@
       "command": "java",
       "args": [
         "-cp",
-        "lib/lxstudio-0.4.0.jar:lib/lx-0.4.0-jar-with-dependencies.jar:lib/p4lx-0.4.0.jar:lib/processing-4.0b8/core-4.0b8.jar:lib/processing-4.0b8/gluegen-rt-4.0b8.jar:lib/processing-4.0b8/jogl-all-4.0b8.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar",
+        "lib/lxstudio-0.4.0.jar:lib/lx-0.4.0-jar-with-dependencies.jar:lib/p4lx-0.4.0.jar:lib/processing-4.0b8/core-4.0b8.jar:lib/processing-4.0b8/gluegen-rt-4.0b8.jar:lib/processing-4.0b8/jogl-all-4.0b8.jar:lib/video-2.1/video.jar:lib/video-2.1/gst1-java-core-1.4.0:lib/video-2.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar",
         "heronarts.lx.app.LXStudioApp"
       ],
       "dependsOn": ["mvn compile assemble"],

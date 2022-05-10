@@ -178,12 +178,10 @@ mvn install:install-file "-Dfile=C:\ProgramData\chocolatey\lib\Processing\tools\
 
 Some animations require the [Processing Video library](https://github.com/processing/processing-video). This is provided in `lib`:
 
-<!-- TODO: install instructions for video-2.0 -->
-
 ```bash
-mvn install:install-file "-Dfile=lib/video-1.0.1/video.jar" -DgroupId=org.processing -DartifactId=video -Dversion=1.0.1 -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/video-1.0.1/gstreamer-java.jar" -DgroupId=org.gstreamer -DartifactId=gstreamer-java -Dversion=1.6.2 -Dpackaging=jar
-mvn install:install-file "-Dfile=lib/video-1.0.1/jna.jar" -DgroupId=com.sun -DartifactId=jna -Dversion=4.2.0 -Dpackaging=jar
+mvn install:install-file "-Dfile=lib/video-2.1/video.jar" "-DgroupId=org.processing" "-DartifactId=video" "-Dversion=2.1" "-Dpackaging=jar"
+mvn install:install-file "-Dfile=lib/video-2.1/gst1-java-core-1.4.0.jar" "-DgroupId=org.gstreamer" "-DartifactId=gstreamer-java" "-Dversion=1.4.0" "-Dpackaging=jar"
+mvn install:install-file "-Dfile=lib/video-2.1/jna.jar" "-DgroupId=com.sun" "-DartifactId=jna" "-Dversion=5.4.0" "-Dpackaging=jar"
 ```
 
 ```bash
@@ -194,7 +192,7 @@ export VIDEO_LIB="$PROCESSING_LIB/video"
 video.jar:
 
 ```bash
-mvn install:install-file -Dfile=${VIDEO_LIB}/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.0 -Dpackaging=jar
+mvn install:install-file -Dfile=${VIDEO_LIB}/library/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=2.1 -Dpackaging=jar
 ```
 
 gstreamer: may require system install of gstreamer library
@@ -245,23 +243,26 @@ This is provided as a VSCode build task in `.vscode/tasks.json`
 ```bash
 # set JAVA_HOME first!
 # you will need to update this if your libraries were sourced from somewhere else.
-# TODO: update to 4.0b8
 export CLASSPATH="$(echo \
   lib/processing-4.0b8/core-4.0b8.jar \
   lib/processing-4.0b8/gluegen-rt-4.0b8.jar \
   lib/processing-4.0b8/jogl-all-4.0b8.jar \
-  lib/video-1.0.1/video.jar \
-  lib/video-1.0.1/gstreamer-java.jar \
-  lib/video-1.0.1/jna.jar \
+  lib/video-2.1/video.jar \
+  lib/video-2.1/gst1-java-core-1.4.0.jar \
+  lib/video-2.1/jna.jar \
   lib/gifAnimation-3.0.0/gifAnimation.jar \
+  lib/lx-0.4.0-jar-with-dependencies.jar \
+  lib/p4lx-0.4.0.jar \
+  lib/lxstudio-0.4.0.jar \
   target/lxstudio-ide-0.4.0-jar-with-dependencies.jar \
   | sed 's/ /:/g'
 )"
+echo $CLASSPATH
 java heronarts.lx.app.LXStudioApp
 ```
 
 ```
-lib/processing-4.0b8/core-4.0b8.jar:lib/processing-4.0b8/gluegen-rt-4.0b8.jar:lib/processing-4.0b8/jogl-all-4.0b8.jar:lib/video-1.0.1/video.jar:lib/video-1.0.1/gstreamer-java.jar:lib/video-1.0.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar
+lib/processing-4.0b8/core-4.0b8.jar:lib/processing-4.0b8/gluegen-rt-4.0b8.jar:lib/processing-4.0b8/jogl-all-4.0b8.jar:lib/video-2.1/video.jar:lib/video-2.1/gst1-java-core-1.4.0.jar:lib/video-2.1/jna.jar:lib/gifAnimation-3.0.0/gifAnimation.jar:lib/lx-0.4.0-jar-with-dependencies.jar:lib/p4lx-0.4.0.jar:lib/lxstudio-0.4.0.jar:target/lxstudio-ide-0.4.0-jar-with-dependencies.jar
 ```
 
 This is provided as a VSCode build task in `.vscode/tasks.json`
@@ -313,6 +314,16 @@ install processing from source
 git clone
 cd processing
 ```
+
+### Video not working on Windows
+
+get the appropriate gstreamer installer from one of these locations:
+
+- <https://gstreamer.freedesktop.org/data/pkg/windows/1.4.0/gstreamer-1.0-x86_64-1.4.0.msi>
+- <https://gstreamer.freedesktop.org/data/pkg/windows/1.8.0/gstreamer-1.0-x86_64-1.8.0.msi>
+- <https://gstreamer.freedesktop.org/data/pkg/windows/1.4.0/gstreamer-1.0-x86-1.4.0.msi>
+
+You may need to also add an entry "C:\gstreamer\1.0\x86_64\bin" to the PATH environment variable <https://github.com/gstreamer-java/gst1-java-core/issues/15>
 
 ## LX Studio Notices
 
