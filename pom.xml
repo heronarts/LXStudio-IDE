@@ -26,7 +26,7 @@
 			<artifactId>lx</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/lx-${project.version}-jar-with-dependencies.jar</systemPath>
+			<systemPath>${project.basedir}/lib/lx-${project.version}-jar-with-dependencies.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -34,7 +34,7 @@
 			<artifactId>p4lx</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/p4lx-${project.version}.jar</systemPath>
+			<systemPath>${project.basedir}/lib/p4lx-${project.version}.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -42,7 +42,7 @@
 			<artifactId>lxstudio</artifactId>
 			<version>${project.version}</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/lxstudio-${project.version}.jar</systemPath>
+			<systemPath>${project.basedir}/lib/lxstudio-${project.version}.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -50,7 +50,7 @@
 			<artifactId>core</artifactId>
 			<version>4.0b8</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/processing-4.0b8/core-4.0b8.jar</systemPath>
+			<systemPath>${project.basedir}/lib/processing-4.0b8/core-4.0b8.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -59,7 +59,7 @@
 			<version>4.0b8</version>
 			<!-- <scope>provided</scope> -->
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/processing-4.0b8/jogl-all-4.0b8.jar</systemPath>
+			<systemPath>${project.basedir}/lib/processing-4.0b8/jogl-all-4.0b8.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -68,7 +68,7 @@
 			<version>2.4.0-rc-20210111</version>
 			<!-- <scope>provided</scope> -->
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/processing-4.0b8/gluegen-rt-4.0b8.jar</systemPath>
+			<systemPath>${project.basedir}/lib/processing-4.0b8/gluegen-rt-4.0b8.jar</systemPath>
 		</dependency>
 
 		<!-- video. TODO: update to 2.0 -->
@@ -78,7 +78,7 @@
 			<artifactId>video</artifactId>
 			<version>1.0.1</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/video-1.0.1/video.jar</systemPath>
+			<systemPath>${project.basedir}/lib/video-1.0.1/video.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -89,7 +89,7 @@
 			<!-- <version>1.2.0</version> -->
 			<!-- <version>1.4.0</version> -->
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/video-1.0.1/gstreamer-java.jar</systemPath>
+			<systemPath>${project.basedir}/lib/video-1.0.1/gstreamer-java.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -98,7 +98,7 @@
 			<version>4.2.0</version>
 			<!-- <version>5.4.0</version> -->
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/video-1.0.1/jna.jar</systemPath>
+			<systemPath>${project.basedir}/lib/video-1.0.1/jna.jar</systemPath>
 		</dependency>
 
 		<!-- reflection -->
@@ -117,7 +117,7 @@
 			<artifactId>gifAnimation</artifactId>
 			<version>3.0.0</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/lib/gifAnimation-3.0.0/gifAnimation.jar</systemPath>
+			<systemPath>${project.basedir}/lib/gifAnimation-3.0.0/gifAnimation.jar</systemPath>
 		</dependency>
 
 	</dependencies>
