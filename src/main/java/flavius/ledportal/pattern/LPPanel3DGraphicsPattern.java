@@ -11,6 +11,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.core.PMatrix2D;
@@ -126,6 +127,11 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       .setDescription("The shear of the foreground X axis with increasing Y")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
+  public final CompoundParameter alphaCurve //
+    = new CompoundParameter("Alpha Curve", 0.1, 0, 2)
+      .setDescription("The exponential slope of the alpha curve")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
+
   public LPPanel3DGraphicsPattern(LX lx) {
     super(lx);
     scheduleRenderTask();
@@ -208,6 +214,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     if (pg != null)
     pg.dispose();
     pg = LXStudioApp.instance.createGraphics(width, height, renderer);
+    pg.colorMode(PConstants.ARGB, 255);
     frame = new PImage(pg.width, pg.height);
     frameSize = Math.max(pg.width, pg.height);
     logger.info(String.format("resized %d x %d, size=%d", width, height, frameSize));
@@ -248,11 +255,17 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
   }
 
   public void applyBackground(int colour) {
-    pg.background(colour);
+    applyBackground(colour, 1f);
+  }
+
+  public void applyBackground(int colour, float alpha) {
+    pg.background(colour, alpha);
   }
 
   public void applyBackground() {
-    applyBackground(LXColor.BLACK);
+    // background is black with alpha = 0
+    applyBackground(LXColor.BLACK & LXColor.RGB_MASK, 0f);
+    return;
   }
 
   public void applyShear() {
@@ -339,6 +352,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     synchronized (LPPanel3DGraphicsPattern.class) {
       LPPanelModel.PanelMetrics metrics = ((LPPanelModel) (this
         .getModel())).metrics;
+      // TODO frameReady can be replaced by frame.modified
       if (frameReady == false) {
         return;
       }
@@ -349,6 +363,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       int yScanFuckery = (int) (this.yScanFuckery.getValuef() * frame.height
         / 2);
       int beats = this.beats.getValuei();
+      float alphaCurve = this.alphaCurve.getValuef();
       float phase = (float) (beats + this.lx.engine.tempo.basis()) / beats;
       for (Point point : model.points) {
         int x = (point.xi - metrics.xiMin
@@ -359,7 +374,11 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
           + (int) (yScanFuckery
             * Math.sin(2 * Math.PI * ((point.xi / period) + phase))))
           % frame.height;
-        setColor(point.index, frame.get(x, y));
+        int c = frame.get(x, y);
+        int alpha = (int)(Math.pow(LXColor.b(c) / 100f, alphaCurve) * 255);
+        c &= LXColor.RGB_MASK;
+        c |= alpha << LXColor.ALPHA_SHIFT;
+        setColor(point.index, c);
       }
       frameReady = false;
     }
