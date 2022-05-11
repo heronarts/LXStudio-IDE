@@ -62,7 +62,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     .getLogger(LPPanel3DGraphicsPattern.class.getName());
 
   public final CompoundParameter fov //
-    = new CompoundParameter("fov", Math.PI/4, Math.PI/8, Math.PI)
+    = new CompoundParameter("fov", Math.PI/4, Math.PI/16, Math.PI)
       .setDescription("The camera field of view");
 
   public final CompoundParameter depth //
@@ -70,17 +70,17 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       .setDescription("The camera depth");
 
   public final CompoundParameter xOffset //
-    = new CompoundParameter("X-Off", 0, -4, 4)
+    = new CompoundParameter("X-Off", 0, -1, 1)
       .setDescription("The foreground placement in the X axis")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter yOffset //
-    = new CompoundParameter("Y-Off", 0, -4, 4)
+    = new CompoundParameter("Y-Off", 0, -1, 1)
       .setDescription("The foreground placement in the Y axis")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter zOffset //
-    = new CompoundParameter("Z-Off", 0, -4, 4)
+    = new CompoundParameter("Z-Off", 0, -1, 1)
       .setDescription("The foreground placement in the Z axis")
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
@@ -144,15 +144,22 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     }
     final float fov = this.fov.getValuef();
     final float depth = this.depth.getValuef();
+
     int pgSize = Math.max(pg.width, pg.height);
+    float cameraX = pg.width / 2;
+    float cameraY = pg.height / 2;
     float cameraZ = (float) (pgSize / Math.tan(fov / 2.0f));
     pg.camera( //
-      0, 0, cameraZ * depth, //
-      0, 0, 0, //
-      0, 1, 0 //
+      cameraX, cameraY, cameraZ, // eye
+      cameraX, cameraY, 0, // centre
+      0, -1, 0 // up
     );
-    pg.perspective(fov, (float) (pg.width / pg.height), cameraZ / (depth * depth),
-      cameraZ * (depth * depth));
+    pg.perspective(
+      fov, // fovy field-of-view angle (in radians) for vertical direction
+      (float)(pg.width) / (float)(pg.height), // aspect ratio of width to height
+      cameraZ / (depth * pgSize), // zNear z-position of nearest clipping plane
+      cameraZ * (depth * pgSize) // zFar z-position of farthest clipping plane
+    );
   }
 
   public void onDraw(PGraphics pg) {
@@ -298,14 +305,14 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     final float yOffset = this.yOffset.getValuef();
     final float zOffset = this.zOffset.getValuef();
     pg.translate( //
-      (float)((xOffset - 0.5) * model.width), //
-      (float)((yOffset - 0.5) * model.height), //
-      zOffset * Math.max(model.width, model.height));
+      (1f-xOffset) * frameSize, //
+      (1f-yOffset) * frameSize, //
+      -zOffset * frameSize);
   }
 
   public void applyScale() {
-    final float scale = (float) Math.pow(this.scale.getValue(), 2.d);
-    pg.scale(scale * frameSize);
+    final float scale = (float) this.scale.getValue();
+    pg.scale(scale);
   }
 
   public void applyForeground(PImage foreground) {
@@ -328,16 +335,15 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     int foreSize = Math.max(foreground.width, foreground.height);
     int foreHeight = foreground.height;
     int foreWidth = foreground.width;
+    // final float scale = (float) Math.pow(this.scale.getValue(), 2.d);
     pg.noStroke();
     pg.beginShape();
     pg.texture(foreground);
-    float foreX = frameSize * foreWidth / foreSize / 2.0f;
-    float foreY = frameSize * foreHeight / foreSize / 2.0f;
-    // pg.image(foreground, -foreX, -foreY, foreX * 2.0f, foreY * 2.0f );
-    pg.vertex(-foreX, -foreY, 0, 0, 0);
-    pg.vertex(foreX, -foreY, 0, foreWidth, 0);
-    pg.vertex(foreX, foreY, 0, foreWidth, foreHeight);
-    pg.vertex(-foreX, foreY, 0, 0, foreHeight);
+    float foreX = frameSize * foreWidth / foreSize;
+    float foreY = frameSize * foreHeight / foreSize;
+
+    pg.imageMode(PConstants.CENTER);
+    pg.image(foreground, 0, 0, foreX, foreY );
 
     pg.endShape();
   }
