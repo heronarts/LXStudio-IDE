@@ -10,12 +10,19 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.video.Movie;
+import heronarts.lx.studio.LXStudio.UI;
+import heronarts.lx.studio.ui.device.UIDevice;
+import heronarts.lx.studio.ui.device.UIDeviceControls;
+import heronarts.p4lx.ui.UI2dContainer;
+import heronarts.p4lx.ui.component.UIDropMenu;
+import heronarts.p4lx.ui.component.UIKnob;
 
 /**
  * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed
  * grid pattern
  */
-public class LPPanelVideo extends LPPanel3DGraphicsPattern {
+public class LPPanelVideo extends LPPanel3DGraphicsPattern
+  implements UIDeviceControls<LPPanelVideo> {
 
   PImage foreground;
   Movie movie;
@@ -46,16 +53,10 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
 
     addParameter("xOffset", this.xOffset);
     addParameter("yOffset", this.yOffset);
-    // addParameter("zOffset", this.zOffset);
-    // addParameter("xRotate", this.xRotate);
-    // addParameter("yRotate", this.yRotate);
     addParameter("zRotate", this.zRotate);
-    // addParameter("xShear", this.xShear);
     addParameter("size", this.scale);
-    addParameter("video", this.video);
     addParameter("volume", this.volume);
-    // addParameter("fov", this.fov);
-    // addParameter("depth", this.depth);
+    addParameter("video", this.video);
 
     scheduleRefreshVideoOnce();
     scheduleRefreshForeground();
@@ -147,5 +148,26 @@ public class LPPanelVideo extends LPPanel3DGraphicsPattern {
     applyScale();
     applyForeground(foreground);
     pg.popMatrix();
+  }
+
+  @Override
+  public void buildDeviceControls(UI ui, UIDevice uiDevice,
+    LPPanelVideo pattern) {
+    uiDevice.setContentWidth(COL_WIDTH * 3);
+    UIDropMenu drop = new UIDropMenu(COL_WIDTH * 3, pattern.video);
+    drop.setDirection(UIDropMenu.Direction.UP);
+    addColumn(uiDevice, COL_WIDTH * 3, //
+      drop, //
+      UI2dContainer.newHorizontalContainer(UIKnob.HEIGHT, 0, //
+        new UIKnob(pattern.xOffset), //
+        new UIKnob(pattern.yOffset), //
+        new UIKnob(pattern.zRotate), //
+        new UIKnob(pattern.scale) //
+      ), //
+      UI2dContainer.newHorizontalContainer(UIKnob.HEIGHT, 0, //
+        new UIKnob(pattern.volume), //
+        new UIKnob(pattern.video) //
+      ) //
+    );
   }
 }
