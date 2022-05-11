@@ -41,15 +41,15 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern {
 
     addParameter("xOffset", this.xOffset);
     addParameter("yOffset", this.yOffset);
-    addParameter("zOffset", this.zOffset);
-    addParameter("xRotate", this.xRotate);
-    addParameter("yRotate", this.yRotate);
+    // addParameter("zOffset", this.zOffset);
+    // addParameter("xRotate", this.xRotate);
+    // addParameter("yRotate", this.yRotate);
     addParameter("zRotate", this.zRotate);
-    addParameter("xShear", this.xShear);
+    // addParameter("xShear", this.xShear);
     addParameter("size", this.scale);
     addParameter("gif", this.gifName);
-    addParameter("fov", this.fov);
-    addParameter("depth", this.depth);
+    // addParameter("fov", this.fov);
+    // addParameter("depth", this.depth);
     addParameter("alphaCurve", this.alphaCurve);
 
     scheduleRefreshGifOnce();
