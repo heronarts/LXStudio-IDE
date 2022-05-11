@@ -36,6 +36,7 @@ public class LPPanelShader extends LPPanel3DGraphicsPattern {
   @Override
   public void beforeDraw(final PGraphics pg) {
     super.beforeDraw(pg);
+    if (shader == null) return;
     pg.shader(shader, PConstants.LINES);
     pg.noStroke();
   }

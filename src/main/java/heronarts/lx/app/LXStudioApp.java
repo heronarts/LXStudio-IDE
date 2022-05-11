@@ -42,7 +42,7 @@ import flavius.ledportal.pattern.LPPanelShaderMonjori;
 import flavius.ledportal.pattern.LPPanelShaderNebula;
 import flavius.ledportal.pattern.LPPanelShaderPartyBlob;
 import flavius.ledportal.pattern.LPPanelShaderSpiral;
-import flavius.ledportal.pattern.LPPanelSolidState;
+import flavius.ledportal.pattern.LPPanelTextMoonbase;
 import flavius.ledportal.pattern.LPPanelTexture;
 import flavius.ledportal.pattern.LPPanelVideo;
 import flavius.ledportal.structure.LPPanelFixture;
@@ -229,7 +229,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(LPPanelBLM.class);
     lx.registry.addPattern(LPPanel3DRotatingCube.class);
     lx.registry.addPattern(LPPanelTexture.class);
-    lx.registry.addPattern(LPPanelSolidState.class);
+    lx.registry.addPattern(LPPanelTextMoonbase.class);
     lx.registry.addPattern(LPPanelHexLife.class);
     lx.registry.addPattern(LPPanelVideo.class);
     // lx.registry.addPattern(LPPanelScreenCapture.class);

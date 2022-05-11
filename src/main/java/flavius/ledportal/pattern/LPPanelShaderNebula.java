@@ -9,12 +9,12 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 
 /**
- * 
+ *
  * Stolen from https://github.com/genekogan/Processing-Shader-Examples
  */
 public class LPPanelShaderNebula extends LPPanelShaderDirect {
     long startTime;
-            
+
     public final CompoundParameter starspeed = new CompoundParameter("starspeed", 50.0,
         0.0, 100.0).setDescription("Speed of stars")
             .setPolarity(LXParameter.Polarity.BIPOLAR);
@@ -33,6 +33,7 @@ public class LPPanelShaderNebula extends LPPanelShaderDirect {
 
     @Override
     public void beforeDraw(final PGraphics pg) {
+        if (shader == null) return;
         super.beforeDraw(pg);
         pg.textureMode(PConstants.NORMAL);
         shader.set("time", (float) ((System.currentTimeMillis() - startTime) / 1000.0));

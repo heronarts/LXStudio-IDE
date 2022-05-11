@@ -9,7 +9,7 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 
 /**
- * 
+ *
  * Stolen from https://github.com/genekogan/Processing-Shader-Examples
  */
 public class LPPanelShaderMonjori extends LPPanelShaderDirect {
@@ -41,6 +41,7 @@ public class LPPanelShaderMonjori extends LPPanelShaderDirect {
 
     @Override
     public void beforeDraw(final PGraphics pg) {
+        if (shader == null) return;
         super.beforeDraw(pg);
         pg.textureMode(PConstants.NORMAL);
         shader.set("time",

@@ -7,11 +7,11 @@ import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-public class LPPanelSolidState extends LPPanel3DGraphicsPattern {
+public class LPPanelTextSolidState extends LPPanel3DGraphicsPattern {
   PFont font;
   public final String marqueeText = "SOLIDSTATE";
 
-  public LPPanelSolidState(LX lx) {
+  public LPPanelTextSolidState(LX lx) {
     super(lx);
 
     addParameter("xOffset", this.xOffset);
@@ -39,7 +39,7 @@ public class LPPanelSolidState extends LPPanel3DGraphicsPattern {
     final int marqueeIndex = (this.lx.engine.tempo.beatCount()/beats) % marqueeText.length();
 
     pg.pushMatrix();
-    pg.textFont(font);
+    if (font != null) pg.textFont(font);
     pg.textAlign(PConstants.CENTER, PConstants.CENTER);
     applyBackground();
     applyTranslation();

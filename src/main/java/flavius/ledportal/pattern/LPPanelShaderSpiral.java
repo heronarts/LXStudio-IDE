@@ -35,6 +35,7 @@ public class LPPanelShaderSpiral extends LPPanelShaderDirect {
 
     @Override
     public void beforeDraw(final PGraphics pg) {
+        if (shader == null) return;
         super.beforeDraw(pg);
         pg.textureMode(PConstants.NORMAL);
         float time = (float) ((System.currentTimeMillis() - startTime) / 1000.0);

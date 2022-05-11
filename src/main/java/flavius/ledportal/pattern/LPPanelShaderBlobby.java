@@ -9,7 +9,7 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 
 /**
- * 
+ *
  * Stolen from https://github.com/genekogan/Processing-Shader-Examples
  */
 public class LPPanelShaderBlobby extends LPPanelShaderDirect {
@@ -18,7 +18,7 @@ public class LPPanelShaderBlobby extends LPPanelShaderDirect {
     public final CompoundParameter depth = new CompoundParameter("depth", 1.0,
         0.0, 2.0).setDescription("Depth of blobbiness")
             .setPolarity(LXParameter.Polarity.BIPOLAR);
-            
+
     public final CompoundParameter rate = new CompoundParameter("rate", 1.0,
         0.0, 2.0).setDescription("Rate of movement")
             .setPolarity(LXParameter.Polarity.BIPOLAR);
@@ -39,6 +39,7 @@ public class LPPanelShaderBlobby extends LPPanelShaderDirect {
     @Override
     public void beforeDraw(final PGraphics pg) {
         super.beforeDraw(pg);
+        if (shader == null) return;
         pg.textureMode(PConstants.NORMAL);
         shader.set("time",
             (float) ((System.currentTimeMillis() - startTime) / 1000.0));
