@@ -41,8 +41,7 @@ public class FontLibrary extends MediaLibrary<PFont> {
 
   public void init(LX lx) {
     String mediaFolder = "fonts";
-    FileFilter filter = getFileFilterForExtensions(
-      Arrays.asList("ttf", "otf", "vlw"));
+    FileFilter filter = createFileFilter(Arrays.asList("ttf", "otf", "vlw"));
     super.init(lx, mediaFolder, filter);
   }
 }

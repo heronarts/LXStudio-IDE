@@ -35,7 +35,7 @@ public class VideoLibrary extends MediaLibrary<Movie> {
 
   public void init(LX lx) {
     String mediaFolder = "videos";
-    FileFilter filter = getFileFilterForExtensions(
+    FileFilter filter = createFileFilter(
       // gif doesn't work :(
       Arrays.asList("mov", "mp4"));
     super.init(lx, mediaFolder, filter);

@@ -24,7 +24,7 @@ public class GifLibrary extends MediaLibrary<Gif> {
       result = new Gif(LXStudioApp.instance, fullPath);
       result.loop();
       media.put(name, result);
-    } catch(Exception e) {
+    } catch (Exception e) {
       logger.warning(e.toString());
     }
     return result;
@@ -32,8 +32,7 @@ public class GifLibrary extends MediaLibrary<Gif> {
 
   public void init(LX lx) {
     String mediaFolder = "gifs";
-    FileFilter filter = getFileFilterForExtensions(
-      Arrays.asList("gif"));
+    FileFilter filter = createFileFilter(Arrays.asList("gif"));
     super.init(lx, mediaFolder, filter);
   }
 }

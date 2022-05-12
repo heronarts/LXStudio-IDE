@@ -3,11 +3,14 @@ package flavius.ledportal.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.app.LXStudioApp;
+import heronarts.lx.app.media.GifLibrary;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.ObjectParameter;
+import heronarts.lx.parameter.StringParameter;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
+
 import gifAnimation.Gif;
 import heronarts.lx.studio.LXStudio.UI;
 import heronarts.lx.studio.ui.device.UIDevice;
@@ -15,6 +18,7 @@ import heronarts.lx.studio.ui.device.UIDeviceControls;
 import heronarts.p4lx.ui.UI2dContainer;
 import heronarts.p4lx.ui.component.UIDropMenu;
 import heronarts.p4lx.ui.component.UIKnob;
+import heronarts.p4lx.ui.component.UITextBox;
 
 /**
  * Draw an SVG pattern directly to a panel where pixels are arranged in a fixed
@@ -25,8 +29,11 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern
 
   PImage foreground;
   Gif gif;
+  protected GifLibrary library;
 
-  public final ObjectParameter<String> gifName;
+  protected final ObjectParameter<String> gifName;
+  protected final StringParameter query = new StringParameter("query");
+  protected final UIDropMenu uiDrop;
 
   /**
    * Last time a warning was emitted
@@ -38,9 +45,11 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern
   public LPPanelGif(LX lx) {
     super(lx);
 
-    String[] gifNames = LXStudioApp.instance.gifLibrary.getNames();
+    library = LXStudioApp.instance.gifLibrary;
+
+    String[] gifNames = library.getNames();
     if (gifNames.length == 0) {
-      logger.warning("no videos available");
+      logger.warning("no gifs available");
       gifName = new ObjectParameter<String>("gif", new String[] { "" });
     } else {
       gifName = new ObjectParameter<String>("gif", gifNames);
@@ -52,7 +61,12 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern
     addParameter("size", this.scale);
     addParameter("gif", this.gifName);
     addParameter("alphaCurve", this.alphaCurve);
+    addParameter("query", this.query);
 
+    uiDrop = new UIDropMenu(COL_WIDTH * 3, gifName);
+    uiDrop.setDirection(UIDropMenu.Direction.UP);
+
+    scheduleRefreshGifNamesOnce();
     scheduleRefreshGifOnce();
     scheduleRefreshForeground();
   }
@@ -68,7 +82,11 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern
   }
 
   public void onParameterChanged(LXParameter p) {
+    logger.info(String.format("on param changed %s", p.toString()));
     super.onParameterChanged(p);
+    if (p == this.query) {
+      scheduleRefreshGifNamesOnce();
+    }
     if (p == this.gifName) {
       scheduleRefreshGifOnce();
     }
@@ -79,7 +97,7 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern
     if (name == "") {
       return;
     }
-    Gif newGif = LXStudioApp.instance.gifLibrary.prepareMedia(name);
+    Gif newGif = library.prepareMedia(name);
 
     if (newGif == null) {
       long now = System.currentTimeMillis();
@@ -95,6 +113,28 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern
     }
     lastFrame = -1;
     gif = newGif;
+  }
+
+  protected void _refreshGifNames() {
+    String queryString = query.getString();
+    String[] gifNames = null;
+    if (queryString.length() > 0) {
+      logger
+        .warning(String.format("refreshing gif names. Query: %s", queryString));
+      gifNames = library.getNames((String name) -> {
+        return name.contains(queryString);
+      });
+    } else {
+      gifNames = library.getNames();
+    }
+
+    if (gifNames.length == 0) {
+      logger.warning("no gifs available");
+    } else {
+      gifName.setObjects(gifNames);
+      uiDrop.setParameter(gifName);
+      uiDrop.setOptions(gifNames);
+    }
   }
 
   protected void _refreshForeground() {
@@ -132,6 +172,16 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern
     LXStudioApp.instance.scheduleDrawLoopTaskOnce(refreshGifTask);
   }
 
+  public void scheduleRefreshGifNamesOnce() {
+    LXLoopTask refreshGifTask = new LXLoopTask() {
+      @Override
+      public void loop(double deltaMs) {
+        _refreshGifNames();
+      }
+    };
+    LXStudioApp.instance.scheduleDrawLoopTaskOnce(refreshGifTask);
+  }
+
   @Override
   public void beforeDraw(final PGraphics pg) {
     super.beforeDraw(pg);
@@ -153,11 +203,14 @@ public class LPPanelGif extends LPPanel3DGraphicsPattern
   @Override
   public void buildDeviceControls(UI ui, UIDevice uiDevice,
     LPPanelGif pattern) {
+    uiDrop.setParameter(pattern.gifName);
+    float height = UIDropMenu.DEFAULT_HEIGHT;
     uiDevice.setContentWidth(COL_WIDTH * 3);
-    UIDropMenu drop = new UIDropMenu(COL_WIDTH * 3, pattern.gifName);
-    drop.setDirection(UIDropMenu.Direction.UP);
+    UITextBox searchUI = new UITextBox(0, 0, COL_WIDTH * 2, height);
+    searchUI.setParameter(pattern.query);
     addColumn(uiDevice, COL_WIDTH * 3, //
-      drop, //
+      searchUI, //
+      uiDrop, //
       UI2dContainer.newHorizontalContainer(UIKnob.HEIGHT, 0, //
         new UIKnob(pattern.xOffset), //
         new UIKnob(pattern.yOffset), //

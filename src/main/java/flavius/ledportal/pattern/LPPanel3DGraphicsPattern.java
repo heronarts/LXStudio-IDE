@@ -62,7 +62,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     .getLogger(LPPanel3DGraphicsPattern.class.getName());
 
   public final CompoundParameter fov //
-    = new CompoundParameter("fov", Math.PI/4, Math.PI/16, Math.PI)
+    = new CompoundParameter("fov", Math.PI / 4, Math.PI / 16, Math.PI)
       .setDescription("The camera field of view");
 
   public final CompoundParameter depth //
@@ -100,8 +100,9 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final CompoundParameter scale //
-    = new CompoundParameter("Scale", 1, 0, 2).setDescription("The foreground Scale")
-    .setPolarity(LXParameter.Polarity.BIPOLAR);
+    = new CompoundParameter("Scale", 1, 0, 2)
+      .setDescription("The foreground Scale")
+      .setPolarity(LXParameter.Polarity.BIPOLAR);
 
   public final DiscreteParameter beats //
     = new DiscreteParameter("Beats", 4, 1, 16)
@@ -137,7 +138,6 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     scheduleRenderTask();
   }
 
-
   public void beforeDraw(PGraphics pg) {
     if (pg == null) {
       return;
@@ -154,9 +154,10 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       cameraX, cameraY, 0, // centre
       0, -1, 0 // up
     );
-    pg.perspective(
-      fov, // fovy field-of-view angle (in radians) for vertical direction
-      (float)(pg.width) / (float)(pg.height), // aspect ratio of width to height
+    pg.perspective(fov, // fovy field-of-view angle (in radians) for vertical
+                        // direction
+      (float) (pg.width) / (float) (pg.height), // aspect ratio of width to
+                                                // height
       cameraZ / (depth * pgSize), // zNear z-position of nearest clipping plane
       cameraZ * (depth * pgSize) // zFar z-position of farthest clipping plane
     );
@@ -219,12 +220,13 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
 
   protected void _resize(int width, int height) {
     if (pg != null)
-    pg.dispose();
+      pg.dispose();
     pg = LXStudioApp.instance.createGraphics(width, height, renderer);
-    pg.colorMode(PConstants.ARGB, 255);
+    // pg.colorMode(PConstants.ARGB, 255);
     frame = new PImage(pg.width, pg.height);
     frameSize = Math.max(pg.width, pg.height);
-    logger.info(String.format("resized %d x %d, size=%d", width, height, frameSize));
+    logger.info(
+      String.format("resized %d x %d, size=%d", width, height, frameSize));
   }
 
   public void scheduleResize(int width, int height) {
@@ -262,17 +264,11 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
   }
 
   public void applyBackground(int colour) {
-    applyBackground(colour, 1f);
-  }
-
-  public void applyBackground(int colour, float alpha) {
-    pg.background(colour, alpha);
+    pg.background(colour);
   }
 
   public void applyBackground() {
-    // background is black with alpha = 0
-    applyBackground(LXColor.BLACK & LXColor.RGB_MASK, 0f);
-    return;
+    applyBackground(LXColor.BLACK);
   }
 
   public void applyShear() {
@@ -305,8 +301,8 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     final float yOffset = this.yOffset.getValuef();
     final float zOffset = this.zOffset.getValuef();
     pg.translate( //
-      (1f-xOffset) * frameSize, //
-      (1f-yOffset) * frameSize, //
+      (1f - xOffset) * frameSize, //
+      (1f - yOffset) * frameSize, //
       -zOffset * frameSize);
   }
 
@@ -324,7 +320,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
       }
       return;
     }
-    if(foreground.width == 0 || foreground.height == 0) {
+    if (foreground.width == 0 || foreground.height == 0) {
       long now = System.currentTimeMillis();
       if (lastWarning == 0 || now - lastWarning > 10000) {
         logger.warning("foreground is zero-sized...");
@@ -343,7 +339,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
     float foreY = frameSize * foreHeight / foreSize;
 
     pg.imageMode(PConstants.CENTER);
-    pg.image(foreground, 0, 0, foreX, foreY );
+    pg.image(foreground, 0, 0, foreX, foreY);
 
     pg.endShape();
   }
@@ -381,7 +377,7 @@ public class LPPanel3DGraphicsPattern extends LPPanelModelPattern {
             * Math.sin(2 * Math.PI * ((point.xi / period) + phase))))
           % frame.height;
         int c = frame.get(x, y);
-        int alpha = (int)(Math.pow(LXColor.b(c) / 100f, alphaCurve) * 255);
+        int alpha = (int) (Math.pow(LXColor.b(c) / 100f, alphaCurve) * 255);
         c &= LXColor.RGB_MASK;
         c |= alpha << LXColor.ALPHA_SHIFT;
         setColor(point.index, c);

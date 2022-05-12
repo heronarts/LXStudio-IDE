@@ -19,6 +19,9 @@ public abstract class MediaLibrary<T> {
   protected static final Logger logger = Logger
     .getLogger(MediaLibrary.class.getName());
 
+  protected FileFilter filter;
+  protected String contentPath;
+
   public static String[] splitExt(String fileName) {
     String[] result = fileName.split("\\.(?=[^\\.]+$)");
     if (result.length > 0) {
@@ -28,7 +31,7 @@ public abstract class MediaLibrary<T> {
     return result;
   }
 
-  public static FileFilter getFileFilterForExtensions(List<String> extensions) {
+  public static FileFilter createFileFilter(List<String> extensions) {
     return new FileFilter() {
       @Override
       public boolean accept(File file) {
@@ -57,10 +60,19 @@ public abstract class MediaLibrary<T> {
   abstract public T prepareMedia(String name);
 
   public void init(LX lx, String mediaFolder, FileFilter filter) {
+    this.contentPath = getCanonicalContentPath(lx, mediaFolder);
+    logger
+      .info(String.format("contentPath for %s: %s", mediaFolder, contentPath));
+    this.filter = filter;
+    rescan();
+    logger.info(String.format("%s listing: %s", mediaFolder,
+      listing.keySet().toString()));
+  }
+
+  public void rescan() {
     listing.clear();
-    String contentPath = getCanonicalContentPath(lx, mediaFolder);
+
     File dir = new File(contentPath);
-    logger.info(String.format("contentPath for %s: %s", mediaFolder, contentPath));
     File[] directoryListing = dir.listFiles(filter);
     if (directoryListing != null) {
       for (File child : directoryListing) {
@@ -70,12 +82,11 @@ public abstract class MediaLibrary<T> {
         }
       }
     }
-    logger.info(String.format("%s listing: %s", mediaFolder,
-      listing.keySet().toString()));
   }
 
   public String[] getNames(Predicate<String> predicate) {
-    String[] names = listing.keySet().stream().filter(predicate).toArray(String[]::new);
+    String[] names = listing.keySet().stream().filter(predicate)
+      .toArray(String[]::new);
     Arrays.sort(names);
     return names;
   }

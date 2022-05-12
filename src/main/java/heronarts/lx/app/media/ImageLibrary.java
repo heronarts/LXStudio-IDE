@@ -27,7 +27,7 @@ public class ImageLibrary extends MediaLibrary<PImage> {
 
   public void init(LX lx) {
     String mediaFolder = "images";
-    FileFilter filter = getFileFilterForExtensions(
+    FileFilter filter = createFileFilter(
       Arrays.asList("gif", "jpg", "tga", "png"));
     super.init(lx, mediaFolder, filter);
   }
