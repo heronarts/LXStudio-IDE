@@ -4,9 +4,9 @@
     <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b8/core-4.0b8.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b8/gluegen-rt-4.0b8.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b8/jogl-all-4.0b8.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/lxstudio-0.4.0.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/lx-0.4.0-jar-with-dependencies.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/p4lx-0.4.0.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/lxstudio-0.4.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/lx-0.4.1-jar-with-dependencies.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/p4lx-0.4.1.jar!/" />
     <src_description expected_position="1">
       <src_folder value="file://$MODULE_DIR$/src/main/java" expected_position="0" />
       <src_folder value="file://$MODULE_DIR$/src/test/java" expected_position="2" />
@@ -50,47 +50,47 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="lxstudio-0.4.0.jar">
+      <library name="lxstudio-0.4.1.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/lxstudio-0.4.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lxstudio-0.4.1.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$MODULE_DIR$/lib/lxstudio-0.4.0-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lxstudio-0.4.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="lx-0.4.0-jar-with-dependencies.jar">
+      <library name="lx-0.4.1-jar-with-dependencies.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/lx-0.4.0-jar-with-dependencies.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lx-0.4.1-jar-with-dependencies.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$MODULE_DIR$/lib/lx-0.4.0-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lx-0.4.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/lx-0.4.0-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/lx-0.4.1-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="p4lx-0.4.0.jar">
+      <library name="p4lx-0.4.1.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/p4lx-0.4.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/p4lx-0.4.1.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$MODULE_DIR$/lib/p4lx-0.4.0-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/p4lx-0.4.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/p4lx-0.4.0-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/p4lx-0.4.1-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: com.heronarts:lx:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.heronarts:lx:0.4.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.9" level="project" />
     <orderEntry type="library" name="Maven: uk.co.xfactory-librarians:coremidi4j:1.6" level="project" />
-    <orderEntry type="library" name="Maven: com.heronarts:p4lx:0.4.0" level="project" />
-    <orderEntry type="library" name="Maven: com.heronarts:lxstudio:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: com.heronarts:p4lx:0.4.1" level="project" />
+    <orderEntry type="library" name="Maven: com.heronarts:lxstudio:0.4.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.processing:core:4.0b8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.jogl:jogl-all:4.0b8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.gluegen:gluegen-rt-main:4.0b8" level="project" />
