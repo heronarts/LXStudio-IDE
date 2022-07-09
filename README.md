@@ -34,12 +34,13 @@ This is pre-configured in the Eclipse launch configuration `LXStudioApp.launch`
 
 If you change platforms, update the symlink using one of the following:
 ```
-$ ln -hsf lib/processing-4.0b8/linux-aarch64 lib/processing-4.0b8/native
-$ ln -hsf lib/processing-4.0b8/linux-amd64 lib/processing-4.0b8/native
-$ ln -hsf lib/processing-4.0b8/linux-arm lib/processing-4.0b8/native
-$ ln -hsf lib/processing-4.0b8/macos-aarch64 lib/processing-4.0b8/native
-$ ln -hsf lib/processing-4.0b8/macos-x86_64 lib/processing-4.0b8/native
-$ ln -hsf lib/processing-4.0b8/windows-amd64 lib/processing-4.0b8/native
+$ cd lib/processing-4.0b8
+$ ln -hsf linux-aarch64 native
+$ ln -hsf linux-amd64 native
+$ ln -hsf linux-arm native
+$ ln -hsf macos-aarch64 native
+$ ln -hsf macos-x86_64 native
+$ ln -hsf windows-amd64 native
 ```
 
 ### Contact and Collaboration ###
