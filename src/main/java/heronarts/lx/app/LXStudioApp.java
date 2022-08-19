@@ -37,6 +37,8 @@ import processing.core.PApplet;
  */
 public class LXStudioApp extends PApplet implements LXPlugin {
 
+  private static File projectFile = null;
+
   private static final String WINDOW_TITLE = "LX Studio";
 
   private static int WIDTH = 1280;
@@ -64,6 +66,7 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     flags.resizable = true;
     flags.useGLPointCloud = false;
     flags.startMultiThreaded = true;
+    flags.initialFile = projectFile;
 
     new LXStudio(this, flags);
     this.surface.setTitle(WINDOW_TITLE);
@@ -104,7 +107,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(heronarts.lx.app.pattern.AppPattern.class);
     lx.registry.addPattern(heronarts.lx.app.pattern.AppPatternWithUI.class);
     lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
-
 
     // Create an instance of your global component and register it with the LX engine
     // so that it can be saved and loaded in project files
@@ -152,7 +154,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
   public static void main(String[] args) {
     LX.log("Initializing LX version " + LXStudio.VERSION);
     boolean headless = false;
-    File projectFile = null;
     for (int i = 0; i < args.length; ++i) {
       if ("--help".equals(args[i])) {
       } else if ("--headless".equals(args[i])) {
@@ -188,8 +189,22 @@ public class LXStudioApp extends PApplet implements LXPlugin {
       } else if (args[i].endsWith(".lxp")) {
         try {
           projectFile = new File(args[i]);
+          if (!projectFile.exists()) {
+            LX.error("Project file: " + projectFile.getName() + " not found");
+            projectFile = null;
+          }
         } catch (Exception x) {
           LX.error(x, "Command-line project file path invalid: " + args[i]);
+        }
+      } else if (args[i].endsWith(".lxs")) {
+        try {
+          projectFile = new File(args[i]);
+          if (!projectFile.exists()) {
+            LX.error("Schedule file: " + projectFile.getName() + " not found");
+            projectFile = null;
+          }
+        } catch (Exception x) {
+          LX.error(x, "Command-line schedule file path invalid: " + args[i]);
         }
       }
     }
