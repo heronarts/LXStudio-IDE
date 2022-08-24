@@ -65,6 +65,12 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     flags.useGLPointCloud = false;
     flags.startMultiThreaded = true;
 
+    // NOTE: it seems like on Windows systems P4LX can end
+    // up setting this to the "lib" folder depending on how
+    // dependency JARs were loaded. Explicitly set it to "."
+    // here and be sure to run explicitly from root folder
+    flags.mediaPath = ".";
+
     new LXStudio(this, flags);
     this.surface.setTitle(WINDOW_TITLE);
     if (!FULLSCREEN && HAS_WINDOW_POSITION) {
