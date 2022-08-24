@@ -28,6 +28,8 @@ Consult the [LX Studio API reference &rarr;](http://lx.studio/api/)
 
 Processing 4.0 beta 8 runs on [Eclipse Temurin 17 (17.0.2+8)](https://adoptium.net/). It is highly recommend to use this JDK for consistency.
 
+The core Processing libraries are not available in Maven central. The first time you setup your project, you must manually run `mvn validate` a single time to install the Processing runtime libraries into your local Maven repository. This is a one-time only step.
+
 Running the project requires passing `-Djava.library.path=lib/processing-4.0b8/native` explicitly to the `java` command. Note that `native` is a symlink within the `processing-4.0b8` folder which should be pointed at the appropriate target platform folder.
 
 This is pre-configured in the Eclipse launch configuration `LXStudioApp.launch`
