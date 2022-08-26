@@ -28,8 +28,8 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/processing-4.0b8/core-4.0b8.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b8/gluegen-rt-4.0b8.jar"/>
-	<classpathentry kind="lib" path="lib/processing-4.0b8/jogl-all-4.0b8.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0.1/core-4.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0.1/gluegen-rt-4.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/processing-4.0.1/jogl-all-4.0.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

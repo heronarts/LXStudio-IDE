@@ -41,21 +41,21 @@
 		<dependency>
 			<groupId>org.processing</groupId>
 			<artifactId>core</artifactId>
-			<version>4.0b8</version>
+			<version>4.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all</artifactId>
-			<version>4.0b8</version>
+			<version>4.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-main</artifactId>
-			<version>4.0b8</version>
+			<version>4.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -72,9 +72,9 @@
 						<configuration>
 							<groupId>org.processing</groupId>
 							<artifactId>core</artifactId>
-							<version>4.0b8</version>
+							<version>4.0.1</version>
 							<packaging>jar</packaging>
-							<file>${basedir}/lib/processing-4.0b8/core-4.0b8.jar</file>
+							<file>${basedir}/lib/processing-4.0.1/core-4.0.1.jar</file>
 							<generatePom>true</generatePom>
 						</configuration>
 						<goals>
@@ -87,9 +87,9 @@
 						<configuration>
 							<groupId>org.jogamp.jogl</groupId>
 							<artifactId>jogl-all</artifactId>
-							<version>4.0b8</version>
+							<version>4.0.1</version>
 							<packaging>jar</packaging>
-							<file>${basedir}/lib/processing-4.0b8/jogl-all-4.0b8.jar</file>
+							<file>${basedir}/lib/processing-4.0.1/jogl-all-4.0.1.jar</file>
 							<generatePom>true</generatePom>
 						</configuration>
 						<goals>
@@ -102,9 +102,9 @@
 						<configuration>
 							<groupId>org.jogamp.gluegen</groupId>
 							<artifactId>gluegen-rt-main</artifactId>
-							<version>4.0b8</version>
+							<version>4.0.1</version>
 							<packaging>jar</packaging>
-							<file>${basedir}/lib/processing-4.0b8/gluegen-rt-4.0b8.jar</file>
+							<file>${basedir}/lib/processing-4.0.1/gluegen-rt-4.0.1.jar</file>
 							<generatePom>true</generatePom>
 						</configuration>
 						<goals>
