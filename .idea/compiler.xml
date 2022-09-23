@@ -6,16 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="LXStudio-IDE" />
+        <module name="lxstudio-ide" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="LXStudio-IDE" target="11" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="LXStudio-IDE" options="-Xlint -Xpkginfo:always" />
+      <module name="lxstudio-ide" options="-Xlint -Xpkginfo:always" />
     </option>
   </component>
 </project>

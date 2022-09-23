@@ -111,7 +111,6 @@ public class LXStudioApp extends PApplet implements LXPlugin {
     lx.registry.addPattern(heronarts.lx.app.pattern.AppPatternWithUI.class);
     lx.registry.addEffect(heronarts.lx.app.effect.AppEffect.class);
 
-
     // Create an instance of your global component and register it with the LX engine
     // so that it can be saved and loaded in project files
     this.myComponent = new MyComponent(lx);
@@ -157,6 +156,13 @@ public class LXStudioApp extends PApplet implements LXPlugin {
    */
   public static void main(String[] args) {
     LX.log("Initializing LX version " + LXStudio.VERSION);
+    LX.log("Running java " +
+      System.getProperty("java.version") + " " +
+      System.getProperty("java.vendor") + " " +
+      System.getProperty("os.name") + " " +
+      System.getProperty("os.version") + " " +
+      System.getProperty("os.arch")
+    );
     boolean headless = false;
     File projectFile = null;
     for (int i = 0; i < args.length; ++i) {
