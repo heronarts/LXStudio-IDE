@@ -45,6 +45,12 @@ $ ln -hsf macos-x86_64 native
 $ ln -hsf windows-amd64 native
 ```
 
+On Windows, this command may be one of the following:
+```
+mklink /d native windows-amd64 (in CMD)
+cmd /c mklink /d native windows-amd64 (in PowerShell)
+```
+
 ### Contact and Collaboration ###
 
 Building a big cool project? I'm probably interested in hearing about it! Want to solicit some help, request new framework features, or just ask a random question? Open an issue on the project or drop me a line: mark@heronarts.com
