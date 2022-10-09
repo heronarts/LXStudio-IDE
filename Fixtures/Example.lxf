@@ -1,5 +1,7 @@
 {
-  "fixtureType": "Cube",
+  "label": "Cube",
+  
+  "tag": "cube",
 
   "strips": [
 
