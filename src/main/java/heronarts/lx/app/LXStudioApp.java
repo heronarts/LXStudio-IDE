@@ -32,7 +32,7 @@ import processing.core.PApplet;
 /**
  * This is an example top-level class to build and run an LX Studio
  * application via an IDE. The main() method of this class can be
- * invoked with arguments to either run with a full Processing 3 UI
+ * invoked with arguments to either run with a full Processing 4 UI
  * or as a headless command-line only engine.
  */
 public class LXStudioApp extends PApplet implements LXPlugin {
