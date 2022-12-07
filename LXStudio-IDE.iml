@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="EclipseModuleManager">
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b8/core-4.0b8.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b8/gluegen-rt-4.0b8.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0b8/jogl-all-4.0b8.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0.1/core-4.0.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0.1/gluegen-rt-4.0.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/processing-4.0.1/jogl-all-4.0.1.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/lxstudio-0.4.1.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/lx-0.4.1-jar-with-dependencies.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/p4lx-0.4.1.jar!/" />
@@ -23,27 +23,27 @@
     <orderEntry type="jdk" jdkName="temurin-17" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
-      <library name="core-4.0b8.jar">
+      <library name="core-4.0.1.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b8/core-4.0b8.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/processing-4.0.1/core-4.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="gluegen-rt-4.0b8.jar">
+      <library name="gluegen-rt-4.0.1.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b8/gluegen-rt-4.0b8.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/processing-4.0.1/gluegen-rt-4.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="jogl-all-4.0b8.jar">
+      <library name="jogl-all-4.0.1.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/processing-4.0b8/jogl-all-4.0b8.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/processing-4.0.1/jogl-all-4.0.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -91,8 +91,8 @@
     <orderEntry type="library" name="Maven: uk.co.xfactory-librarians:coremidi4j:1.6" level="project" />
     <orderEntry type="library" name="Maven: com.heronarts:p4lx:0.4.1" level="project" />
     <orderEntry type="library" name="Maven: com.heronarts:lxstudio:0.4.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.processing:core:4.0b8" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.jogl:jogl-all:4.0b8" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.gluegen:gluegen-rt-main:4.0b8" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.processing:core:4.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.jogl:jogl-all:4.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jogamp.gluegen:gluegen-rt-main:4.0.1" level="project" />
   </component>
 </module>
